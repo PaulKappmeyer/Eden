@@ -39,7 +39,7 @@ public class Main extends GameBase{
 
 	@Override
 	public void draw(Graphics graphics) {
-		graphics.setColor(Color.WHITE);
+		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.fillRect(0, 0, width, height);
 		player.draw(graphics);
 	}
