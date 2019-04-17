@@ -4,9 +4,10 @@
 package gamelogic;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
+import gameengine.inputs.KeyboardInputManager;
 import gameengine.loaders.ImageLoader;
 import gameengine.maths.Vector2D;
 
@@ -17,18 +18,18 @@ import gameengine.maths.Vector2D;
  */
 public class Player extends DrawableObject{
 
-	Vector2D position;
 	int width;
 	int height;
 	BufferedImage image;
+	int walkspeed;
 	
 	public Player(float x, float y) {
 		this.position = new Vector2D(x, y);
 		this.width = 32;
 		this.height = 32;
-		File path = new File(".\\res\\eden_tileset.png");
+		this.walkspeed = 100;
 		try {
-			this.image = ImageLoader.loadImage(path).getSubimage(0, 0, 16, 16);
+			this.image = ImageLoader.loadImage(".\\res\\eden_tileset.png").getSubimage(0, 0, 16, 16);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -36,8 +37,18 @@ public class Player extends DrawableObject{
 
 	@Override
 	public void update(float tslf) {
-		// TODO Auto-generated method stub
-		
+		if(KeyboardInputManager.isKeyDown(KeyEvent.VK_W)) {
+			position.y -= walkspeed * tslf;
+		}
+		if(KeyboardInputManager.isKeyDown(KeyEvent.VK_A)) {
+			position.x -= walkspeed * tslf;
+		}
+		if(KeyboardInputManager.isKeyDown(KeyEvent.VK_S)) {
+			position.y += walkspeed * tslf;
+		}
+		if(KeyboardInputManager.isKeyDown(KeyEvent.VK_D)) {
+			position.x += walkspeed * tslf;
+		}
 	}
 
 	@Override
