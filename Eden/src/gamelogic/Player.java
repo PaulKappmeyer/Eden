@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import gameengine.inputs.KeyboardInputManager;
-import gameengine.loaders.ImageLoader;
+import gameengine.loaders.ResourceLoader;
 import gameengine.maths.Vector2D;
 
 /**
@@ -29,7 +29,7 @@ public class Player extends DrawableObject{
 		this.height = 32;
 		this.walkspeed = 100;
 		try {
-			this.image = ImageLoader.loadImage(".\\res\\eden_tileset.png").getSubimage(0, 0, 16, 16);
+			this.image = ResourceLoader.load(BufferedImage.class, ".\\res\\eden_tileset.png").getSubimage(0, 0, 16, 16);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
