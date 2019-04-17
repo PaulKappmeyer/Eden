@@ -11,7 +11,7 @@ import gameengine.inputs.MouseInputManager;
 
 /**
  * 
- * @author Felix Kappmeyer & Daniel Lucarz
+ * @author Paul Kappmeyer & Daniel Lucarz
  *
  */
 
@@ -30,12 +30,14 @@ public abstract class GameBase {
 	 * @param width The width of the window
 	 * @param height The height of the window
 	 */
-	public void run(String title, int width, int height) {
+	public void start(String title, int width, int height) {
 		window = new Window(title, width, height);
 		
 		//Adding inputManagers to window
 		window.addKeyListener(new KeyboardInputManager());
-		window.addMouseListener(new MouseInputManager(window));
+		MouseInputManager mouseInputManager = new MouseInputManager(window);
+		window.addMouseListener(mouseInputManager);
+		window.addMouseMotionListener(mouseInputManager);
 		
 		init(); //Calling method init() in the sub-class
 		
