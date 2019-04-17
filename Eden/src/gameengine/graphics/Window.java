@@ -49,7 +49,9 @@ public class Window extends JFrame {
 	}
 	
 	public Graphics beginDrawing() {
-		return strat.getDrawGraphics();
+		Graphics graphics = strat.getDrawGraphics();
+		graphics.translate(insetX, insetY);
+		return graphics;
 	}
 	
 	public void endDrawing(Graphics g){

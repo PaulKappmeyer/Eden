@@ -3,6 +3,7 @@
  */
 package gamelogic;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import gameengine.GameBase;
@@ -14,11 +15,16 @@ import gameengine.GameBase;
  */
 public class Main extends GameBase{
 
+	static int width;
+	static int height;
+	
 	Player player;
 	
 	public static void main(String[] args) {
 		Main main = new Main();
-		main.start("Eden", 1280, 860);
+		Main.width = 1280;
+		Main.height = 860;
+		main.start("Eden", width, height);
 	}	
 
 	@Override
@@ -33,6 +39,8 @@ public class Main extends GameBase{
 
 	@Override
 	public void draw(Graphics graphics) {
+		graphics.setColor(Color.WHITE);
+		graphics.fillRect(0, 0, width, height);
 		player.draw(graphics);
 	}
 	
