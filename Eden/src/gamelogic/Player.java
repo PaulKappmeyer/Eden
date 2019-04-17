@@ -4,10 +4,8 @@
 package gamelogic;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
-import gameengine.inputs.KeyboardInputManager;
 import gameengine.loaders.ImageLoader;
 import gameengine.maths.Vector2D;
 
@@ -34,15 +32,17 @@ public class Player extends DrawableObject{
 		this.height = 128;
 		this.walkspeed = 100;
 		try {
-			this.image = ImageLoader.loadImage(".\\res\\eden_tileset.png");
-			player_walk_down = new Animation(new BufferedImage[] {image.getSubimage(0, 0, 16, 16), image.getSubimage(0, 16, 16, 16),
-					image.getSubimage(0, 32, 16, 16), image.getSubimage(0, 48, 16, 16)}, 0.25f);
-			player_walk_up = new Animation(new BufferedImage[] {image.getSubimage(16, 0, 16, 16), image.getSubimage(16, 16, 16, 16),
-					image.getSubimage(16, 32, 16, 16), image.getSubimage(16, 48, 16, 16)}, 0.25f);
-			player_walk_left = new Animation(new BufferedImage[] {image.getSubimage(32, 0, 16, 16), image.getSubimage(32, 16, 16, 16),
-					image.getSubimage(32, 32, 16, 16), image.getSubimage(32, 48, 16, 16)}, 0.25f);
-			player_walk_right = new Animation(new BufferedImage[] {image.getSubimage(48, 0, 16, 16), image.getSubimage(48, 16, 16, 16),
-					image.getSubimage(48, 32, 16, 16), image.getSubimage(48, 48, 16, 16)}, 0.25f);
+			this.image = ImageLoader.loadImage(".\\res\\eden_32.png");
+			int tilesize = 32;
+			float time = 0.1f;
+			player_walk_down = new Animation(new BufferedImage[] {image.getSubimage(0, 0, tilesize, tilesize), image.getSubimage(0, tilesize, tilesize, tilesize),
+					image.getSubimage(0, tilesize*2, tilesize, tilesize), image.getSubimage(0, tilesize*3, tilesize, tilesize)}, time);
+			player_walk_up = new Animation(new BufferedImage[] {image.getSubimage(tilesize, 0, tilesize, tilesize), image.getSubimage(tilesize, tilesize, tilesize, tilesize),
+					image.getSubimage(tilesize, tilesize*2, tilesize, tilesize), image.getSubimage(tilesize, tilesize*3, tilesize, tilesize)}, time);
+			player_walk_left = new Animation(new BufferedImage[] {image.getSubimage(tilesize*2, 0, tilesize, tilesize), image.getSubimage(tilesize*2, tilesize, tilesize, tilesize),
+					image.getSubimage(tilesize*2, tilesize*2, tilesize, tilesize), image.getSubimage(tilesize*2, tilesize*3, tilesize, tilesize)}, time);
+			player_walk_right = new Animation(new BufferedImage[] {image.getSubimage(tilesize*3, 0, tilesize, tilesize), image.getSubimage(tilesize*3, tilesize, tilesize, tilesize),
+					image.getSubimage(tilesize*3, tilesize*2, tilesize, tilesize), image.getSubimage(tilesize*3, tilesize*3, tilesize, tilesize)}, time);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,25 +51,30 @@ public class Player extends DrawableObject{
 
 	@Override
 	public void update(float tslf) {
-		if(KeyboardInputManager.isKeyDown(KeyEvent.VK_W)) {
+		if(PlayerInput.isUpKeyDown()) {
 			position.y -= walkspeed * tslf;
 			currentAnimation = player_walk_up;
 			currentAnimation.play();
 		}
-		if(KeyboardInputManager.isKeyDown(KeyEvent.VK_A)) {
+		if(PlayerInput.isLeftKeyDown()) {
 			position.x -= walkspeed * tslf;
 			currentAnimation = player_walk_left;
 			currentAnimation.play();
 		}
-		if(KeyboardInputManager.isKeyDown(KeyEvent.VK_S)) {
+		if(PlayerInput.isDownKeyDown()) {
 			position.y += walkspeed * tslf;
 			currentAnimation = player_walk_down;
 			currentAnimation.play();
 		}
-		if(KeyboardInputManager.isKeyDown(KeyEvent.VK_D)) {
+		if(PlayerInput.isRightKeyDown()) {
 			position.x += walkspeed * tslf;
 			currentAnimation = player_walk_right;
 			currentAnimation.play();
+		}
+		
+		if(!(PlayerInput.isDownKeyDown() || PlayerInput.isLeftKeyDown() || PlayerInput.isRightKeyDown() || PlayerInput.isUpKeyDown())){
+			currentAnimation.reset();
+			currentAnimation.stop();
 		}
 		
 		currentAnimation.update(tslf);

@@ -39,6 +39,14 @@ public class Animation {
 	public void play() {
 		isPlaying = true;
 	}
+	public void stop() {
+		isPlaying = false;
+	}
+	
+	public void reset() {
+		currentPlayedTime = 0;
+		currentSpriteIndex = 0;
+	}
 	
 	public BufferedImage getCurrentFrame() {
 		return sprites[currentSpriteIndex]; 
