@@ -38,6 +38,7 @@ public abstract class GameBase {
 		MouseInputManager mouseInputManager = new MouseInputManager(window);
 		window.addMouseListener(mouseInputManager);
 		window.addMouseMotionListener(mouseInputManager);
+		window.addMouseWheelListener(mouseInputManager);
 		
 		init(); //Calling method init() in the sub-class
 		

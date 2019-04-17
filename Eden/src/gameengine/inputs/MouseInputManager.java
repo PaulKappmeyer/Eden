@@ -4,6 +4,8 @@
 package gameengine.inputs;
 
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputListener;
 
@@ -15,7 +17,7 @@ import gameengine.graphics.Window;
  * 
  */
 
-public final class MouseInputManager implements MouseInputListener {
+public final class MouseInputManager implements MouseInputListener, MouseWheelListener {
 	
 	private static boolean[] mousebutton = new boolean[5];
 	private static float mouseX;
@@ -27,8 +29,8 @@ public final class MouseInputManager implements MouseInputListener {
 		this.window = window;
 	}
 	
-	public static boolean isButtonDown(int mouseButtoon) {
-		if(mouseButtoon >= 0 && mouseButtoon < mousebutton.length && mousebutton[mouseButtoon]) return true;
+	public static boolean isButtonDown(int mouseButton) {
+		if(mouseButton >= 0 && mouseButton < mousebutton.length && mousebutton[mouseButton]) return true;
 		else return false;
 	}
 	public static float getMouseX () {
@@ -46,14 +48,12 @@ public final class MouseInputManager implements MouseInputListener {
 
 	@Override
 	public void mouseEntered(MouseEvent mouseEvent) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent mouseEvent) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
@@ -81,5 +81,10 @@ public final class MouseInputManager implements MouseInputListener {
 	public void mouseMoved(MouseEvent mouseEvent) {
 		mouseX = mouseEvent.getX() - window.getInsetX();
 		mouseY = mouseEvent.getY() - window.getInsetY();
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
+		// TODO Auto-generated method stub
 	}
 }
