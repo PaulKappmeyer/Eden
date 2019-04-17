@@ -13,7 +13,7 @@ public class Vector2D {
 	public float x;
 	public float y;
 	
-	/* ---------------------------------------------CONSTRUCOTRS------------------------------------ */
+	/* ---------------------------------------------Constructors------------------------------------ */
 	/**
 	 * Constructs and initializes a new Vector with x and y equals zero
 	 */
@@ -39,7 +39,7 @@ public class Vector2D {
 		this.y = vector.y;
 	}
 	
-	/* ---------------------------------------------METHODS------------------------------------ */
+	/* ---------------------------------------------methods------------------------------------ */
 	/**
 	 * Returns the distance between the vector and a specified x-and y-position
 	 * @param x The x-position
@@ -81,5 +81,38 @@ public class Vector2D {
 		float distX = Math.abs(this.x - vector.x);
 		float distY = Math.abs(this.y - vector.y);
 		return (distX * distX + distY * distY);
+	}
+	
+	/**
+	 * Returns the length of the vector
+	 * @return The length of the vector
+	 * @see {@link #getMagnitude()} 
+	 */
+	public float getLength() {
+		return (float) Math.sqrt(x*x + y*y);
+	}
+	/**
+	 * Returns the magnitude of the vector
+	 * @return The magnitude of the vector
+	 * @see {@link #getLength()} 
+	 */
+	public float getMagnitude() {
+		return (float) Math.sqrt(x*x + y*y);
+	}
+	
+	/**
+	 * This method sets the vector to a unit vector by dividing the x-and y-position by the length of the vector
+	 */
+	public void makeUnitVector() {
+		float length = this.getLength();
+		this.x /= length;
+		this.y /= length;
+	}
+	/**
+	 * Returns if the vector is a unit vector with a length of one
+	 * @return true if the vector is a unit vector, false if not
+	 */
+	public boolean isUnitVector() {
+		return Math.round((x*x + y*y) * 1000)/1000 == 1 ? true : false;
 	}
 }
