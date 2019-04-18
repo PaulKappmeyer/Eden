@@ -6,7 +6,9 @@ package gamelogic;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import gameengine.loaders.AnimationSetLoader;
 import gameengine.loaders.ImageLoader;
+import gameengine.loaders.RessourceLoader;
 import gameengine.maths.Vector2D;
 
 /**
@@ -24,6 +26,9 @@ public class Player extends DrawableObject{
 	Animation player_walk_left;
 	Animation player_walk_right;
 	Animation currentAnimation;
+	
+	AnimationSet playerAnimationSet;
+	
 	int walkspeed;
 	
 	public Player(float x, float y) {
@@ -32,7 +37,7 @@ public class Player extends DrawableObject{
 		this.height = 128;
 		this.walkspeed = 100;
 		try {
-			this.image = ImageLoader.loadImage(".\\res\\eden_32.png");
+			/*this.image = ImageLoader.loadImage(".\\res\\eden_32.png");
 			int tilesize = 32;
 			float time = 0.1f;
 			player_walk_down = new Animation(new BufferedImage[] {image.getSubimage(0, 0, tilesize, tilesize), image.getSubimage(0, tilesize, tilesize, tilesize),
@@ -43,6 +48,14 @@ public class Player extends DrawableObject{
 					image.getSubimage(tilesize*2, tilesize*2, tilesize, tilesize), image.getSubimage(tilesize*2, tilesize*3, tilesize, tilesize)}, time);
 			player_walk_right = new Animation(new BufferedImage[] {image.getSubimage(tilesize*3, 0, tilesize, tilesize), image.getSubimage(tilesize*3, tilesize, tilesize, tilesize),
 					image.getSubimage(tilesize*3, tilesize*2, tilesize, tilesize), image.getSubimage(tilesize*3, tilesize*3, tilesize, tilesize)}, time);
+			*/
+			
+			playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
+			player_walk_down = playerAnimationSet.getAnimation("player_walk_down");
+			player_walk_up = playerAnimationSet.getAnimation("player_walk_up");
+			player_walk_left = playerAnimationSet.getAnimation("player_walk_left");
+			player_walk_right = playerAnimationSet.getAnimation("player_walk_right");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
