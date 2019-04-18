@@ -1,7 +1,7 @@
 /*
  * 
  */
-package gamelogic;
+package gameengine;
 
 import java.awt.Graphics;
 
@@ -14,7 +14,7 @@ import gameengine.maths.Vector2D;
  */
 public abstract class DrawableObject {
 
-	Vector2D position;
+	public Vector2D position;
 	
 	public DrawableObject() {
 		position = new Vector2D();

@@ -1,7 +1,7 @@
 /*
  * 
  */
-package gamelogic;
+package gameengine.graphics;
 
 import java.util.HashMap;
 import java.util.Map;

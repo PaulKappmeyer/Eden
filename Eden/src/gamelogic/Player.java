@@ -6,8 +6,8 @@ package gamelogic;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import gameengine.loaders.AnimationSetLoader;
-import gameengine.loaders.ImageLoader;
+import gameengine.DrawableObject;
+import gameengine.graphics.AnimationSet;
 import gameengine.loaders.RessourceLoader;
 import gameengine.maths.Vector2D;
 
@@ -21,83 +21,71 @@ public class Player extends DrawableObject{
 	int width;
 	int height;
 	BufferedImage image;
-	Animation player_walk_up;
-	Animation player_walk_down;
-	Animation player_walk_left;
-	Animation player_walk_right;
-	Animation currentAnimation;
+	AnimationPlayer animationPlayer;
 	
-	AnimationSet playerAnimationSet;
-	
+	boolean isMoving;
 	int walkspeed;
+	Vector2D walkDireciton;
 	
 	public Player(float x, float y) {
 		this.position = new Vector2D(x, y);
 		this.width = 128;
 		this.height = 128;
+		this.isMoving = false;
 		this.walkspeed = 100;
-		try {
-			/*this.image = ImageLoader.loadImage(".\\res\\eden_32.png");
-			int tilesize = 32;
-			float time = 0.1f;
-			player_walk_down = new Animation(new BufferedImage[] {image.getSubimage(0, 0, tilesize, tilesize), image.getSubimage(0, tilesize, tilesize, tilesize),
-					image.getSubimage(0, tilesize*2, tilesize, tilesize), image.getSubimage(0, tilesize*3, tilesize, tilesize)}, time);
-			player_walk_up = new Animation(new BufferedImage[] {image.getSubimage(tilesize, 0, tilesize, tilesize), image.getSubimage(tilesize, tilesize, tilesize, tilesize),
-					image.getSubimage(tilesize, tilesize*2, tilesize, tilesize), image.getSubimage(tilesize, tilesize*3, tilesize, tilesize)}, time);
-			player_walk_left = new Animation(new BufferedImage[] {image.getSubimage(tilesize*2, 0, tilesize, tilesize), image.getSubimage(tilesize*2, tilesize, tilesize, tilesize),
-					image.getSubimage(tilesize*2, tilesize*2, tilesize, tilesize), image.getSubimage(tilesize*2, tilesize*3, tilesize, tilesize)}, time);
-			player_walk_right = new Animation(new BufferedImage[] {image.getSubimage(tilesize*3, 0, tilesize, tilesize), image.getSubimage(tilesize*3, tilesize, tilesize, tilesize),
-					image.getSubimage(tilesize*3, tilesize*2, tilesize, tilesize), image.getSubimage(tilesize*3, tilesize*3, tilesize, tilesize)}, time);
-			*/
-			
-			playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
-			player_walk_down = playerAnimationSet.getAnimation("player_walk_down");
-			player_walk_up = playerAnimationSet.getAnimation("player_walk_up");
-			player_walk_left = playerAnimationSet.getAnimation("player_walk_left");
-			player_walk_right = playerAnimationSet.getAnimation("player_walk_right");
-			
+		this.walkDireciton = new Vector2D();
+		try {	
+			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
+			animationPlayer = new AnimationPlayer(playerAnimationSet);		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		currentAnimation = player_walk_down;
+		animationPlayer.play("player_walk_down");
 	}
 
 	@Override
 	public void update(float tslf) {
+		this.isMoving = false;
 		if(PlayerInput.isUpKeyDown()) {
-			position.y -= walkspeed * tslf;
-			currentAnimation = player_walk_up;
-			currentAnimation.play();
+			isMoving = true;
+			walkDireciton.x = 0;
+			walkDireciton.y = -1;
+			animationPlayer.play("player_walk_up");
 		}
 		if(PlayerInput.isLeftKeyDown()) {
-			position.x -= walkspeed * tslf;
-			currentAnimation = player_walk_left;
-			currentAnimation.play();
+			isMoving = true;
+			walkDireciton.x = -1;
+			walkDireciton.y = 0;
+			animationPlayer.play("player_walk_left");
 		}
 		if(PlayerInput.isDownKeyDown()) {
-			position.y += walkspeed * tslf;
-			currentAnimation = player_walk_down;
-			currentAnimation.play();
+			isMoving = true;
+			walkDireciton.x = 0;
+			walkDireciton.y = 1;
+			animationPlayer.play("player_walk_down");
 		}
 		if(PlayerInput.isRightKeyDown()) {
-			position.x += walkspeed * tslf;
-			currentAnimation = player_walk_right;
-			currentAnimation.play();
+			isMoving = true;
+			walkDireciton.x = 1;
+			walkDireciton.y = 0;
+			animationPlayer.play("player_walk_right");
+		} 
+		if(!isMoving){
+			animationPlayer.reset();
+			animationPlayer.stop();
+			walkDireciton.x = 0;
+			walkDireciton.y = 0;
 		}
 		
-		if(!(PlayerInput.isDownKeyDown() || PlayerInput.isLeftKeyDown() || PlayerInput.isRightKeyDown() || PlayerInput.isUpKeyDown())){
-			currentAnimation.reset();
-			currentAnimation.stop();
-		}
+		animationPlayer.update(tslf);
+		this.image = animationPlayer.getCurrentFrame();
 		
-		currentAnimation.update(tslf);
-		
-		this.image = currentAnimation.getCurrentFrame();
+		this.position.x += walkDireciton.x * walkspeed * tslf;
+		this.position.y += walkDireciton.y * walkspeed * tslf;
 	}
 
 	@Override
 	public void draw(Graphics graphics) {
 		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
 	}
-	
 }

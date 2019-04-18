@@ -1,0 +1,8 @@
+16
+4
+4
+0.1
+player_walk_down
+player_walk_up
+player_walk_left
+player_walk_right

@@ -5,7 +5,7 @@ package gameengine.loaders;
 
 import java.awt.image.BufferedImage;
 
-import gamelogic.AnimationSet;
+import gameengine.graphics.AnimationSet;
 
 /**
  * 
@@ -20,7 +20,7 @@ public final class RessourceLoader {
 			return (T) ImageLoader.loadImage(filePath);
 		}
 		else if(classType == AnimationSet.class) {
-			return (T) AnimationSetLoader.loadAnimation(filePath);
+			return (T) AnimationSetLoader.loadAnimationSet(filePath);
 		}
 		else throw new Exception("Unsupported Type.");
 	}

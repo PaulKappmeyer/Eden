@@ -1,7 +1,7 @@
 /*
  * 
  */
-package gamelogic;
+package gameengine.graphics;
 
 import java.awt.image.BufferedImage;
 
@@ -36,18 +36,29 @@ public class Animation {
 		}
 	}
 	
+	/**
+	 * Sets the boolean {@link #isPlaying} to true
+	 */
 	public void play() {
 		isPlaying = true;
 	}
+	/**
+	 * Sets the boolean {@link #isPlaying} to false
+	 */
 	public void stop() {
 		isPlaying = false;
 	}
-	
+	/**
+	 * Sets {@link #currentPlayedTime} and {@link #currentSpriteIndex} to zero
+	 */
 	public void reset() {
 		currentPlayedTime = 0;
 		currentSpriteIndex = 0;
 	}
-	
+	/**
+	 * Returns the current frame of the animation
+	 * @return BufferedImage - the current frame
+	 */
 	public BufferedImage getCurrentFrame() {
 		return sprites[currentSpriteIndex]; 
 	}

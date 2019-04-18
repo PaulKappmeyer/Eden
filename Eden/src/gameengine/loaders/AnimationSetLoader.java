@@ -4,12 +4,13 @@
 package gameengine.loaders;
 
 import java.io.FileReader;
+
+import gameengine.graphics.Animation;
+import gameengine.graphics.AnimationSet;
+
 import java.io.File;
 import java.io.BufferedReader;
 import java.awt.image.BufferedImage;
-
-import gamelogic.Animation;
-import gamelogic.AnimationSet;
 
 /**
  * 
@@ -18,7 +19,8 @@ import gamelogic.AnimationSet;
  */
 public final class AnimationSetLoader {
 	
-	public static AnimationSet loadAnimation(String filePath) throws Exception{
+	
+	public static AnimationSet loadAnimationSet(String filePath) throws Exception{
 		String filePathWithoutExtension = filePath.substring(0, filePath.lastIndexOf('.'));
 		String filePathAnimationTextFile = filePathWithoutExtension + ".txt";
 		File fileAnimationTextFile = new File(filePathAnimationTextFile);
