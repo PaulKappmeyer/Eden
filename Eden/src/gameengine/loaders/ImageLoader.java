@@ -26,7 +26,6 @@ public final class ImageLoader {
 		File source = new File(path);
 		if(!source.exists()) throw new FileNotFoundException("This file could not be found");
 		if(!source.isFile()) throw new Exception("The given path is not a file");
-		System.out.println("Start loading Image: " + source.getAbsolutePath());
 		
 		BufferedImage image = ImageIO.read(source);
 		return image;

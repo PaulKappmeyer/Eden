@@ -1,9 +1,6 @@
-package gamelogic;
+package gameengine.graphics;
 
 import java.awt.image.BufferedImage;
-
-import gameengine.graphics.Animation;
-import gameengine.graphics.AnimationSet;
 
 public class AnimationPlayer {
 
