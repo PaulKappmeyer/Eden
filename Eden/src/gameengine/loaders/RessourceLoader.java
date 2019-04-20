@@ -4,9 +4,9 @@
 package gameengine.loaders;
 
 import java.awt.image.BufferedImage;
-import javax.sound.sampled.Clip;
 
 import gameengine.graphics.AnimationSet;
+import gameengine.sounds.Sound;
 
 /**
  * 
@@ -23,7 +23,7 @@ public final class RessourceLoader {
 		else if(classType == AnimationSet.class) {
 			return (T) AnimationSetLoader.loadAnimationSet(filePath);
 		}
-		else if(classType == Clip.class) {
+		else if(classType == Sound.class) {
 			return (T) SoundLoader.loadSound(filePath);
 		}
 		else throw new Exception("Unsupported Type.");

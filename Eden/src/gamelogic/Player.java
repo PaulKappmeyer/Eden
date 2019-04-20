@@ -5,13 +5,13 @@ package gamelogic;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import javax.sound.sampled.Clip;
 
 import gameengine.DrawableObject;
 import gameengine.graphics.AnimationPlayer;
 import gameengine.graphics.AnimationSet;
 import gameengine.loaders.RessourceLoader;
 import gameengine.maths.Vector2D;
+import gameengine.sounds.Sound;
 
 /**
  * 
@@ -25,7 +25,7 @@ public class Player extends DrawableObject{
 	BufferedImage image;
 	AnimationPlayer animationPlayer;
 	
-	//Clip clipWalking;
+	Sound soundWalking;
 	
 	boolean isMoving;
 	int walkspeed;
@@ -42,7 +42,7 @@ public class Player extends DrawableObject{
 			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
 			animationPlayer = new AnimationPlayer(playerAnimationSet);		
 			
-			//clipWalking = RessourceLoader.load(Clip.class, ".\\res\\walking.wav"); <- Clip kann nicht geöffnet werden		
+			soundWalking = RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -79,8 +79,14 @@ public class Player extends DrawableObject{
 		if(!isMoving){
 			animationPlayer.reset();
 			animationPlayer.stop();
+			
+			soundWalking.stop();
+			
 			walkDireciton.x = 0;
 			walkDireciton.y = 0;
+		}
+		else {
+			soundWalking.loop();
 		}
 		
 		animationPlayer.update(tslf);
