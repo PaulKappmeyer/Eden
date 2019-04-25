@@ -12,7 +12,7 @@ import gameengine.inputs.KeyboardInputManager;
  * @author Paul
  *
  */
-public class PlayerInput {
+public final class PlayerInput {
 
 	/**
 	 * 
