@@ -12,8 +12,8 @@ import javax.sound.sampled.FloatControl;
  *
  */
 public class Sound {
-	Clip clip;
-	FloatControl volume;
+	private Clip clip;
+	private FloatControl volume;
 	
 	public Sound(Clip clip) {
 		this.clip = clip;

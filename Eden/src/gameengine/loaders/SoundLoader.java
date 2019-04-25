@@ -19,7 +19,7 @@ import gameengine.sounds.Sound;
  *
  */
 final class SoundLoader {
-	public static Sound loadSound(String filePath) throws Exception {
+	static Sound loadSound(String filePath) throws Exception {
 		File soundFile = new File(filePath);
 		if(!soundFile.exists()) throw new FileNotFoundException("This file could not be found");
 		if(!soundFile.isFile()) throw new Exception("The given path is not a file");

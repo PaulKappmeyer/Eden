@@ -19,7 +19,7 @@ import java.awt.image.BufferedImage;
  */
 final class AnimationSetLoader {
 		
-	public static AnimationSet loadAnimationSet(String filePath) throws Exception{
+	static AnimationSet loadAnimationSet(String filePath) throws Exception{
 		String filePathWithoutExtension = filePath.substring(0, filePath.lastIndexOf('.'));
 		String filePathAnimationTextFile = filePathWithoutExtension + ".txt";
 		File fileAnimationTextFile = new File(filePathAnimationTextFile);

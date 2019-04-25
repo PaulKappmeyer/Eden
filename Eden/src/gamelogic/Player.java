@@ -12,6 +12,8 @@ import gameengine.graphics.AnimationSet;
 import gameengine.loaders.RessourceLoader;
 import gameengine.maths.Vector2D;
 import gameengine.sounds.Sound;
+import gameengine.sounds.SoundPlayer;
+import gameengine.sounds.SoundSet;
 
 /**
  * 
@@ -24,8 +26,7 @@ public class Player extends DrawableObject{
 	int height;
 	BufferedImage image;
 	AnimationPlayer animationPlayer;
-	
-	Sound soundWalking;
+	SoundPlayer soundPlayer;
 	
 	boolean isMoving;
 	int walkspeed;
@@ -42,11 +43,14 @@ public class Player extends DrawableObject{
 			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
 			animationPlayer = new AnimationPlayer(playerAnimationSet);		
 			
-			soundWalking = RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav");
+			SoundSet soundSet = new SoundSet();
+			soundSet.addSound("player_walk", RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav"));
+			soundPlayer = new SoundPlayer(soundSet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		animationPlayer.play("player_walk_down");
+		soundPlayer.play("player_walk");                //TODO: Steht hier, da sonst soundPlayer.stop(); einen nullPointerExecption wirft.
+		animationPlayer.play("player_walk_down");       //TODO: Steht hier, da sonst animationPlayer.stop(); einen nullPointerExecption wirft.
 	}
 
 	@Override
@@ -80,13 +84,13 @@ public class Player extends DrawableObject{
 			animationPlayer.reset();
 			animationPlayer.stop();
 			
-			soundWalking.stop();
+			soundPlayer.stop();
 			
 			walkDireciton.x = 0;
 			walkDireciton.y = 0;
 		}
 		else {
-			soundWalking.loop();
+			soundPlayer.loop("player_walk");
 		}
 		
 		animationPlayer.update(tslf);
