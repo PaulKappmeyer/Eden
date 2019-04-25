@@ -4,11 +4,14 @@ import java.awt.image.BufferedImage;
 
 public class AnimationPlayer {
 
-	private AnimationSet animations;
+	private AnimationSet animationSet;
 	private Animation currentAnimation;
 	
-	public AnimationPlayer(AnimationSet animations) {
-		this.animations = animations;
+	public AnimationPlayer() {
+		animationSet = new AnimationSet();
+	}
+	public AnimationPlayer(AnimationSet animationSet) {
+		this.animationSet = animationSet;
 	}
 	
 	public void update(float tslf) {
@@ -16,7 +19,7 @@ public class AnimationPlayer {
 	}
 	
 	public void play(String name) {
-		currentAnimation = animations.getAnimation(name);
+		currentAnimation = animationSet.getAnimation(name);
 		currentAnimation.play();
 	}
 	
@@ -30,5 +33,9 @@ public class AnimationPlayer {
 	
 	public BufferedImage getCurrentFrame() {
 		return currentAnimation.getCurrentFrame();
+	}
+	
+	public void addAnimation(String name, Animation animation) {
+		animationSet.addAnimation(name, animation);
 	}
 }

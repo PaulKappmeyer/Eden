@@ -24,5 +24,5 @@ public class SoundSet {
 	
 	public Sound getSound(String name) {
 		return sounds.get(name);
-	}	
+	}
 }

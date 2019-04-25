@@ -13,7 +13,6 @@ import gameengine.loaders.RessourceLoader;
 import gameengine.maths.Vector2D;
 import gameengine.sounds.Sound;
 import gameengine.sounds.SoundPlayer;
-import gameengine.sounds.SoundSet;
 
 /**
  * 
@@ -43,58 +42,63 @@ public class Player extends DrawableObject{
 			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
 			animationPlayer = new AnimationPlayer(playerAnimationSet);		
 			
-			SoundSet soundSet = new SoundSet();
-			soundSet.addSound("player_walk", RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav"));
-			soundPlayer = new SoundPlayer(soundSet);
+			soundPlayer = new SoundPlayer();
+			soundPlayer.addSound("player_walk", RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		soundPlayer.play("player_walk");                //TODO: Steht hier, da sonst soundPlayer.stop(); einen nullPointerExecption wirft.
-		animationPlayer.play("player_walk_down");       //TODO: Steht hier, da sonst animationPlayer.stop(); einen nullPointerExecption wirft.
+		animationPlayer.play("player_walk_down");
+		image = animationPlayer.getCurrentFrame();
 	}
 
 	@Override
 	public void update(float tslf) {
-		this.isMoving = false;
+		boolean isPressing = false;
 		if(PlayerInput.isUpKeyDown()) {
 			isMoving = true;
+			isPressing = true;
 			walkDireciton.x = 0;
 			walkDireciton.y = -1;
 			animationPlayer.play("player_walk_up");
 		}
 		if(PlayerInput.isLeftKeyDown()) {
 			isMoving = true;
+			isPressing = true;
 			walkDireciton.x = -1;
 			walkDireciton.y = 0;
 			animationPlayer.play("player_walk_left");
 		}
 		if(PlayerInput.isDownKeyDown()) {
 			isMoving = true;
+			isPressing = true;
 			walkDireciton.x = 0;
 			walkDireciton.y = 1;
 			animationPlayer.play("player_walk_down");
 		}
 		if(PlayerInput.isRightKeyDown()) {
 			isMoving = true;
+			isPressing = true;
 			walkDireciton.x = 1;
 			walkDireciton.y = 0;
 			animationPlayer.play("player_walk_right");
 		} 
-		if(!isMoving){
-			animationPlayer.reset();
-			animationPlayer.stop();
-			
-			soundPlayer.stop();
-			
-			walkDireciton.x = 0;
-			walkDireciton.y = 0;
-		}
-		else {
-			soundPlayer.loop("player_walk");
-		}
 		
-		animationPlayer.update(tslf);
-		this.image = animationPlayer.getCurrentFrame();
+		if(isMoving) {
+			animationPlayer.update(tslf);
+			soundPlayer.loop("player_walk");
+			
+			if(!isPressing) {
+				animationPlayer.reset();
+				animationPlayer.stop();
+				
+				soundPlayer.stop();
+				
+				walkDireciton.x = 0;
+				walkDireciton.y = 0;
+				isMoving = false;
+			}
+		}
+		image = animationPlayer.getCurrentFrame();
 		
 		this.position.x += walkDireciton.x * walkspeed * tslf;
 		this.position.y += walkDireciton.y * walkspeed * tslf;
