@@ -21,12 +21,17 @@ import gameengine.sounds.SoundPlayer;
  */
 public class Player extends DrawableObject{
 
+	public static final String UP = "up";
+	public static final String DOWN = "down";
+	public static final String LEFT = "left";
+	public static final String RIGHT = "right";
 	public static final int MAX_WALKSPEED = 200;
 	public static final float TIME_FOR_MAX_WALKSPEED = 1.25f;
 	private float timeWalked;
 	private boolean isMoving;	
 	private int currentWalkspeed;
-	private Vector2D walkDireciton;
+	private Vector2D walkDirectionVector;
+	private String walkDirectionString;
 	
 	private int width;
 	private int height;
@@ -40,7 +45,7 @@ public class Player extends DrawableObject{
 		this.height = 128;
 		this.isMoving = false;
 		this.currentWalkspeed = 0;
-		this.walkDireciton = new Vector2D();
+		this.walkDirectionVector = new Vector2D();
 		try {	
 			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
 			animationPlayer = new AnimationPlayer(playerAnimationSet);		
@@ -60,33 +65,34 @@ public class Player extends DrawableObject{
 		if(PlayerInput.isUpKeyDown()) {
 			isMoving = true;
 			isPressing = true;
-			walkDireciton.x = 0;
-			walkDireciton.y = -1;
-			animationPlayer.play("player_walk_up");
+			walkDirectionVector.x = 0;
+			walkDirectionVector.y = -1;
+			walkDirectionString = UP;
 		}
 		if(PlayerInput.isLeftKeyDown()) {
 			isMoving = true;
 			isPressing = true;
-			walkDireciton.x = -1;
-			walkDireciton.y = 0;
-			animationPlayer.play("player_walk_left");
+			walkDirectionVector.x = -1;
+			walkDirectionVector.y = 0;
+			walkDirectionString = LEFT;
 		}
 		if(PlayerInput.isDownKeyDown()) {
 			isMoving = true;
 			isPressing = true;
-			walkDireciton.x = 0;
-			walkDireciton.y = 1;
-			animationPlayer.play("player_walk_down");
+			walkDirectionVector.x = 0;
+			walkDirectionVector.y = 1;
+			walkDirectionString = DOWN;
 		}
 		if(PlayerInput.isRightKeyDown()) {
 			isMoving = true;
 			isPressing = true;
-			walkDireciton.x = 1;
-			walkDireciton.y = 0;
-			animationPlayer.play("player_walk_right");
+			walkDirectionVector.x = 1;
+			walkDirectionVector.y = 0;
+			walkDirectionString = RIGHT;
 		} 
 		
 		if(isMoving) {
+			animationPlayer.play("player_walk_" + walkDirectionString);
 			animationPlayer.update(tslf);
 			soundPlayer.loop("player_walk");
 			
@@ -96,8 +102,8 @@ public class Player extends DrawableObject{
 				
 				soundPlayer.stop();
 				
-				walkDireciton.x = 0;
-				walkDireciton.y = 0;
+				walkDirectionVector.x = 0;
+				walkDirectionVector.y = 0;
 				timeWalked = 0;
 				isMoving = false;
 			}
@@ -111,8 +117,8 @@ public class Player extends DrawableObject{
 			currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
 		}
 		
-		this.position.x += walkDireciton.x * currentWalkspeed * tslf;
-		this.position.y += walkDireciton.y * currentWalkspeed * tslf;
+		this.position.x += walkDirectionVector.x * currentWalkspeed * tslf;
+		this.position.y += walkDirectionVector.y * currentWalkspeed * tslf;
 	}
 
 	@Override
