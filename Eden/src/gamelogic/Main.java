@@ -41,10 +41,11 @@ public class Main extends GameBase{
 		}
 		int width = 100;
 		int height = 100;
+		int tileSize = 128;
 		tiles = new Tile[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				tiles[i][j] = new Tile(i * 16, j * 16);
+				tiles[i][j] = new Tile(i * tileSize, j * tileSize, tileSize);
 			}
 		}
 	}

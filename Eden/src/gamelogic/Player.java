@@ -21,22 +21,25 @@ import gameengine.sounds.SoundPlayer;
  */
 public class Player extends DrawableObject{
 
-	int width;
-	int height;
-	BufferedImage image;
-	AnimationPlayer animationPlayer;
-	SoundPlayer soundPlayer;
+	public static final int MAX_WALKSPEED = 200;
+	public static final float TIME_FOR_MAX_WALKSPEED = 1.25f;
+	private float timeWalked;
+	private boolean isMoving;	
+	private int currentWalkspeed;
+	private Vector2D walkDireciton;
 	
-	boolean isMoving;
-	int walkspeed;
-	Vector2D walkDireciton;
+	private int width;
+	private int height;
+	private BufferedImage image;
+	private AnimationPlayer animationPlayer;
+	private SoundPlayer soundPlayer;
 	
 	public Player(float x, float y) {
 		this.position = new Vector2D(x, y);
 		this.width = 128;
 		this.height = 128;
 		this.isMoving = false;
-		this.walkspeed = 100;
+		this.currentWalkspeed = 0;
 		this.walkDireciton = new Vector2D();
 		try {	
 			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
@@ -95,13 +98,21 @@ public class Player extends DrawableObject{
 				
 				walkDireciton.x = 0;
 				walkDireciton.y = 0;
+				timeWalked = 0;
 				isMoving = false;
 			}
 		}
 		image = animationPlayer.getCurrentFrame();
 		
-		this.position.x += walkDireciton.x * walkspeed * tslf;
-		this.position.y += walkDireciton.y * walkspeed * tslf;
+		timeWalked += tslf;
+		if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {
+			currentWalkspeed = MAX_WALKSPEED;
+		} else {
+			currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
+		}
+		
+		this.position.x += walkDireciton.x * currentWalkspeed * tslf;
+		this.position.y += walkDireciton.y * currentWalkspeed * tslf;
 	}
 
 	@Override
