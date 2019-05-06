@@ -10,10 +10,10 @@ public class Tile extends DrawableObject{
 	BufferedImage image;
 	int size;
 	
-	public Tile(int x, int y, int size) {
+	public Tile(int x, int y, int size, BufferedImage image) {
 		super(x, y);
 		this.size = size;
-		this.image = Main.tileSet;
+		this.image = image;
 	}
 	
 	@Override

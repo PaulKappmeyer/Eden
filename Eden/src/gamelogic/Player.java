@@ -96,6 +96,13 @@ public class Player extends DrawableObject{
 			animationPlayer.update(tslf);
 			soundPlayer.loop("player_walk");
 			
+			timeWalked += tslf;
+			if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {
+				currentWalkspeed = MAX_WALKSPEED;
+			} else {
+				currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
+			}
+			
 			if(!isPressing) {
 				animationPlayer.reset();
 				animationPlayer.stop();
@@ -109,13 +116,6 @@ public class Player extends DrawableObject{
 			}
 		}
 		image = animationPlayer.getCurrentFrame();
-		
-		timeWalked += tslf;
-		if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {
-			currentWalkspeed = MAX_WALKSPEED;
-		} else {
-			currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
-		}
 		
 		this.position.x += walkDirectionVector.x * currentWalkspeed * tslf;
 		this.position.y += walkDirectionVector.y * currentWalkspeed * tslf;
