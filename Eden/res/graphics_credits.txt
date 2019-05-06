@@ -1,0 +1,4 @@
+eden_16: selfmade
+eden_32: selfmade
+eden_64: https://i.stack.imgur.com/AjFP5.png
+Dungeon_1: selfmade

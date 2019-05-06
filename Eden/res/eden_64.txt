@@ -1,0 +1,10 @@
+horizontal
+64
+64
+4
+4
+0.1
+player_walk_down
+player_walk_left
+player_walk_right
+player_walk_up

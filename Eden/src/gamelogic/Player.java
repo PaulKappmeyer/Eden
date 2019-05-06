@@ -47,7 +47,7 @@ public class Player extends DrawableObject{
 		this.currentWalkspeed = 0;
 		this.walkDirectionVector = new Vector2D();
 		try {	
-			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_32.png");
+			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_64_1.png");
 			animationPlayer = new AnimationPlayer(playerAnimationSet);		
 			
 			soundPlayer = new SoundPlayer();
