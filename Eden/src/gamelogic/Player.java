@@ -53,10 +53,9 @@ public class Player extends DrawableObject{
 			soundPlayer = new SoundPlayer();
 			soundPlayer.addSound("player_walk", RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			// TODO: handle exception
 		}
 		animationPlayer.play("player_walk_down");
-		image = animationPlayer.getCurrentFrame();
 	}
 
 	@Override
