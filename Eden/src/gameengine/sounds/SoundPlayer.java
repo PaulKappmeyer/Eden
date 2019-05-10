@@ -36,6 +36,11 @@ public class SoundPlayer {
 		}
 	}
 
+	public void setVolume(float volume) {
+		if(currentSound == null) return;
+		currentSound.setVolume(volume);
+	}
+	
 	public void addSound(String name, Sound sound) {
 		soundSet.addSound(name, sound);
 	}

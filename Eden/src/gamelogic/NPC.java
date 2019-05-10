@@ -19,12 +19,7 @@ import gameengine.sounds.SoundPlayer;
  * @author Paul
  *
  */
-public class Player extends DrawableObject{
-
-	public static final String UP = "up";
-	public static final String DOWN = "down";
-	public static final String LEFT = "left";
-	public static final String RIGHT = "right";
+public class NPC extends DrawableObject{
 	public static final int MAX_WALKSPEED = 200;
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.5f;
 	private float timeWalked;
@@ -32,14 +27,14 @@ public class Player extends DrawableObject{
 	private int currentWalkspeed;
 	private Vector2D walkDirectionVector;
 	private String walkDirectionString;
-	
+
 	private int width;
 	private int height;
 	private BufferedImage image;
 	private AnimationPlayer animationPlayer;
 	private SoundPlayer soundPlayer;
-	
-	public Player(float x, float y) {
+
+	public NPC(float x, float y) {
 		super(x, y);
 		this.width = 128;
 		this.height = 128;
@@ -47,75 +42,52 @@ public class Player extends DrawableObject{
 		this.currentWalkspeed = 0;
 		this.walkDirectionVector = new Vector2D();
 		try {	
-			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_64.png");
+			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\npc_64.png");
 			animationPlayer = new AnimationPlayer(playerAnimationSet);		
-			
+
 			soundPlayer = new SoundPlayer();
-			soundPlayer.addSound("player_walk", RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav"));
+			soundPlayer.addSound("npc_walk", RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav"));
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		animationPlayer.loop("player_walk_down");
+		animationPlayer.loop("npc_walk_down");
 	}
 
+	String direction = Player.DOWN;
 	@Override
 	public void update(float tslf) {
-		boolean isPressing = false;
-		if(PlayerInput.isUpKeyDown()) {
-			isMoving = true;
-			isPressing = true;
-			walkDirectionVector.x = 0;
-			walkDirectionVector.y = -1;
-			walkDirectionString = UP;
+		if(position.y > 500) {
+			direction = Player.UP;
 		}
-		if(PlayerInput.isLeftKeyDown()) {
-			isMoving = true;
-			isPressing = true;
-			walkDirectionVector.x = -1;
-			walkDirectionVector.y = 0;
-			walkDirectionString = LEFT;
+		if(position.y < 100) {
+			direction = Player.DOWN;
 		}
-		if(PlayerInput.isDownKeyDown()) {
-			isMoving = true;
-			isPressing = true;
-			walkDirectionVector.x = 0;
-			walkDirectionVector.y = 1;
-			walkDirectionString = DOWN;
-		}
-		if(PlayerInput.isRightKeyDown()) {
-			isMoving = true;
-			isPressing = true;
-			walkDirectionVector.x = 1;
-			walkDirectionVector.y = 0;
-			walkDirectionString = RIGHT;
-		} 
+		move(direction);
 		
 		if(isMoving) {
-			animationPlayer.loop("player_walk_" + walkDirectionString);
+			animationPlayer.loop("npc_walk_" + walkDirectionString);
 			animationPlayer.update(tslf);
-			soundPlayer.loop("player_walk");
-			
+			//soundPlayer.loop("npc_walk");
+
 			timeWalked += tslf;
 			if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {
 				currentWalkspeed = MAX_WALKSPEED;
 			} else {
 				currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
 			}
-			
-			if(!isPressing) {
-				animationPlayer.reset();
-				animationPlayer.stop();
-				
-				soundPlayer.stop();
-				
-				walkDirectionVector.x = 0;
-				walkDirectionVector.y = 0;
-				timeWalked = 0;
-				isMoving = false;
-			}
+		} else {
+			animationPlayer.reset();
+			animationPlayer.stop();
+
+			soundPlayer.stop();
+
+			walkDirectionVector.x = 0;
+			walkDirectionVector.y = 0;
+			timeWalked = 0;
+			isMoving = false;
 		}
 		image = animationPlayer.getCurrentFrame();
-		
+
 		this.position.x += walkDirectionVector.x * currentWalkspeed * tslf;
 		this.position.y += walkDirectionVector.y * currentWalkspeed * tslf;
 	}
@@ -124,4 +96,34 @@ public class Player extends DrawableObject{
 	public void draw(Graphics graphics) {
 		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
 	}
+
+	public void move(String direction) {
+		if(direction == null) return;
+		switch (direction) {
+		case Player.UP:
+			isMoving = true;
+			walkDirectionVector.y = -1;
+			walkDirectionString = Player.UP;
+			break;
+		case Player.DOWN:
+			isMoving = true;
+			walkDirectionVector.y = 1;
+			walkDirectionString = Player.DOWN;
+			break;
+		case Player.LEFT:
+			isMoving = true;
+			walkDirectionVector.x = -1;
+			walkDirectionString = Player.LEFT;
+			break;
+		case Player.RIGHT:
+			isMoving = true;
+			walkDirectionVector.x = 1;
+			walkDirectionString = Player.RIGHT;
+			break;
+
+		default:
+			break;
+		}
+	}
+
 }

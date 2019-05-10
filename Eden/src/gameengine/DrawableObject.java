@@ -24,5 +24,5 @@ public abstract class DrawableObject {
 	}
 	
 	public abstract void update(float tslf);	
-	public abstract void draw(Graphics g);
+	public abstract void draw(Graphics graphics);
 }

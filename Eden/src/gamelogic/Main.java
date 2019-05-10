@@ -20,6 +20,7 @@ public class Main extends GameBase{
 	
 	private Player player;
 	private TiledMap tiledMap;
+	private NPC test;
 	
 	public static void main(String[] args) {
 		Main main = new Main();
@@ -37,11 +38,13 @@ public class Main extends GameBase{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		test = new NPC(500, 100);
 	}
 
 	@Override
 	public void update(float tslf) {
 		player.update(tslf);
+		test.update(tslf);
 	}
 
 	@Override
@@ -51,5 +54,6 @@ public class Main extends GameBase{
 		
 		tiledMap.draw(graphics);
 		player.draw(graphics);
+		test.draw(graphics);
 	}	
 }

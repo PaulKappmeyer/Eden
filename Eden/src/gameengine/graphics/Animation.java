@@ -39,7 +39,7 @@ public class Animation {
 	/**
 	 * Sets the boolean {@link #isPlaying} to true
 	 */
-	public void play() {
+	public void loop() {
 		isPlaying = true;
 	}
 	/**

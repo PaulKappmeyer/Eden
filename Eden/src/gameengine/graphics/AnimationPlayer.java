@@ -18,9 +18,9 @@ public class AnimationPlayer {
 		currentAnimation.update(tslf);
 	}
 	
-	public void play(String name) {
+	public void loop(String name) {
 		currentAnimation = animationSet.getAnimation(name);
-		currentAnimation.play();
+		currentAnimation.loop();
 	}
 	
 	public void stop() {

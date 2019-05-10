@@ -1,0 +1,10 @@
+horizontal
+64
+64
+4
+4
+0.1
+npc_walk_down
+npc_walk_left
+npc_walk_right
+npc_walk_up

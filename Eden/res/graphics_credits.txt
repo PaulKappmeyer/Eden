@@ -1,4 +1,5 @@
 eden_16: selfmade
 eden_32: selfmade
 eden_64: https://i.stack.imgur.com/AjFP5.png
+npc_64: http://orig12.deviantart.net/159c/f/2011/134/c/7/leaf_overworld_ds_by_nsora_96-d3gbyp9.png
 Dungeon_1: selfmade
