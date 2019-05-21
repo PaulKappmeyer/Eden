@@ -8,10 +8,7 @@ import java.awt.image.BufferedImage;
 
 import gameengine.DrawableObject;
 import gameengine.graphics.AnimationPlayer;
-import gameengine.graphics.AnimationSet;
-import gameengine.loaders.RessourceLoader;
 import gameengine.maths.Vector2D;
-import gameengine.sounds.Sound;
 import gameengine.sounds.SoundPlayer;
 
 /**
@@ -41,15 +38,9 @@ public class NPC extends DrawableObject{
 		this.isMoving = false;
 		this.currentWalkspeed = 0;
 		this.walkDirectionVector = new Vector2D();
-		try {	
-			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\npc_64.png");
-			animationPlayer = new AnimationPlayer(playerAnimationSet);		
-
-			soundPlayer = new SoundPlayer();
-			soundPlayer.addSound("npc_walk", RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav"));
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		animationPlayer = new AnimationPlayer(GameResources.NPC_ANIMATION_SET);		
+		soundPlayer = new SoundPlayer();
+		soundPlayer.addSound("npc_walk", GameResources.PLAYER_WALK_SOUND);
 		animationPlayer.loop("npc_walk_down");
 	}
 
@@ -63,7 +54,7 @@ public class NPC extends DrawableObject{
 			direction = Player.DOWN;
 		}
 		move(direction);
-		
+
 		if(isMoving) {
 			animationPlayer.loop("npc_walk_" + walkDirectionString);
 			animationPlayer.update(tslf);

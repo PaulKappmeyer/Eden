@@ -6,8 +6,6 @@ package gamelogic;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import gameengine.loaders.RessourceLoader;
-
 /**
  * 
  * @author Paul
@@ -28,8 +26,8 @@ public class TiledMap {
 	 * @param tileSize The size of each tile in pixels
 	 * @throws Exception
 	 */
-	public TiledMap(int width, int height, int tileSize) throws Exception {
-		this.tileSet = RessourceLoader.load(BufferedImage.class, ".\\res\\Dungeon_1.png"); /*TODO: Handling of exceptions*/
+	public TiledMap(int width, int height, int tileSize) {
+		this.tileSet = GameResources.TILESET;
 		this.width = width;
 		this.height = height;
 		this.tileSize = tileSize;

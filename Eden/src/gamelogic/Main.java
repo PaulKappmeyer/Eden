@@ -31,13 +31,10 @@ public class Main extends GameBase{
 
 	@Override
 	public void init() {
+		GameResources.load();
+		
 		player = new Player(400, 400);
-		try {
-			tiledMap = new TiledMap(100, 100, 128);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		tiledMap = new TiledMap(100, 100, 128);
 		test = new NPC(500, 100);
 	}
 

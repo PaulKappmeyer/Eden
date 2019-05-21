@@ -8,10 +8,7 @@ import java.awt.image.BufferedImage;
 
 import gameengine.DrawableObject;
 import gameengine.graphics.AnimationPlayer;
-import gameengine.graphics.AnimationSet;
-import gameengine.loaders.RessourceLoader;
 import gameengine.maths.Vector2D;
-import gameengine.sounds.Sound;
 import gameengine.sounds.SoundPlayer;
 
 /**
@@ -32,13 +29,13 @@ public class Player extends DrawableObject{
 	private int currentWalkspeed;
 	private Vector2D walkDirectionVector;
 	private String walkDirectionString;
-	
+
 	private int width;
 	private int height;
 	private BufferedImage image;
 	private AnimationPlayer animationPlayer;
 	private SoundPlayer soundPlayer;
-	
+
 	public Player(float x, float y) {
 		super(x, y);
 		this.width = 128;
@@ -46,15 +43,10 @@ public class Player extends DrawableObject{
 		this.isMoving = false;
 		this.currentWalkspeed = 0;
 		this.walkDirectionVector = new Vector2D();
-		try {	
-			AnimationSet playerAnimationSet = RessourceLoader.load(AnimationSet.class, ".\\res\\eden_64.png");
-			animationPlayer = new AnimationPlayer(playerAnimationSet);		
-			
-			soundPlayer = new SoundPlayer();
-			soundPlayer.addSound("player_walk", RessourceLoader.load(Sound.class, ".\\res\\walking_female.wav"));
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET);		
+
+		soundPlayer = new SoundPlayer();
+		soundPlayer.addSound("player_walk", GameResources.PLAYER_WALK_SOUND);
 		animationPlayer.loop("player_walk_down");
 	}
 
@@ -89,25 +81,25 @@ public class Player extends DrawableObject{
 			walkDirectionVector.y = 0;
 			walkDirectionString = RIGHT;
 		} 
-		
+
 		if(isMoving) {
 			animationPlayer.loop("player_walk_" + walkDirectionString);
 			animationPlayer.update(tslf);
 			soundPlayer.loop("player_walk");
-			
+
 			timeWalked += tslf;
 			if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {
 				currentWalkspeed = MAX_WALKSPEED;
 			} else {
 				currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
 			}
-			
+
 			if(!isPressing) {
 				animationPlayer.reset();
 				animationPlayer.stop();
-				
+
 				soundPlayer.stop();
-				
+
 				walkDirectionVector.x = 0;
 				walkDirectionVector.y = 0;
 				timeWalked = 0;
@@ -115,7 +107,7 @@ public class Player extends DrawableObject{
 			}
 		}
 		image = animationPlayer.getCurrentFrame();
-		
+
 		this.position.x += walkDirectionVector.x * currentWalkspeed * tslf;
 		this.position.y += walkDirectionVector.y * currentWalkspeed * tslf;
 	}

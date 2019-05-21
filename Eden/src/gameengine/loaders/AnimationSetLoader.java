@@ -37,7 +37,7 @@ final class AnimationSetLoader {
 		int columnCounts = Integer.parseInt(bufferedReader.readLine());
 		float timePerSprite = Float.parseFloat(bufferedReader.readLine());
 
-		BufferedImage animationSprite = RessourceLoader.load(BufferedImage.class, filePath);
+		BufferedImage animationSprite = ResourceLoader.load(BufferedImage.class, filePath);
 
 		AnimationSet animationSet = new AnimationSet();
 
