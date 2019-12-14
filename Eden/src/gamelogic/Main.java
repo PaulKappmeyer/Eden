@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import gameengine.GameBase;
+import gamelogic.player.Player;
 
 /**
  * 
@@ -20,7 +21,7 @@ public class Main extends GameBase{
 	
 	private Player player;
 	private TiledMap tiledMap;
-	private NPC test;
+	private NPC testNPC;
 	
 	public static void main(String[] args) {
 		Main main = new Main();
@@ -35,13 +36,13 @@ public class Main extends GameBase{
 		
 		player = new Player(400, 400);
 		tiledMap = new TiledMap(100, 100, 128);
-		test = new NPC(500, 100);
+		testNPC = new NPC(500, 100);
 	}
 
 	@Override
 	public void update(float tslf) {
 		player.update(tslf);
-		test.update(tslf);
+		testNPC.update(tslf);
 	}
 
 	@Override
@@ -49,8 +50,10 @@ public class Main extends GameBase{
 		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.fillRect(0, 0, width, height);
 		
+		graphics.translate((int)-player.position.x + width/2 - player.getWidth()/2, (int)-player.position.y + height/2 - player.getHeight()/2);
+		
 		tiledMap.draw(graphics);
 		player.draw(graphics);
-		test.draw(graphics);
+		testNPC.draw(graphics);
 	}	
 }

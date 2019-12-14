@@ -1,7 +1,7 @@
 /*
  * 
  */
-package gamelogic;
+package gamelogic.player;
 
 import java.awt.event.KeyEvent;
 

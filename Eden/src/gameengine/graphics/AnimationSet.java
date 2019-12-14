@@ -25,4 +25,11 @@ public class AnimationSet {
 	public Animation getAnimation(String name) {
 		return animations.get(name);
 	}
+	
+	@Override
+	public String toString() {
+		String out = new String("Animation Set: ");
+		out += animations.toString();
+		return out;
+	}
 }

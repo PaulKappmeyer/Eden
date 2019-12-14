@@ -10,6 +10,7 @@ import gameengine.DrawableObject;
 import gameengine.graphics.AnimationPlayer;
 import gameengine.maths.Vector2D;
 import gameengine.sounds.SoundPlayer;
+import gamelogic.player.Player;
 
 /**
  * 
@@ -58,7 +59,7 @@ public class NPC extends DrawableObject{
 		if(isMoving) {
 			animationPlayer.loop("npc_walk_" + walkDirectionString);
 			animationPlayer.update(tslf);
-			//soundPlayer.loop("npc_walk");
+			soundPlayer.loop("npc_walk");
 
 			timeWalked += tslf;
 			if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {

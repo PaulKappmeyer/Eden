@@ -23,46 +23,34 @@ final class AnimationSetLoader {
 		String filePathWithoutExtension = filePath.substring(0, filePath.lastIndexOf('.'));
 		String filePathAnimationTextFile = filePathWithoutExtension + ".txt";
 		File fileAnimationTextFile = new File(filePathAnimationTextFile);
-
+		
 		if(!fileAnimationTextFile.exists()) throw new Exception("AnimationSetLoader: DescriptionFile was not found for " + filePath);
 
 		FileReader fileReader = new FileReader(fileAnimationTextFile);
-
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-		String orientaion = bufferedReader.readLine();
 		int width = Integer.parseInt(bufferedReader.readLine());
 		int height = Integer.parseInt(bufferedReader.readLine());
-		int frameCounts = Integer.parseInt(bufferedReader.readLine());
-		int columnCounts = Integer.parseInt(bufferedReader.readLine());
-		float timePerSprite = Float.parseFloat(bufferedReader.readLine());
+		int numberOfAnimations = Integer.parseInt(bufferedReader.readLine());
 
-		BufferedImage animationSprite = ResourceLoader.load(BufferedImage.class, filePath);
-
+		BufferedImage animationSetSprite = ResourceLoader.load(BufferedImage.class, filePath);
+		int animationSetWidth = animationSetSprite.getWidth()/width;
+		
 		AnimationSet animationSet = new AnimationSet();
-
-		if(orientaion.equals("vertical")) {
-			for(int i = 0; i < columnCounts; i++) {
-				String name = bufferedReader.readLine();
-				BufferedImage[] sprites = new BufferedImage[frameCounts];
-				for(int j = 0; j < frameCounts; j++) {
-					sprites[j] = animationSprite.getSubimage(width * i, height * j, width, height);
-				}
-				Animation animation = new Animation(sprites, timePerSprite);
-				animationSet.addAnimation(name, animation);
+		
+		for (int n = 0; n < numberOfAnimations; n++) {
+			String name = bufferedReader.readLine();
+			String[] index = bufferedReader.readLine().split(",");
+			BufferedImage[] sprites = new BufferedImage[index.length];
+			for (int i = 0; i < index.length; i++) {
+				int a = Integer.parseInt(index[i]);
+				sprites[i] = animationSetSprite.getSubimage((a%animationSetWidth)*width, Math.floorDiv(a, animationSetWidth)*height, width, height);
 			}
-		} else if(orientaion.equals("horizontal")) {
-			for(int i = 0; i < columnCounts; i++) {
-				String name = bufferedReader.readLine();
-				BufferedImage[] sprites = new BufferedImage[frameCounts];
-				for(int j = 0; j < frameCounts; j++) {
-					sprites[j] = animationSprite.getSubimage(width * j, height * i, width, height);
-				}
-				Animation animation = new Animation(sprites, timePerSprite);
-				animationSet.addAnimation(name, animation);
-			}
+			float timePerSprite = Float.parseFloat(bufferedReader.readLine());
+			Animation animation = new Animation(sprites, timePerSprite);
+			animationSet.addAnimation(name, animation);
 		}
-
+		
 		bufferedReader.close();
 
 		return animationSet;

@@ -108,6 +108,11 @@ public class Vector2D {
 		this.x /= length;
 		this.y /= length;
 	}
+	public void normalize() {
+		float length = this.getLength();
+		this.x /= length;
+		this.y /= length;
+	}
 	/**
 	 * Returns if the vector is a unit vector with a length of one
 	 * @return true if the vector is a unit vector, false if not

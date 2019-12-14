@@ -62,4 +62,9 @@ public class Animation {
 	public BufferedImage getCurrentFrame() {
 		return sprites[currentSpriteIndex]; 
 	}
+	
+	@Override
+	public String toString() {
+		return "[Sprites:"+sprites.length+"]";
+	}
 }

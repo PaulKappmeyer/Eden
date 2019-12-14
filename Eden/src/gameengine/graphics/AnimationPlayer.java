@@ -2,6 +2,8 @@ package gameengine.graphics;
 
 import java.awt.image.BufferedImage;
 
+import gamelogic.GameResources;
+
 public class AnimationPlayer {
 
 	private AnimationSet animationSet;
@@ -15,24 +17,27 @@ public class AnimationPlayer {
 	}
 	
 	public void update(float tslf) {
-		currentAnimation.update(tslf);
+		if(currentAnimation != null) currentAnimation.update(tslf);
 	}
 	
 	public void loop(String name) {
 		currentAnimation = animationSet.getAnimation(name);
-		currentAnimation.loop();
+		if(currentAnimation != null) {
+			currentAnimation.loop();
+		}
+		else System.err.println("Animation " + name + " not found.");
 	}
 	
 	public void stop() {
-		currentAnimation.stop();
+		if(currentAnimation != null) currentAnimation.stop();
 	}
 	
 	public void reset() {
-		currentAnimation.reset();
+		if(currentAnimation != null) currentAnimation.reset();
 	}
 	
 	public BufferedImage getCurrentFrame() {
-		return currentAnimation.getCurrentFrame();
+		return currentAnimation != null ? currentAnimation.getCurrentFrame() : GameResources.ERROR;
 	}
 	
 	public void addAnimation(String name, Animation animation) {
