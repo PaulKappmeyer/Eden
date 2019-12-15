@@ -3,6 +3,8 @@
  */
 package gameengine.maths;
 
+import gamelogic.Direction;
+
 /**
  * A vector representing a x-and y-location in coordinate space, specified in float precision
  * @author Paul
@@ -40,6 +42,12 @@ public class Vector2D {
 	}
 	
 	/* ---------------------------------------------methods------------------------------------ */
+	public Vector2D subtract(Vector2D vector) {
+		this.x -= vector.x;
+		this.y -= vector.y;
+		return this;
+	}
+	
 	/**
 	 * Returns the distance between the vector and a specified x-and y-position
 	 * @param x The x-position
@@ -103,15 +111,17 @@ public class Vector2D {
 	/**
 	 * This method sets the vector to a unit vector by dividing the x-and y-position by the length of the vector
 	 */
-	public void makeUnitVector() {
+	public Vector2D makeUnitVector() {
 		float length = this.getLength();
 		this.x /= length;
 		this.y /= length;
+		return this;
 	}
-	public void normalize() {
+	public Vector2D normalize() {
 		float length = this.getLength();
 		this.x /= length;
 		this.y /= length;
+		return this;
 	}
 	/**
 	 * Returns if the vector is a unit vector with a length of one
@@ -119,5 +129,18 @@ public class Vector2D {
 	 */
 	public boolean isUnitVector() {
 		return Math.round((x*x + y*y) * 1000)/1000 == 1 ? true : false;
+	}
+
+	public Direction getDirection() {
+		if(x <= 1 && x >= 0.7) return Direction.right;
+		else if(x <= -0.7 && x >= -1) return Direction.left;
+		else if(y <= 1 && y >= 0.7) return Direction.down;
+		else if(y <= -0.7 && y >= -1) return Direction.up;
+		else return null;
+	}
+	
+	@Override
+	public String toString() {
+		return "[x:" + String.format("%1.2f", x) + " y:" + String.format("%1.2f", y) + "]"; 
 	}
 }

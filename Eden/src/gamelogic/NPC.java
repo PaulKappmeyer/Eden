@@ -10,7 +10,6 @@ import gameengine.DrawableObject;
 import gameengine.graphics.AnimationPlayer;
 import gameengine.maths.Vector2D;
 import gameengine.sounds.SoundPlayer;
-import gamelogic.player.Player;
 
 /**
  * 
@@ -21,16 +20,19 @@ public class NPC extends DrawableObject{
 	public static final int MAX_WALKSPEED = 200;
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.5f;
 	private float timeWalked;
+	private float timeIdled;
 	private boolean isMoving;	
 	private int currentWalkspeed;
 	private Vector2D walkDirectionVector;
-	private String walkDirectionString;
+	private Direction walkDirectionString;
 
 	private int width;
 	private int height;
 	private BufferedImage image;
 	private AnimationPlayer animationPlayer;
 	private SoundPlayer soundPlayer;
+	private float moveTime;
+	private float standTime;
 
 	public NPC(float x, float y) {
 		super(x, y);
@@ -39,26 +41,16 @@ public class NPC extends DrawableObject{
 		this.isMoving = false;
 		this.currentWalkspeed = 0;
 		this.walkDirectionVector = new Vector2D();
-		animationPlayer = new AnimationPlayer(GameResources.NPC_ANIMATION_SET);		
+		animationPlayer = new AnimationPlayer(GameResources.NPC_ANIMATION_SET);	
 		soundPlayer = new SoundPlayer();
 		soundPlayer.addSound("npc_walk", GameResources.PLAYER_WALK_SOUND);
-		animationPlayer.loop("npc_walk_down");
+		animationPlayer.play("npc_walk_down");
 	}
 
-	String direction = Player.DOWN;
 	@Override
 	public void update(float tslf) {
-		if(position.y > 500) {
-			direction = Player.UP;
-		}
-		if(position.y < 100) {
-			direction = Player.DOWN;
-		}
-		move(direction);
-
 		if(isMoving) {
 			animationPlayer.loop("npc_walk_" + walkDirectionString);
-			animationPlayer.update(tslf);
 			soundPlayer.loop("npc_walk");
 
 			timeWalked += tslf;
@@ -67,17 +59,29 @@ public class NPC extends DrawableObject{
 			} else {
 				currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
 			}
-		} else {
-			animationPlayer.reset();
-			animationPlayer.stop();
 
-			soundPlayer.stop();
+			if(timeWalked >= moveTime) {
+				stopWalking();
+			}
+		}else {
+			timeIdled += tslf;
 
-			walkDirectionVector.x = 0;
-			walkDirectionVector.y = 0;
-			timeWalked = 0;
-			isMoving = false;
+			if(timeIdled >= standTime) {
+				if(position.x < 100) move(Direction.right, 2);
+				else if(position.x > 700) move(Direction.left, 2);
+				else if(position.y < 100) move(Direction.down, 2);
+				else if(position.y > 700) move(Direction.up, 2);
+				else {
+					walkDirectionString = Main.RANDOM.nextDirection();
+					moveTime = Main.RANDOM .nextFloat() * 3;
+					standTime = Main.RANDOM.nextFloat() * 1.5f;
+					move(walkDirectionString, moveTime);
+				}
+
+				timeIdled = 0;
+			}
 		}
+		animationPlayer.update(tslf);
 		image = animationPlayer.getCurrentFrame();
 
 		this.position.x += walkDirectionVector.x * currentWalkspeed * tslf;
@@ -89,33 +93,50 @@ public class NPC extends DrawableObject{
 		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
 	}
 
-	public void move(String direction) {
+	/**
+	 * 
+	 */
+	public void stopWalking() {
+		animationPlayer.reset();
+		animationPlayer.stop();
+
+		soundPlayer.stop();
+
+		walkDirectionVector.x = 0;
+		walkDirectionVector.y = 0;
+		timeWalked = 0;
+		isMoving = false;
+	}
+
+	public void move(Direction direction) {
 		if(direction == null) return;
+		walkDirectionString = direction;
 		switch (direction) {
-		case Player.UP:
+		case up:
 			isMoving = true;
 			walkDirectionVector.y = -1;
-			walkDirectionString = Player.UP;
 			break;
-		case Player.DOWN:
+		case down:
 			isMoving = true;
 			walkDirectionVector.y = 1;
-			walkDirectionString = Player.DOWN;
 			break;
-		case Player.LEFT:
+		case left:
 			isMoving = true;
 			walkDirectionVector.x = -1;
-			walkDirectionString = Player.LEFT;
 			break;
-		case Player.RIGHT:
+		case right:
 			isMoving = true;
 			walkDirectionVector.x = 1;
-			walkDirectionString = Player.RIGHT;
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	public void move(Direction direction, float moveTime) {
+		move(direction);
+		this.moveTime = moveTime;
 	}
 
 }

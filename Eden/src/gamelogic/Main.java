@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import gameengine.GameBase;
+import gameengine.maths.MyRandom;
+import gameengine.maths.Vector2D;
 import gamelogic.player.Player;
 
 /**
@@ -19,9 +21,11 @@ public class Main extends GameBase{
 	static int width;
 	static int height;
 	
-	private Player player;
+	public static final MyRandom RANDOM = new MyRandom();
+	
+	public static Player player;
 	private TiledMap tiledMap;
-	private NPC testNPC;
+	private Zombie testZombie[];
 	
 	public static void main(String[] args) {
 		Main main = new Main();
@@ -36,13 +40,19 @@ public class Main extends GameBase{
 		
 		player = new Player(400, 400);
 		tiledMap = new TiledMap(100, 100, 128);
-		testNPC = new NPC(500, 100);
+		testZombie = new Zombie[15];
+		for (int i = 0; i < testZombie.length; i++) {
+			Vector2D position = RANDOM.nextVector2D(500, 500, 1500, 1500);
+			testZombie[i] = new Zombie(position.x, position.y);
+		}
 	}
 
 	@Override
 	public void update(float tslf) {
 		player.update(tslf);
-		testNPC.update(tslf);
+		for (int i = 0; i < testZombie.length; i++) {
+			testZombie[i].update(tslf);
+		}
 	}
 
 	@Override
@@ -54,6 +64,8 @@ public class Main extends GameBase{
 		
 		tiledMap.draw(graphics);
 		player.draw(graphics);
-		testNPC.draw(graphics);
+		for (int i = 0; i < testZombie.length; i++) {
+			testZombie[i].draw(graphics);
+		}
 	}	
 }

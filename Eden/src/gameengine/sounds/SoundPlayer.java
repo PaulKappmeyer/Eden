@@ -24,6 +24,7 @@ public class SoundPlayer {
 	public void loop(String name) {
 		if(!isPlaying) {
 			currentSound = soundSet.getSound(name);
+			if(currentSound == null) return;
 			currentSound.loop();
 			isPlaying = true;
 		}
