@@ -76,4 +76,12 @@ public class Mob extends MovableObject{
 			break;
 		}
 	}
+	
+	public Vector2D getWalkDirectionVector() {
+		return walkDirectionVector;
+	}
+	
+	public Direction getWalkDirectionString() {
+		return walkDirectionString;
+	}
 }

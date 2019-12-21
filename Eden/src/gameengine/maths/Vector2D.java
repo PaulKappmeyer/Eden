@@ -41,7 +41,7 @@ public class Vector2D {
 		this.y = vector.y;
 	}
 	
-	/* ---------------------------------------------methods------------------------------------ */
+	/* ---------------------------------------------methods------------------------------------ */	
 	public Vector2D subtract(Vector2D vector) {
 		this.x -= vector.x;
 		this.y -= vector.y;
