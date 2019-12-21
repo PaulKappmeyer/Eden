@@ -8,7 +8,7 @@ import gamelogic.Direction;
 public class MyRandom extends Random{
 
 	public int nextInt(int lowerBound, int upperBound) {
-		return lowerBound + nextInt(upperBound);
+		return lowerBound == upperBound ? lowerBound : lowerBound + nextInt(upperBound-lowerBound);
 	}
 	
 	public Vector2D nextVector2D(int lowerBoundX, int lowerBoundY, int upperBoundX, int upperBoundY) {

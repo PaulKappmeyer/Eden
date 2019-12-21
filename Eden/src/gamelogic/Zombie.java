@@ -8,15 +8,18 @@ public class Zombie extends Mob{
 	public static final int MAX_WALKSPEED = 30;
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
 
-	private float triggerDistance = 300;
-	private ZombieWatchBehavior zombieBehavior;
+	private ZombieBehavior zombieBehavior;
+	private ZombieWatchBehavior zombieWatchBehavior;
+	private int triggerDistance = 400;
+	private int viewCone = 25;
 	
 	public Zombie(float x, float y) {
 		super(x, y, 128, 128);
 		walkDirectionString = Main.RANDOM.nextDirection();
 		animationPlayer = new AnimationPlayer(GameResources.ZOMBIE_ANIMATION_SET, GameResources.ZOMBIE_ANIMATION_SET.getAnimation("zombie_walk_" + walkDirectionString));
 		soundPlayer.addSound("zombie_walk", GameResources.PLAYER_WALK_SOUND);
-		zombieBehavior = new ZombieWatchBehavior(this, triggerDistance);
+		zombieBehavior = new ZombieBehavior(this, width/2);
+		zombieWatchBehavior = new ZombieWatchBehavior(this, triggerDistance, viewCone);
 	}
 	
 	@Override
@@ -37,7 +40,7 @@ public class Zombie extends Mob{
 				currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
 			}
 		}else {
-			if(zombieBehavior.isTriggered()) {
+			if(zombieBehavior.isTriggered() || zombieWatchBehavior.isTriggered()) {
 				isWalking = true;
 			}
 		}

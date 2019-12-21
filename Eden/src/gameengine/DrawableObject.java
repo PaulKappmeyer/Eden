@@ -32,7 +32,7 @@ public abstract class DrawableObject {
 		this.height = height;
 	}
 	
-	public abstract void update(float tslf);	
+	public abstract void update(float tslf);
 	
 	public void draw(Graphics graphics) {
 		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);

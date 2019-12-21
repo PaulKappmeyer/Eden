@@ -40,9 +40,9 @@ public class Main extends GameBase{
 		
 		player = new Player(400, 400);
 		tiledMap = new TiledMap(100, 100, 128);
-		testZombie = new Zombie[15];
+		testZombie = new Zombie[50];
 		for (int i = 0; i < testZombie.length; i++) {
-			Vector2D position = RANDOM.nextVector2D(500, 500, 1500, 1500);
+			Vector2D position = RANDOM.nextVector2D(750, 200, 3500, 3500);
 			testZombie[i] = new Zombie(position.x, position.y);
 		}
 	}

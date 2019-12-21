@@ -42,13 +42,13 @@ public class Player extends Mob{
 		}
 		if(PlayerInput.isUpKeyDown() && PlayerInput.isRightKeyDown()) {
 			isPressing = true;
-			walkDirectionVector.y = -0.75f;
-			walkDirectionVector.x = 0.75f;
+			walkDirectionVector.y = -0.7f;
+			walkDirectionVector.x = 0.7f;
 		}
 		if(PlayerInput.isUpKeyDown() && PlayerInput.isLeftKeyDown()) {
 			isPressing = true;
-			walkDirectionVector.y = -0.75f;
-			walkDirectionVector.x = -0.75f;
+			walkDirectionVector.y = -0.7f;
+			walkDirectionVector.x = -0.7f;
 		}
 		if(PlayerInput.isDownKeyDown() && !(PlayerInput.isLeftKeyDown() || PlayerInput.isRightKeyDown())) {
 			isPressing = true;
@@ -57,13 +57,13 @@ public class Player extends Mob{
 		}
 		if(PlayerInput.isDownKeyDown() && PlayerInput.isRightKeyDown()) {
 			isPressing = true;
-			walkDirectionVector.y = 0.75f;
-			walkDirectionVector.x = 0.75f;
+			walkDirectionVector.y = 0.7f;
+			walkDirectionVector.x = 0.7f;
 		}
 		if(PlayerInput.isDownKeyDown() && PlayerInput.isLeftKeyDown()) {
 			isPressing = true;
-			walkDirectionVector.y = 0.75f;
-			walkDirectionVector.x = -0.75f;
+			walkDirectionVector.y = 0.7f;
+			walkDirectionVector.x = -0.7f;
 		}
 		if(PlayerInput.isLeftKeyDown() && !(PlayerInput.isUpKeyDown() || PlayerInput.isDownKeyDown())) {
 			isPressing = true;

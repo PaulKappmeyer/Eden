@@ -7,37 +7,36 @@ public class ZombieWatchBehavior {
 
 	private Mob object;
 	private float triggerDistance;
-	
-	public ZombieWatchBehavior(Mob object, float triggerDistance) {
+	private float viewCone = 90;
+
+	public ZombieWatchBehavior(Mob object, int triggerDistance, int viewCone) {
 		this.object = object;
 		this.triggerDistance = triggerDistance;
+		this.viewCone = viewCone;
 	}
 
 	public boolean isTriggered() {
-		float playerCenterX = Main.player.getX() + Main.player.getWidth()/2;
-		float playerCenterY = Main.player.getY() + Main.player.getHeight()/2;
-		Vector2D playerCenterPosition = new Vector2D(playerCenterX, playerCenterY);
-		float zombieCenterX = object.getX() + object.getWidth()/2;
-		float zombieCenterY = object.getY() + object.getHeight()/2;
-		Vector2D zombieCenterPosition = new Vector2D(zombieCenterX, zombieCenterY);
-
+		Vector2D playerCenterPosition = Main.player.getCenterPosition();
+		Vector2D zombieCenterPosition = object.getCenterPosition();
+		
 		if(triggerDistance*triggerDistance >= zombieCenterPosition.distanceSquared(playerCenterPosition)) {
-			Vector2D newCenterPosition = playerCenterPosition.subtract(zombieCenterPosition);
 			Vector2D zombieWatchVector = Direction.directionToVector(object.getWalkDirectionString());
+			Vector2D newCenterPosition = Vector2D.subtract(playerCenterPosition, zombieCenterPosition);
+			
 			float scalar = newCenterPosition.x * zombieWatchVector.x + newCenterPosition.y * zombieWatchVector.y;
-
-			return scalar > 0 ? true : false;
+			float length = newCenterPosition.getLength();
+			float value = scalar / length;
+			float degrees = (float) Math.toDegrees(Math.acos(value));
+			
+			return degrees <= viewCone/2 ? true : false;
 		} else return false;
 	}
 
 	public Vector2D getVectorToPlayer() {
-		float playerCenterX = Main.player.getX() + Main.player.getWidth()/2;
-		float playerCenterY = Main.player.getY() + Main.player.getHeight()/2;
-		Vector2D playerCenterPosition = new Vector2D(playerCenterX, playerCenterY);
-		float zombieCenterX = object.getX() + object.getWidth()/2;
-		float zombieCenterY = object.getY() + object.getHeight()/2;
-		Vector2D zombieCenterPosition = new Vector2D(zombieCenterX, zombieCenterY);
-		return (playerCenterPosition.subtract(zombieCenterPosition)).makeUnitVector();
+		Vector2D playerCenterPosition = Main.player.getCenterPosition();
+		Vector2D zombieCenterPosition = object.getCenterPosition();
+
+		return (Vector2D.subtract(playerCenterPosition, zombieCenterPosition)).makeUnitVector();
 	}
 
 }
