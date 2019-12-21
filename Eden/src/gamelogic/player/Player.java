@@ -3,8 +3,12 @@
  */
 package gamelogic.player;
 
+import java.awt.Graphics;
+
 import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
+import gameengine.hitbox.CircleHitbox;
+import gameengine.hitbox.Hitbox;
 import gameengine.maths.Vector2D;
 import gamelogic.Direction;
 import gamelogic.GameResources;
@@ -17,8 +21,10 @@ import gamelogic.GameResources;
 public class Player extends Mob{
 
 	public static final int MAX_WALKSPEED = 400;
-	public static final float TIME_FOR_MAX_WALKSPEED = 0.2f;
+	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
 
+	public Hitbox hitbox;
+	
 	public Player(float x, float y) {
 		super(x, y, 128, 128);
 		this.currentWalkspeed = 0;
@@ -26,8 +32,14 @@ public class Player extends Mob{
 		this.walkDirectionString = Direction.down;
 		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET, GameResources.PLAYER_ANIMATION_SET.getAnimation("player_stand_" + walkDirectionString));
 		this.soundPlayer.addSound("player_walk", GameResources.PLAYER_WALK_SOUND);
+		this.hitbox = new CircleHitbox(centerPosition, 35);
 	}
 
+	@Override
+	public void draw(Graphics graphics) {
+		super.draw(graphics);
+	}
+	
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);

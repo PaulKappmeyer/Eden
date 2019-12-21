@@ -1,13 +1,16 @@
 package gamelogic;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import gameengine.Mob;
 import gameengine.maths.Vector2D;
 
 public class ZombieWatchBehavior {
 
 	private Mob object;
-	private float triggerDistance;
-	private float viewCone = 90;
+	private int triggerDistance;
+	private int viewCone = 90;
 
 	public ZombieWatchBehavior(Mob object, int triggerDistance, int viewCone) {
 		this.object = object;
@@ -15,6 +18,29 @@ public class ZombieWatchBehavior {
 		this.viewCone = viewCone;
 	}
 
+	public void draw(Graphics graphics) {
+		int t = triggerDistance;
+		float v = viewCone/2;
+		graphics.setColor(new Color(255, 255, 255, 150));
+		switch (object.getWalkDirectionString()) {
+		case right:
+			graphics.fillArc((int)(object.getCenterPositionX() - t), (int)(object.getCenterPositionY() - t), t*2, t*2, (int)(0-v), (int)(v*2));	
+			break;
+		case left:
+			graphics.fillArc((int)(object.getCenterPositionX() - t), (int)(object.getCenterPositionY() - t), t*2, t*2, (int)(180-v), (int)(v*2));	
+			break;
+		case up:
+			graphics.fillArc((int)(object.getCenterPositionX() - t), (int)(object.getCenterPositionY() - t), t*2, t*2, (int)(90-v), (int)(v*2));	
+			break;
+		case down:
+			graphics.fillArc((int)(object.getCenterPositionX() - t), (int)(object.getCenterPositionY() - t), t*2, t*2, (int)(-90-v), (int)(v*2));	
+			break;
+
+		default:
+			break;
+		}
+	}
+	
 	public boolean isTriggered() {
 		Vector2D playerCenterPosition = Main.player.getCenterPosition();
 		Vector2D zombieCenterPosition = object.getCenterPosition();

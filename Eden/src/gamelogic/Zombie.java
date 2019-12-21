@@ -1,11 +1,15 @@
 package gamelogic;
 
+import java.awt.Graphics;
+
 import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
+import gameengine.hitbox.CircleHitbox;
+import gameengine.hitbox.Hitbox;
 
 public class Zombie extends Mob{
 
-	public static final int MAX_WALKSPEED = 30;
+	public static final int MAX_WALKSPEED = 30 + Main.RANDOM.nextInt(20);
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
 
 	private ZombieBehavior zombieBehavior;
@@ -13,13 +17,21 @@ public class Zombie extends Mob{
 	private int triggerDistance = 400;
 	private int viewCone = 25;
 	
+	Hitbox hitbox;
+	
 	public Zombie(float x, float y) {
 		super(x, y, 128, 128);
-		walkDirectionString = Main.RANDOM.nextDirection();
-		animationPlayer = new AnimationPlayer(GameResources.ZOMBIE_ANIMATION_SET, GameResources.ZOMBIE_ANIMATION_SET.getAnimation("zombie_walk_" + walkDirectionString));
-		soundPlayer.addSound("zombie_walk", GameResources.PLAYER_WALK_SOUND);
-		zombieBehavior = new ZombieBehavior(this, width/2);
-		zombieWatchBehavior = new ZombieWatchBehavior(this, triggerDistance, viewCone);
+		this.walkDirectionString = Main.RANDOM.nextDirection();
+		this.animationPlayer = new AnimationPlayer(GameResources.ZOMBIE_ANIMATION_SET, GameResources.ZOMBIE_ANIMATION_SET.getAnimation("zombie_walk_" + walkDirectionString));
+		this.soundPlayer.addSound("zombie_walk", GameResources.PLAYER_WALK_SOUND);
+		this.zombieBehavior = new ZombieBehavior(this, width/2);
+		this.zombieWatchBehavior = new ZombieWatchBehavior(this, triggerDistance, viewCone);
+		this.hitbox = new CircleHitbox(centerPosition, 35);
+	}
+	
+	@Override
+	public void draw(Graphics graphics) {
+		super.draw(graphics);
 	}
 	
 	@Override

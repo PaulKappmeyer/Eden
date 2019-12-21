@@ -40,18 +40,23 @@ public class Main extends GameBase{
 		
 		player = new Player(400, 400);
 		tiledMap = new TiledMap(100, 100, 128);
-		testZombie = new Zombie[50];
+		testZombie = new Zombie[100];
 		for (int i = 0; i < testZombie.length; i++) {
 			Vector2D position = RANDOM.nextVector2D(750, 200, 3500, 3500);
 			testZombie[i] = new Zombie(position.x, position.y);
 		}
+		testZombie[0] = new Zombie(750, 400);
 	}
 
 	@Override
 	public void update(float tslf) {
 		player.update(tslf);
 		for (int i = 0; i < testZombie.length; i++) {
-			testZombie[i].update(tslf);
+			Zombie z = testZombie[i];
+			z.update(tslf);
+			if(z.hitbox.isOverlapping(player.hitbox)) {
+				z.stopWalking();
+			}
 		}
 	}
 
