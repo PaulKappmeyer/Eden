@@ -1,54 +1,30 @@
 package gamelogic;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-
-import gameengine.DrawableObject;
+import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
-import gameengine.maths.Vector2D;
-import gameengine.sounds.SoundPlayer;
 
-public class Zombie extends DrawableObject{
+public class Zombie extends Mob{
 
-	public static final int MAX_WALKSPEED = 90;
+	public static final int MAX_WALKSPEED = 30;
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
-	private float timeWalked;
-	private boolean isMoving;	
-	private int currentWalkspeed;
-	private Vector2D walkDirectionVector;
-	private Direction walkDirectionString;
 
-	private int width;
-	private int height;
-	private BufferedImage image;
-	private AnimationPlayer animationPlayer;
-	private SoundPlayer soundPlayer;
 	private float triggerDistance = 300;
+	private ZombieBehavior zombieBehavior;
 	
 	public Zombie(float x, float y) {
-		super(x, y);
-		this.width = 128;
-		this.height = 128;
-		this.isMoving = false;
-		this.currentWalkspeed = 0;
-		this.walkDirectionVector = new Vector2D();
-		this.walkDirectionString = Main.RANDOM.nextDirection();
-		animationPlayer = new AnimationPlayer(GameResources.ZOMBIE_ANIMATION_SET);
-		soundPlayer = new SoundPlayer();
+		super(x, y, 128, 128);
+		walkDirectionString = Main.RANDOM.nextDirection();
+		animationPlayer = new AnimationPlayer(GameResources.ZOMBIE_ANIMATION_SET, GameResources.ZOMBIE_ANIMATION_SET.getAnimation("zombie_walk_" + walkDirectionString));
 		soundPlayer.addSound("zombie_walk", GameResources.PLAYER_WALK_SOUND);
-		animationPlayer.play("zombie_walk_" + walkDirectionString);
+		zombieBehavior = new ZombieBehavior(this, triggerDistance);
 	}
 	
 	@Override
 	public void update(float tslf) {
-		if(isMoving) {
-			float playerCenterX = Main.player.position.x + Main.player.getWidth()/2;
-			float playerCenterY = Main.player.position.y + Main.player.getHeight()/2;
-			Vector2D playerCenterPosition = new Vector2D(playerCenterX, playerCenterY);
-			float zombieCenterX = this.position.x + this.width/2;
-			float zombieCenterY = this.position.y + this.height/2;
-			Vector2D zombieCenterPosition = new Vector2D(zombieCenterX, zombieCenterY);
-			walkDirectionVector = (playerCenterPosition.subtract(zombieCenterPosition)).makeUnitVector();
+		super.update(tslf);
+		
+		if(isWalking) {
+			move(zombieBehavior.getVectorToPlayer());
 			walkDirectionString = walkDirectionVector.getDirection();
 			
 			animationPlayer.loop("zombie_walk_" + walkDirectionString);
@@ -61,27 +37,12 @@ public class Zombie extends DrawableObject{
 				currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
 			}
 		}else {
-			float playerCenterX = Main.player.position.x + Main.player.getWidth()/2;
-			float playerCenterY = Main.player.position.y + Main.player.getHeight()/2;
-			Vector2D playerCenterPosition = new Vector2D(playerCenterX, playerCenterY);
-			float zombieCenterX = this.position.x + this.width/2;
-			float zombieCenterY = this.position.y + this.height/2;
-			Vector2D zombieCenterPosition = new Vector2D(zombieCenterX, zombieCenterY);
-			
-			if(triggerDistance*triggerDistance >= zombieCenterPosition.distanceSquared(playerCenterPosition)) {
-				isMoving = true;
+			if(zombieBehavior.isTriggered()) {
+				isWalking = true;
 			}
 		}
-		animationPlayer.update(tslf);
-		image = animationPlayer.getCurrentFrame();
-
-		this.position.x += walkDirectionVector.x * currentWalkspeed * tslf;
-		this.position.y += walkDirectionVector.y * currentWalkspeed * tslf;
+		
+		this.moveVector.x = walkDirectionVector.x * currentWalkspeed;
+		this.moveVector.y = walkDirectionVector.y * currentWalkspeed;
 	}
-
-	@Override
-	public void draw(Graphics graphics) {
-		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
-	}
-
 }

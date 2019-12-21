@@ -3,13 +3,9 @@
  */
 package gamelogic.player;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-
-import gameengine.DrawableObject;
+import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
 import gameengine.maths.Vector2D;
-import gameengine.sounds.SoundPlayer;
 import gamelogic.Direction;
 import gamelogic.GameResources;
 
@@ -18,39 +14,24 @@ import gamelogic.GameResources;
  * @author Paul
  *
  */
-public class Player extends DrawableObject{
+public class Player extends Mob{
 
 	public static final int MAX_WALKSPEED = 400;
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.2f;
 
-	private float timeWalked;
-	private boolean isMoving;	
-	private int currentWalkspeed;
-	private Vector2D walkDirectionVector;
-	private Direction walkDirectionString;
-
-	private int width;
-	private int height;
-	private BufferedImage image;
-	private AnimationPlayer animationPlayer;
-	private SoundPlayer soundPlayer;
-
 	public Player(float x, float y) {
-		super(x, y);
-		this.width = 128;
-		this.height = 128;
-		this.isMoving = false;
+		super(x, y, 128, 128);
 		this.currentWalkspeed = 0;
 		this.walkDirectionVector = new Vector2D();
 		this.walkDirectionString = Direction.down;
-		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET);
-		this.animationPlayer.play("player_walk_" + walkDirectionString);
-		this.soundPlayer = new SoundPlayer();
+		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET, GameResources.PLAYER_ANIMATION_SET.getAnimation("player_stand_" + walkDirectionString));
 		this.soundPlayer.addSound("player_walk", GameResources.PLAYER_WALK_SOUND);
 	}
 
 	@Override
 	public void update(float tslf) {
+		super.update(tslf);
+		
 		boolean isPressing = false;
 		walkDirectionVector.x = 0;
 		walkDirectionVector.y = 0;
@@ -95,10 +76,10 @@ public class Player extends DrawableObject{
 			walkDirectionString = Direction.right;
 		}
 		if(isPressing) {
-			isMoving = true;
+			isWalking = true;
 		}
 
-		if(isMoving) {
+		if(isWalking) {
 			animationPlayer.loop("player_walk_" + walkDirectionString);
 			soundPlayer.loop("player_walk");
 
@@ -112,11 +93,9 @@ public class Player extends DrawableObject{
 		if(!isPressing || (walkDirectionVector.x == 0 && walkDirectionVector.y == 0)) {
 			stopWalking();
 		}
-		animationPlayer.update(tslf);
-		image = animationPlayer.getCurrentFrame();
-
-		this.position.x += walkDirectionVector.x * currentWalkspeed * tslf;
-		this.position.y += walkDirectionVector.y * currentWalkspeed * tslf;
+		
+		this.moveVector.x = walkDirectionVector.x * currentWalkspeed;
+		this.moveVector.y = walkDirectionVector.y * currentWalkspeed;
 	}
 
 	/**
@@ -131,18 +110,6 @@ public class Player extends DrawableObject{
 		walkDirectionVector.x = 0;
 		walkDirectionVector.y = 0;
 		timeWalked = 0;
-		isMoving = false;
-	}
-
-	@Override
-	public void draw(Graphics graphics) {
-		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
-	}
-
-	public int getWidth() {
-		return width;
-	}
-	public int getHeight() {
-		return height;
+		isWalking = false;
 	}
 }

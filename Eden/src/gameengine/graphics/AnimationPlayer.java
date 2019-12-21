@@ -25,6 +25,13 @@ public class AnimationPlayer {
 		this.currentSpriteIndex = 0;
 	}
 	
+	public AnimationPlayer(AnimationSet animationSet, Animation firstAnimation) {
+		this.animationSet = animationSet;
+		this.currentAnimation = firstAnimation;
+		this.currentPlayedTime = 0;
+		this.currentSpriteIndex = 0;
+	}
+	
 	public void update(float tslf) {
 		if(isPlaying) {
 			currentPlayedTime += tslf;

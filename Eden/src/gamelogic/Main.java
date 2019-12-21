@@ -60,7 +60,7 @@ public class Main extends GameBase{
 		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.fillRect(0, 0, width, height);
 		
-		graphics.translate((int)-player.position.x + width/2 - player.getWidth()/2, (int)-player.position.y + height/2 - player.getHeight()/2);
+		graphics.translate((int)-player.getX() + width/2 - player.getWidth()/2, (int)-player.getY()  + height/2 - player.getHeight()/2);
 		
 		tiledMap.draw(graphics);
 		player.draw(graphics);

@@ -3,53 +3,36 @@
  */
 package gamelogic;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-
-import gameengine.DrawableObject;
+import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
-import gameengine.maths.Vector2D;
-import gameengine.sounds.SoundPlayer;
 
 /**
  * 
  * @author Paul
  *
  */
-public class NPC extends DrawableObject{
+public class NPC extends Mob{
+	
 	public static final int MAX_WALKSPEED = 200;
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.5f;
-	private float timeWalked;
+	
 	private float timeIdled;
-	private boolean isMoving;	
-	private int currentWalkspeed;
-	private Vector2D walkDirectionVector;
-	private Direction walkDirectionString;
 
-	private int width;
-	private int height;
-	private BufferedImage image;
-	private AnimationPlayer animationPlayer;
-	private SoundPlayer soundPlayer;
 	private float moveTime;
 	private float standTime;
 
 	public NPC(float x, float y) {
-		super(x, y);
-		this.width = 128;
-		this.height = 128;
-		this.isMoving = false;
-		this.currentWalkspeed = 0;
-		this.walkDirectionVector = new Vector2D();
-		animationPlayer = new AnimationPlayer(GameResources.NPC_ANIMATION_SET);	
-		soundPlayer = new SoundPlayer();
+		super(x, y, 128, 128);
+		walkDirectionString = Direction.down;
+		animationPlayer = new AnimationPlayer(GameResources.NPC_ANIMATION_SET, GameResources.NPC_ANIMATION_SET.getAnimation("npc_walk_" + walkDirectionString));
 		soundPlayer.addSound("npc_walk", GameResources.PLAYER_WALK_SOUND);
-		animationPlayer.play("npc_walk_down");
 	}
 
 	@Override
 	public void update(float tslf) {
-		if(isMoving) {
+		super.update(tslf);
+		
+		if(isWalking) {
 			animationPlayer.loop("npc_walk_" + walkDirectionString);
 			soundPlayer.loop("npc_walk");
 
@@ -81,57 +64,9 @@ public class NPC extends DrawableObject{
 				timeIdled = 0;
 			}
 		}
-		animationPlayer.update(tslf);
-		image = animationPlayer.getCurrentFrame();
 
-		this.position.x += walkDirectionVector.x * currentWalkspeed * tslf;
-		this.position.y += walkDirectionVector.y * currentWalkspeed * tslf;
-	}
-
-	@Override
-	public void draw(Graphics graphics) {
-		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
-	}
-
-	/**
-	 * 
-	 */
-	public void stopWalking() {
-		animationPlayer.reset();
-		animationPlayer.stop();
-
-		soundPlayer.stop();
-
-		walkDirectionVector.x = 0;
-		walkDirectionVector.y = 0;
-		timeWalked = 0;
-		isMoving = false;
-	}
-
-	public void move(Direction direction) {
-		if(direction == null) return;
-		walkDirectionString = direction;
-		switch (direction) {
-		case up:
-			isMoving = true;
-			walkDirectionVector.y = -1;
-			break;
-		case down:
-			isMoving = true;
-			walkDirectionVector.y = 1;
-			break;
-		case left:
-			isMoving = true;
-			walkDirectionVector.x = -1;
-			break;
-		case right:
-			isMoving = true;
-			walkDirectionVector.x = 1;
-			break;
-
-		default:
-			break;
-		}
+		this.moveVector.x = walkDirectionVector.x * currentWalkspeed;
+		this.moveVector.y = walkDirectionVector.y * currentWalkspeed;
 	}
 
 	public void move(Direction direction, float moveTime) {

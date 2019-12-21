@@ -7,11 +7,10 @@ import gameengine.DrawableObject;
 
 public class Tile extends DrawableObject{
 	
-	private BufferedImage image;
 	private int size;
 	
 	public Tile(int x, int y, int size, BufferedImage image) {
-		super(x, y);
+		super(x, y, size, size);
 		this.size = size;
 		this.image = image;
 	}
