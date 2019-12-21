@@ -32,7 +32,8 @@ public final class GameResources {
 			TILESET = ResourceLoader.load(BufferedImage.class, ".\\res\\Dungeon_1.png");
 			ERROR = ResourceLoader.load(BufferedImage.class, ".\\res\\error.png");
 		} catch (Exception e) {
-			
+			System.err.println("Failed to load");
+			e.printStackTrace();
 		}
 	}
 	

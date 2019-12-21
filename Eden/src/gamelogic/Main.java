@@ -54,8 +54,9 @@ public class Main extends GameBase{
 		for (int i = 0; i < testZombie.length; i++) {
 			Zombie z = testZombie[i];
 			z.update(tslf);
-			if(z.hitbox.isOverlapping(player.hitbox)) {
+			if(z.getHitbox().isOverlapping(player.getHitbox())) {
 				z.stopWalking();
+				player.getDamaged(50, Vector2D.subtract(player.getCenterPosition(), z.getCenterPosition()).makeUnitVector());
 			}
 		}
 	}

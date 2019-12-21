@@ -50,20 +50,35 @@ public class AnimationPlayer {
 	}
 	
 	public void play(String name) {
-		currentAnimation = animationSet.getAnimation(name);
-		if(currentAnimation != null) {
+		Animation newAnimation = animationSet.getAnimation(name);
+		if(newAnimation == null) {
+			System.err.println("Animation " + name + " not found.");
+			return;
+		}else if(newAnimation != currentAnimation) {
+			reset();
+			currentAnimation = newAnimation;
 			isPlaying = true;
-		} else System.err.println("Animation " + name + " not found.");
+		}else {
+			isPlaying = true;
+		}
 	}
-	
+
 	public void loop(String name) {
-		currentAnimation = animationSet.getAnimation(name);
-		if(currentAnimation != null) {
+		Animation newAnimation = animationSet.getAnimation(name);
+		if(newAnimation == null) {
+			System.err.println("Animation " + name + " not found.");
+			return;
+		}else if(newAnimation != currentAnimation) {
+			reset();
+			currentAnimation = newAnimation;
 			isPlaying = true;
 			isLooping = true;
-		} else System.err.println("Animation " + name + " not found.");
+		}else {
+			isPlaying = true;
+			isLooping = true;
+		}
 	}
-	
+
 	public void stop() {
 		isPlaying = false;
 		isLooping = false;

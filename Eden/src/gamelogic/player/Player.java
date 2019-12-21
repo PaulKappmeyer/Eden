@@ -22,9 +22,17 @@ public class Player extends Mob{
 
 	public static final int MAX_WALKSPEED = 400;
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
+	public static final int MAX_HEALTH = 400;
+	public static final int MAX_KNOCKBACK_AMOUNT = 1000;
+	public static final float MAX_KNOCKBACK_TIME = 0.35f;
 
-	public Hitbox hitbox;
-	
+	private Hitbox hitbox;
+	private float currentHealth;
+	private boolean gotDamaged;
+	private Vector2D knockbackVector;
+	private float currentKnockbackAmount;
+	private float time;
+
 	public Player(float x, float y) {
 		super(x, y, 128, 128);
 		this.currentWalkspeed = 0;
@@ -33,17 +41,65 @@ public class Player extends Mob{
 		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET, GameResources.PLAYER_ANIMATION_SET.getAnimation("player_stand_" + walkDirectionString));
 		this.soundPlayer.addSound("player_walk", GameResources.PLAYER_WALK_SOUND);
 		this.hitbox = new CircleHitbox(centerPosition, 35);
+		this.currentHealth = MAX_HEALTH;
+		this.knockbackVector = new Vector2D();
+	}
+
+	public void getDamaged(float damageAmount, Vector2D knockbackVector) {
+		if(!gotDamaged) {
+			gotDamaged = true;
+			currentHealth -= damageAmount;
+			stopWalking();
+			this.knockbackVector.x = knockbackVector.x;
+			this.knockbackVector.y = knockbackVector.y;
+			currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT;
+			animationPlayer.loop("player_getDamaged_" + walkDirectionString);
+		}
 	}
 
 	@Override
 	public void draw(Graphics graphics) {
 		super.draw(graphics);
 	}
-	
+
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-		
+
+		if(gotDamaged) {
+			time += tslf;
+			
+			if(time >= MAX_KNOCKBACK_TIME) {
+				time = 0;
+				knockbackVector.x = 0;
+				knockbackVector.y = 0;
+				animationPlayer.reset();
+				animationPlayer.stop();
+				gotDamaged = false;
+			}else {
+				currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT - MAX_KNOCKBACK_AMOUNT * time/MAX_KNOCKBACK_TIME;
+			}
+		}else {
+			checkInput();
+
+			if(isWalking) {
+				animationPlayer.loop("player_walk_" + walkDirectionString);
+				soundPlayer.loop("player_walk");
+
+				timeWalked += tslf;
+				if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {
+					currentWalkspeed = MAX_WALKSPEED;
+				} else {
+					currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
+				}
+			}
+		}
+
+		this.moveVector.x = walkDirectionVector.x * currentWalkspeed + knockbackVector.x * currentKnockbackAmount;
+		this.moveVector.y = walkDirectionVector.y * currentWalkspeed + knockbackVector.y * currentKnockbackAmount;
+	}
+
+	public void checkInput() {
 		boolean isPressing = false;
 		walkDirectionVector.x = 0;
 		walkDirectionVector.y = 0;
@@ -89,39 +145,33 @@ public class Player extends Mob{
 		}
 		if(isPressing) {
 			isWalking = true;
-		}
-
-		if(isWalking) {
-			animationPlayer.loop("player_walk_" + walkDirectionString);
-			soundPlayer.loop("player_walk");
-
-			timeWalked += tslf;
-			if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {
-				currentWalkspeed = MAX_WALKSPEED;
-			} else {
-				currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
-			}
-		}
-		if(!isPressing || (walkDirectionVector.x == 0 && walkDirectionVector.y == 0)) {
+		} else 	if(walkDirectionVector.x == 0 && walkDirectionVector.y == 0) {
 			stopWalking();
 		}
-		
-		this.moveVector.x = walkDirectionVector.x * currentWalkspeed;
-		this.moveVector.y = walkDirectionVector.y * currentWalkspeed;
 	}
 
 	/**
 	 * 
 	 */
 	public void stopWalking() {
-		animationPlayer.reset();
-		animationPlayer.stop();
+		if(isWalking) {
+			animationPlayer.reset();
+			animationPlayer.stop();
 
-		soundPlayer.stop();
+			soundPlayer.stop();
 
-		walkDirectionVector.x = 0;
-		walkDirectionVector.y = 0;
-		timeWalked = 0;
-		isWalking = false;
+			walkDirectionVector.x = 0;
+			walkDirectionVector.y = 0;
+			timeWalked = 0;
+			isWalking = false;
+		}
+	}
+
+	public Hitbox getHitbox() {
+		return hitbox;
+	}
+	
+	public float getCurrentHealth() {
+		return currentHealth;
 	}
 }

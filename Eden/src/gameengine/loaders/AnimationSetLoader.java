@@ -32,19 +32,21 @@ final class AnimationSetLoader {
 		int width = Integer.parseInt(bufferedReader.readLine());
 		int height = Integer.parseInt(bufferedReader.readLine());
 		int numberOfAnimations = Integer.parseInt(bufferedReader.readLine());
-
+		
 		BufferedImage animationSetSprite = ResourceLoader.load(BufferedImage.class, filePath);
-		int animationSetWidth = animationSetSprite.getWidth()/width;
 		
 		AnimationSet animationSet = new AnimationSet();
 		
 		for (int n = 0; n < numberOfAnimations; n++) {
 			String name = bufferedReader.readLine();
-			String[] index = bufferedReader.readLine().split(",");
-			BufferedImage[] sprites = new BufferedImage[index.length];
-			for (int i = 0; i < index.length; i++) {
-				int a = Integer.parseInt(index[i]);
-				sprites[i] = animationSetSprite.getSubimage((a%animationSetWidth)*width, Math.floorDiv(a, animationSetWidth)*height, width, height);
+			String[]array = bufferedReader.readLine().split("]");
+			BufferedImage[] sprites = new BufferedImage[array.length];
+			
+			for (int i = 0; i < array.length; i++) {
+				String[] positions = array[i].split(",");
+				int x = Integer.parseInt(positions[0].substring(1));
+				int y = Integer.parseInt(positions[1]);
+				sprites[i] = animationSetSprite.getSubimage(x*width, y*height, width, height);
 			}
 			float timePerSprite = Float.parseFloat(bufferedReader.readLine());
 			Animation animation = new Animation(sprites, timePerSprite);
