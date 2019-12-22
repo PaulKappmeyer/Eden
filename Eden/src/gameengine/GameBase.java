@@ -17,13 +17,13 @@ import gameengine.inputs.MouseInputManager;
 
 public abstract class GameBase {
 	private Window window;
-	
+
 	//-----------------------------------------------ABSTRACT METHODS FOR SUB-CLASS
 	public abstract void init();
 	public abstract void update(float tslf);
 	public abstract void draw(Graphics graphics);
 	//-----------------------------------------------END ABSTRACT METHODS
-	
+
 	/**
 	 * Creates a new window and starts the game loop
 	 * @param title The title of the window
@@ -32,30 +32,32 @@ public abstract class GameBase {
 	 */
 	public void start(String title, int width, int height) {
 		window = new Window(title, width, height);
-		
+
 		//Adding inputManagers to window
 		window.addKeyListener(new KeyboardInputManager());
 		MouseInputManager mouseInputManager = new MouseInputManager(window);
 		window.addMouseListener(mouseInputManager);
 		window.addMouseMotionListener(mouseInputManager);
 		window.addMouseWheelListener(mouseInputManager);
-		
+
 		init(); //Calling method init() in the sub-class
-		
+
 		long lastFrame = System.currentTimeMillis();
-		
+
 		while(true) {
-			
-			//Calculating time since last frame
-			long thisFrame = System.currentTimeMillis();
-			float tslf = (float)(thisFrame - lastFrame) / 1000f;
-			lastFrame = thisFrame;
-			
-			update(tslf); //Calling method update() in the sub-class 
-			
-			Graphics g = window.beginDrawing();
-			draw(g); //Calling method draw() in the sub-class
-			window.endDrawing(g);
+			lastFrame = System.currentTimeMillis();
+			while(window.isActive()) {
+				//Calculating time since last frame
+				long thisFrame = System.currentTimeMillis();
+				float tslf = (float)(thisFrame - lastFrame) / 1000f;
+				lastFrame = thisFrame;
+
+				update(tslf); //Calling method update() in the sub-class 
+
+				Graphics g = window.beginDrawing();
+				draw(g); //Calling method draw() in the sub-class
+				window.endDrawing(g);
+			}
 		}
 	}
 }

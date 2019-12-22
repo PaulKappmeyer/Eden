@@ -9,6 +9,8 @@ import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
 import gameengine.hitbox.CircleHitbox;
 import gameengine.hitbox.Hitbox;
+import gameengine.hud.HealthBar;
+import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
 import gamelogic.Direction;
 import gamelogic.GameResources;
@@ -22,50 +24,56 @@ public class Player extends Mob{
 
 	public static final int MAX_WALKSPEED = 400;
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
-	public static final int MAX_HEALTH = 400;
 	public static final int MAX_KNOCKBACK_AMOUNT = 1000;
 	public static final float MAX_KNOCKBACK_TIME = 0.35f;
 
 	private Hitbox hitbox;
-	private float currentHealth;
 	private boolean gotDamaged;
 	private Vector2D knockbackVector;
 	private float currentKnockbackAmount;
 	private float time;
 
+	private HealthBar healthBar;
+	
 	public Player(float x, float y) {
-		super(x, y, 128, 128);
+		super(x, y, 128, 128, 400);
 		this.currentWalkspeed = 0;
 		this.walkDirectionVector = new Vector2D();
 		this.walkDirectionString = Direction.down;
 		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET, GameResources.PLAYER_ANIMATION_SET.getAnimation("player_stand_" + walkDirectionString));
 		this.soundPlayer.addSound("player_walk", GameResources.PLAYER_WALK_SOUND);
 		this.hitbox = new CircleHitbox(centerPosition, 35);
-		this.currentHealth = MAX_HEALTH;
 		this.knockbackVector = new Vector2D();
+		this.healthBar = new HealthBar(this);
 	}
 
-	public void getDamaged(float damageAmount, Vector2D knockbackVector) {
+	public void getDamaged(float damageAmount) {
 		if(!gotDamaged) {
 			gotDamaged = true;
 			currentHealth -= damageAmount;
 			stopWalking();
-			this.knockbackVector.x = knockbackVector.x;
-			this.knockbackVector.y = knockbackVector.y;
-			currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT;
 			animationPlayer.loop("player_getDamaged_" + walkDirectionString);
+			healthBar.show();
 		}
+	}
+	
+	public void getKnockbacked(Vector2D knockbackVector) {
+		this.knockbackVector.x = knockbackVector.x;
+		this.knockbackVector.y = knockbackVector.y;
+		currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT;
 	}
 
 	@Override
 	public void draw(Graphics graphics) {
 		super.draw(graphics);
+		healthBar.draw(graphics);
 	}
 
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-
+		healthBar.update(tslf);
+		
 		if(gotDamaged) {
 			time += tslf;
 			
@@ -77,7 +85,7 @@ public class Player extends Mob{
 				animationPlayer.stop();
 				gotDamaged = false;
 			}else {
-				currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT - MAX_KNOCKBACK_AMOUNT * time/MAX_KNOCKBACK_TIME;
+				currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT - MyMaths.linearInterpolation(0, MAX_KNOCKBACK_AMOUNT, time, MAX_KNOCKBACK_TIME);
 			}
 		}else {
 			checkInput();
@@ -87,11 +95,7 @@ public class Player extends Mob{
 				soundPlayer.loop("player_walk");
 
 				timeWalked += tslf;
-				if(timeWalked >= TIME_FOR_MAX_WALKSPEED) {
-					currentWalkspeed = MAX_WALKSPEED;
-				} else {
-					currentWalkspeed = (int) (MAX_WALKSPEED * (timeWalked / TIME_FOR_MAX_WALKSPEED));
-				}
+				currentWalkspeed = MyMaths.linearInterpolation(0, MAX_WALKSPEED, timeWalked, TIME_FOR_MAX_WALKSPEED);
 			}
 		}
 
@@ -169,9 +173,5 @@ public class Player extends Mob{
 
 	public Hitbox getHitbox() {
 		return hitbox;
-	}
-	
-	public float getCurrentHealth() {
-		return currentHealth;
 	}
 }

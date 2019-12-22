@@ -7,6 +7,8 @@ import gamelogic.Direction;
 
 public class Mob extends MovableObject{
 
+	public int MAX_HEALTH;
+	
 	protected AnimationPlayer animationPlayer;
 	protected SoundPlayer soundPlayer;
 	
@@ -16,7 +18,9 @@ public class Mob extends MovableObject{
 	protected Vector2D walkDirectionVector;
 	protected Direction walkDirectionString;
 	
-	public Mob(float x, float y, int width, int height) {
+	protected float currentHealth;
+	
+	public Mob(float x, float y, int width, int height, int MAX_HEALTH) {
 		super(x, y, width, height);
 		this.soundPlayer = new SoundPlayer();
 		this.animationPlayer = new AnimationPlayer();
@@ -24,6 +28,8 @@ public class Mob extends MovableObject{
 		this.currentWalkspeed = 0;
 		this.timeWalked = 0;
 		this.walkDirectionVector = new Vector2D();
+		this.MAX_HEALTH = MAX_HEALTH;
+		this.currentHealth = MAX_HEALTH;
 	}
 	
 	@Override
@@ -83,5 +89,9 @@ public class Mob extends MovableObject{
 	
 	public Direction getWalkDirectionString() {
 		return walkDirectionString;
+	}
+	
+	public float getCurrentHealth() {
+		return currentHealth;
 	}
 }
