@@ -41,11 +41,23 @@ public class AnimationPlayer {
 				if(currentSpriteIndex == currentAnimation.getSprites().length) {
 					if(isLooping) currentSpriteIndex = 0;
 					else {
-						reset();
+						currentSpriteIndex = currentAnimation.getSprites().length - 1;
 						stop();
 					}
 				}
 			}
+		}
+	}
+	
+	public boolean isAnimationFinished(String name) {
+		Animation newAnimation = animationSet.getAnimation(name);
+		if(newAnimation == null) {
+			System.err.println("Animation " + name + " not found.");
+			return false;
+		}else if(newAnimation == currentAnimation && isLooping == false && isPlaying == false) {
+			return true;
+		}else {
+			return false;
 		}
 	}
 	

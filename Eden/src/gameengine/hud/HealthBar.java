@@ -29,9 +29,9 @@ public class HealthBar {
 
 	public void draw(Graphics graphics) {
 		if(isShown) {
-			graphics.setColor(Color.GREEN);
+			graphics.setColor(new Color(0, 255, 0, 180));
 			graphics.fillRect((int)healthBarPosition.x, (int)healthBarPosition.y, currentWidth, FULL_HEIGHT);
-			graphics.setColor(Color.BLACK);
+			graphics.setColor(new Color(0, 0, 0, 180));
 			graphics.drawRect((int)healthBarPosition.x, (int)healthBarPosition.y, FULL_WIDTH, FULL_HEIGHT);
 		}
 	}
@@ -40,7 +40,8 @@ public class HealthBar {
 		if(isShown) {
 			healthBarPosition.x = object.getX();
 			healthBarPosition.y = object.getY() - DISTANCE;
-			currentWidth = (int) (object.getCurrentHealth() / object.MAX_HEALTH * FULL_WIDTH);
+			if(object.getCurrentHealth() > 0)  currentWidth = (int) (object.getCurrentHealth() / object.MAX_HEALTH * FULL_WIDTH);
+			else currentWidth = 0;
 			
 			if(slidingUp) {
 				time += tslf;

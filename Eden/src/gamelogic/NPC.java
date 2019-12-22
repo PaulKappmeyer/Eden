@@ -26,7 +26,6 @@ public class NPC extends Mob{
 		super(x, y, 128, 128, 400);
 		walkDirectionString = Direction.down;
 		animationPlayer = new AnimationPlayer(GameResources.NPC_ANIMATION_SET, GameResources.NPC_ANIMATION_SET.getAnimation("npc_walk_" + walkDirectionString));
-		soundPlayer.addSound("npc_walk", GameResources.PLAYER_WALK_SOUND);
 	}
 
 	@Override
@@ -35,7 +34,6 @@ public class NPC extends Mob{
 		
 		if(isWalking) {
 			animationPlayer.loop("npc_walk_" + walkDirectionString);
-			soundPlayer.loop("npc_walk");
 
 			timeWalked += tslf;
 			currentWalkspeed = MyMaths.linearInterpolation(0, MAX_WALKSPEED, timeWalked, TIME_FOR_MAX_WALKSPEED);

@@ -12,7 +12,7 @@ import gameengine.maths.Vector2D;
 
 public class Zombie extends Mob{
 
-	public static final int MAX_WALKSPEED = 30 + Main.RANDOM.nextInt(20);
+	public static final int MAX_WALKSPEED = 30 + Main.RANDOM.nextInt(50);
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
 	public static final int MAX_KNOCKBACK_AMOUNT = 1000;
 	public static final float MAX_KNOCKBACK_TIME = 0.35f;
@@ -25,16 +25,18 @@ public class Zombie extends Mob{
 	private Hitbox hitbox;
 	private boolean gotDamaged;
 	private Vector2D knockbackVector;
+	private boolean gotKnockbacked;
 	private float currentKnockbackAmount;
-	private float time;
+	private float currentKnockbackTime;
 
-	private HealthBar healthBar;
+	public boolean isAlive = true;
 	
+	private HealthBar healthBar;
+
 	public Zombie(float x, float y) {
-		super(x, y, 128, 128, 400);
+		super(x, y, 128, 128, 100);
 		this.walkDirectionString = Main.RANDOM.nextDirection();
 		this.animationPlayer = new AnimationPlayer(GameResources.ZOMBIE_ANIMATION_SET, GameResources.ZOMBIE_ANIMATION_SET.getAnimation("zombie_walk_" + walkDirectionString));
-		this.soundPlayer.addSound("zombie_walk", GameResources.PLAYER_WALK_SOUND);
 		this.zombieBehavior = new ZombieBehavior(this, width);
 		this.zombieWatchBehavior = new ZombieWatchBehavior(this, triggerDistance, viewCone);
 		this.hitbox = new CircleHitbox(centerPosition, 35);
@@ -44,18 +46,27 @@ public class Zombie extends Mob{
 	}
 
 	public void getDamaged(float damageAmount) {
-		if(!gotDamaged) {
-			healthBar.show();
+		if(!gotDamaged  && isAlive) {
 			gotDamaged = true;
 			currentHealth -= damageAmount;
+			healthBar.show();
 			stopWalking();
+			if(currentHealth <= 0) {
+				isAlive = false;
+				animationPlayer.play("zombie_die_" + walkDirectionString);
+			}else {
+				animationPlayer.loop("zombie_getDamaged_" + walkDirectionString);
+			}
 		}
 	}
 
 	public void getKnockbacked(Vector2D knockbackVector) {
-		this.knockbackVector.x = knockbackVector.x;
-		this.knockbackVector.y = knockbackVector.y;
-		currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT;
+		if(!gotKnockbacked && isAlive) {
+			gotKnockbacked = true;
+			this.knockbackVector.x = knockbackVector.x;
+			this.knockbackVector.y = knockbackVector.y;
+			currentKnockbackTime = 0;
+		}
 	}
 
 	@Override
@@ -69,27 +80,25 @@ public class Zombie extends Mob{
 		super.update(tslf);
 		healthBar.update(tslf);
 
-		if(gotDamaged) {
-			time += tslf;
-
-			if(time >= MAX_KNOCKBACK_TIME) {
-				time = 0;
+		if(gotKnockbacked) {
+			currentKnockbackTime += tslf;
+			
+			if(currentKnockbackTime >= MAX_KNOCKBACK_TIME) {
+				currentKnockbackTime = 0;
 				knockbackVector.x = 0;
 				knockbackVector.y = 0;
-				animationPlayer.reset();
-				animationPlayer.stop();
+				gotKnockbacked = false;
 				gotDamaged = false;
 				isWalking = true;
 			}else {
-				currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT - MAX_KNOCKBACK_AMOUNT * time/MAX_KNOCKBACK_TIME;
+				currentKnockbackAmount = MyMaths.linearInterpolation(MAX_KNOCKBACK_AMOUNT, 0, currentKnockbackTime, MAX_KNOCKBACK_TIME);
 			}
 		}
-		else if(isWalking) {
+		if(isWalking && !gotDamaged && isAlive) {
 			move(zombieBehavior.getVectorToPlayer());
 			walkDirectionString = walkDirectionVector.getDirection();
 
 			animationPlayer.loop("zombie_walk_" + walkDirectionString);
-			soundPlayer.loop("zombie_walk");
 
 			timeWalked += tslf;
 			currentWalkspeed = MyMaths.linearInterpolation(0, MAX_WALKSPEED, timeWalked, TIME_FOR_MAX_WALKSPEED);

@@ -85,7 +85,7 @@ public class Player extends Mob{
 				animationPlayer.stop();
 				gotDamaged = false;
 			}else {
-				currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT - MyMaths.linearInterpolation(0, MAX_KNOCKBACK_AMOUNT, time, MAX_KNOCKBACK_TIME);
+				currentKnockbackAmount = MyMaths.linearInterpolation(MAX_KNOCKBACK_AMOUNT, 0, time, MAX_KNOCKBACK_TIME);
 			}
 		}else {
 			checkInput();
