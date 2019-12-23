@@ -1,4 +1,4 @@
-package gamelogic;
+package gamelogic.enemies;
 
 import java.awt.Graphics;
 
@@ -9,6 +9,8 @@ import gameengine.hitbox.Hitbox;
 import gameengine.hud.HealthBar;
 import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
+import gamelogic.GameResources;
+import gamelogic.Main;
 
 public class Zombie extends Mob{
 
@@ -43,6 +45,7 @@ public class Zombie extends Mob{
 		this.currentHealth = MAX_HEALTH;
 		this.knockbackVector = new Vector2D();
 		this.healthBar = new HealthBar(this);
+		this.isWalking = true;
 	}
 
 	public void getDamaged(float damageAmount) {

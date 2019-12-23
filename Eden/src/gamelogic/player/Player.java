@@ -4,6 +4,7 @@
 package gamelogic.player;
 
 import java.awt.Graphics;
+import java.util.LinkedList;
 
 import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
@@ -14,6 +15,8 @@ import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
 import gamelogic.Direction;
 import gamelogic.GameResources;
+import gamelogic.Main;
+import gamelogic.Projectile;
 
 /**
  * 
@@ -26,14 +29,19 @@ public class Player extends Mob{
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
 	public static final int MAX_KNOCKBACK_AMOUNT = 1000;
 	public static final float MAX_KNOCKBACK_TIME = 0.35f;
+	public static final float SHOOT_COOLDOWN = 0.5f;
 
 	private Hitbox hitbox;
 	private boolean gotDamaged;
 	private Vector2D knockbackVector;
 	private float currentKnockbackAmount;
-	private float time;
+	private float currentKnockbackTime;
 
 	private HealthBar healthBar;
+
+	public LinkedList<Projectile> projectiles;
+	private boolean canShoot = true;
+	private float currentShootCooldown;
 	
 	public Player(float x, float y) {
 		super(x, y, 128, 128, 400);
@@ -45,6 +53,7 @@ public class Player extends Mob{
 		this.hitbox = new CircleHitbox(centerPosition, 35);
 		this.knockbackVector = new Vector2D();
 		this.healthBar = new HealthBar(this);
+		this.projectiles = new LinkedList<Projectile>();
 	}
 
 	public void getDamaged(float damageAmount) {
@@ -56,7 +65,7 @@ public class Player extends Mob{
 			healthBar.show();
 		}
 	}
-	
+
 	public void getKnockbacked(Vector2D knockbackVector) {
 		this.knockbackVector.x = knockbackVector.x;
 		this.knockbackVector.y = knockbackVector.y;
@@ -65,6 +74,9 @@ public class Player extends Mob{
 
 	@Override
 	public void draw(Graphics graphics) {
+		for (Projectile projectile : projectiles) {
+			projectile.draw(graphics);
+		}
 		super.draw(graphics);
 		healthBar.draw(graphics);
 	}
@@ -73,19 +85,39 @@ public class Player extends Mob{
 	public void update(float tslf) {
 		super.update(tslf);
 		healthBar.update(tslf);
-		
+
+		if(canShoot) {
+			if(PlayerInput.isLeftMouseButtonDown()) {
+				Vector2D mousePosition = PlayerInput.getMousePosition();
+				Vector2D velocityVector = new Vector2D(mousePosition.x - Main.SCREEN_WIDTH/2, mousePosition.y - Main.SCREEN_HEIGHT/2);
+				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
+				projectiles.add(projectile);
+				canShoot = false;
+			}
+		}else {
+			currentShootCooldown += tslf;
+			if(currentShootCooldown >= SHOOT_COOLDOWN) {
+				canShoot = true;
+				currentShootCooldown = 0;
+			}
+		}
+
+		for (Projectile projectile : projectiles) {
+			projectile.update(tslf);
+		}
+
 		if(gotDamaged) {
-			time += tslf;
-			
-			if(time >= MAX_KNOCKBACK_TIME) {
-				time = 0;
+			currentKnockbackTime += tslf;
+
+			if(currentKnockbackTime >= MAX_KNOCKBACK_TIME) {
+				currentKnockbackTime = 0;
 				knockbackVector.x = 0;
 				knockbackVector.y = 0;
 				animationPlayer.reset();
 				animationPlayer.stop();
 				gotDamaged = false;
 			}else {
-				currentKnockbackAmount = MyMaths.linearInterpolation(MAX_KNOCKBACK_AMOUNT, 0, time, MAX_KNOCKBACK_TIME);
+				currentKnockbackAmount = MyMaths.linearInterpolation(MAX_KNOCKBACK_AMOUNT, 0, currentKnockbackTime, MAX_KNOCKBACK_TIME);
 			}
 		}else {
 			checkInput();

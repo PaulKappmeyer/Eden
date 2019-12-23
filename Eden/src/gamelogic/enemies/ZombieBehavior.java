@@ -1,7 +1,8 @@
-package gamelogic;
+package gamelogic.enemies;
 
 import gameengine.Mob;
 import gameengine.maths.Vector2D;
+import gamelogic.Main;
 
 public class ZombieBehavior {
 

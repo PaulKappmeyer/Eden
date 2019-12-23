@@ -1,10 +1,12 @@
 /*
  * 
  */
-package gamelogic;
+package gamelogic.map;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+
+import gamelogic.GameResources;
 
 /**
  * 
@@ -18,6 +20,8 @@ public class TiledMap {
 	private int width;	/*The width of the tiled map*/
 	private int height;	/*The height of the tiled map*/
 	private int tileSize;	/*The size of each tile*/
+	private int fullWidth;
+	private int fullHeight;
 	
 	/**
 	 * 
@@ -31,6 +35,8 @@ public class TiledMap {
 		this.width = width;
 		this.height = height;
 		this.tileSize = tileSize;
+		this.fullWidth = width * tileSize;
+		this.fullHeight = height * tileSize;
 		this.tiles = new Tile[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
@@ -45,6 +51,14 @@ public class TiledMap {
 				tiles[i][j].draw(graphics);
 			}
 		}
+	}
+	
+	public int getFullWidth() {
+		return fullWidth;
+	}
+	
+	public int getFullHeight() {
+		return fullHeight;
 	}
 	
 	public int getTileSize() {

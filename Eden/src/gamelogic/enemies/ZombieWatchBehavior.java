@@ -1,10 +1,12 @@
-package gamelogic;
+package gamelogic.enemies;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import gameengine.Mob;
 import gameengine.maths.Vector2D;
+import gamelogic.Direction;
+import gamelogic.Main;
 
 public class ZombieWatchBehavior {
 

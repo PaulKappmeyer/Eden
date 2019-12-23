@@ -4,8 +4,11 @@
 package gamelogic.player;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import gameengine.inputs.KeyboardInputManager;
+import gameengine.inputs.MouseInputManager;
+import gameengine.maths.Vector2D;
 
 /**
  * 
@@ -14,6 +17,22 @@ import gameengine.inputs.KeyboardInputManager;
  */
 public final class PlayerInput {
 
+	public static Vector2D getMousePosition() {
+		return new Vector2D(getMouseX(), getMouseY());
+	}
+	
+	public static float getMouseX() {
+		return MouseInputManager.getMouseX();
+	}
+	
+	public static float getMouseY() {
+		return MouseInputManager.getMouseY();
+	}
+	
+	public static boolean isLeftMouseButtonDown() {
+		return MouseInputManager.isButtonDown(MouseEvent.BUTTON1);
+	}
+	
 	/**
 	 * 
 	 * @return true if the walk-up-key is down
