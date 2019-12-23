@@ -4,6 +4,11 @@ import java.util.Random;
 
 import gamelogic.Direction;
 
+/**
+ * A sub-class of {@link java.util.Random}, which implements some special methods needed in the game (e.g. nextVector, nextDirection).
+ * @author Paul
+ *
+ */
 @SuppressWarnings("serial")
 public class MyRandom extends Random{
 

@@ -8,11 +8,16 @@ import gameengine.maths.Vector2D;
 import gamelogic.Direction;
 import gamelogic.Main;
 
+/**
+ * This class is used to detect whether the "zombie" can see the player or not.
+ * @author Paul
+ *
+ */
 public class ZombieWatchBehavior {
 
 	private Mob object;
 	private int triggerDistance;
-	private int viewCone = 90;
+	private int viewCone;
 
 	public ZombieWatchBehavior(Mob object, int triggerDistance, int viewCone) {
 		this.object = object;

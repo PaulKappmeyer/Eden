@@ -1,5 +1,11 @@
 package gameengine.maths;
 
+
+/**
+ * This class implements basic collision-methods.
+ * @author Paul
+ *
+ */
 public class MyCollision {
 
 	public static boolean circleToCircle(Vector2D centerPositionA, float radiusA, Vector2D centerPositionB, float radiusB) {

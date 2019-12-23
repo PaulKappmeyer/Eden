@@ -92,6 +92,7 @@ public class Player extends Mob{
 				Vector2D velocityVector = new Vector2D(mousePosition.x - Main.SCREEN_WIDTH/2, mousePosition.y - Main.SCREEN_HEIGHT/2);
 				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
 				projectiles.add(projectile);
+				stopWalking();
 				canShoot = false;
 			}
 		}else {

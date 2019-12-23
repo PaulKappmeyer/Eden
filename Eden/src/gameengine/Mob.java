@@ -5,6 +5,11 @@ import gameengine.maths.Vector2D;
 import gameengine.sounds.SoundPlayer;
 import gamelogic.Direction;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Mob extends MovableObject{
 
 	public int MAX_HEALTH;

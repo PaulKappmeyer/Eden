@@ -7,6 +7,11 @@ import gameengine.Mob;
 import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class HealthBar {
 
 	private static final float TIME_SHOWING_UP = 1.5f;

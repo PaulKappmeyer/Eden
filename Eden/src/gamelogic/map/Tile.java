@@ -5,6 +5,11 @@ import java.awt.image.BufferedImage;
 
 import gameengine.DrawableObject;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Tile extends DrawableObject{
 	
 	private int size;

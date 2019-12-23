@@ -4,6 +4,11 @@ import java.awt.image.BufferedImage;
 
 import gamelogic.GameResources;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class AnimationPlayer {
 
 	private AnimationSet animationSet;

@@ -14,7 +14,6 @@ import gameengine.inputs.MouseInputManager;
  * @author Paul Kappmeyer & Daniel Lucarz
  *
  */
-
 public abstract class GameBase {
 	private Window window;
 

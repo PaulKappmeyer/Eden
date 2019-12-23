@@ -4,6 +4,11 @@ import gameengine.Mob;
 import gameengine.maths.Vector2D;
 import gamelogic.Main;
 
+/**
+ * This class is used to detect whether the "zombie" is in range of the player or not.
+ * @author Paul
+ *
+ */
 public class ZombieBehavior {
 
 	private Mob object;

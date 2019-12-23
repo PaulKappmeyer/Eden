@@ -2,6 +2,11 @@ package gameengine;
 
 import gameengine.maths.Vector2D;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class MovableObject extends DrawableObject{
 
 	protected Vector2D centerPosition;

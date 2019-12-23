@@ -6,6 +6,11 @@ import java.awt.Graphics;
 import gameengine.maths.MyCollision;
 import gameengine.maths.Vector2D;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class CircleHitbox extends Hitbox{
 
 	private Vector2D centerPosition;
@@ -18,6 +23,7 @@ public class CircleHitbox extends Hitbox{
 	
 	@Override
 	public void draw(Graphics graphics) {
+		if(!SHOW_HITBOXES) return;
 		graphics.setColor(Color.GREEN);
 		graphics.drawOval((int)(centerPosition.x-radius), (int)(centerPosition.y-radius), (int)(radius*2), (int)(radius*2));
 	}

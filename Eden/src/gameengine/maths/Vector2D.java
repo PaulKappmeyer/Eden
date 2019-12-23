@@ -6,7 +6,7 @@ package gameengine.maths;
 import gamelogic.Direction;
 
 /**
- * A vector representing a x-and y-location in coordinate space, specified in float precision
+ * A vector representing a x-and y-location in coordinate space, specified in float precision.
  * @author Paul
  * @category Game-math
  */

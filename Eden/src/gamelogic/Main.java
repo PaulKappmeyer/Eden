@@ -5,13 +5,13 @@ package gamelogic;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Comparator;
 import java.util.LinkedList;
 
 import gameengine.GameBase;
 import gameengine.maths.MyRandom;
 import gameengine.maths.Vector2D;
 import gamelogic.enemies.Zombie;
+import gamelogic.enemies.ZombieSort;
 import gamelogic.map.TiledMap;
 import gamelogic.player.Player;
 
@@ -30,7 +30,8 @@ public class Main extends GameBase{
 	public static Player player;
 	private TiledMap tiledMap;
 	private LinkedList<Zombie> zombies;
-
+	private ZombieSort zombieSort;
+	
 	public static void main(String[] args) {
 		Main main = new Main();
 		main.start("Eden", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -43,11 +44,12 @@ public class Main extends GameBase{
 		player = new Player(400, 400);
 		tiledMap = new TiledMap(50, 50, 128);
 		zombies = new LinkedList<Zombie>();
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 0; i++) {
 			Vector2D position = RANDOM.nextVector2D(750, 200, 3500, 3500);
 			zombies.add(new Zombie(position.x, position.y));
 		}
 		zombies.add(new Zombie(750, 400));
+		zombieSort = new ZombieSort();
 	}
 
 	@Override
@@ -84,27 +86,10 @@ public class Main extends GameBase{
 				}
 			}
 		}
-		zombies.sort(new Comparator<Zombie>() {
+		//Y-Sort
+		zombies.sort(zombieSort);
 
-			@Override
-			public int compare(Zombie zombie1, Zombie zombie2) {
-				if(zombie1.isAlive && zombie2.isAlive || !zombie1.isAlive && !zombie2.isAlive) {
-					if(zombie1.getCenterPositionY() > zombie2.getCenterPositionY()) {
-						return 1;
-					}else if(zombie1.getCenterPositionY() < zombie2.getCenterPositionY()) {
-						return -1;
-					}else {
-						return 0;
-					}
-				}else if(zombie1.isAlive && !zombie2.isAlive){
-					return 1;
-				}else if(!zombie1.isAlive && zombie2.isAlive) {
-					return -1;
-				}else {
-					return 0;
-				}
-			}
-		});
+
 	}
 
 	@Override
@@ -117,7 +102,9 @@ public class Main extends GameBase{
 		tiledMap.draw(graphics);
 		for (Zombie zombie : zombies) {
 			zombie.draw(graphics);
+			zombie.getHitbox().draw(graphics);
 		}
 		player.draw(graphics);
+		player.getHitbox().draw(graphics);
 	}	
 }

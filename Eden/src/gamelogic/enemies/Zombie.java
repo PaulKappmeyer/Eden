@@ -12,9 +12,14 @@ import gameengine.maths.Vector2D;
 import gamelogic.GameResources;
 import gamelogic.Main;
 
+/**
+ * 
+ * @author Paul
+ *
+ */
 public class Zombie extends Mob{
 
-	public static final int MAX_WALKSPEED = 30 + Main.RANDOM.nextInt(50);
+	public static final int MAX_WALKSPEED = 300 + Main.RANDOM.nextInt(50);
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
 	public static final int MAX_KNOCKBACK_AMOUNT = 1000;
 	public static final float MAX_KNOCKBACK_TIME = 0.35f;
@@ -45,7 +50,6 @@ public class Zombie extends Mob{
 		this.currentHealth = MAX_HEALTH;
 		this.knockbackVector = new Vector2D();
 		this.healthBar = new HealthBar(this);
-		this.isWalking = true;
 	}
 
 	public void getDamaged(float damageAmount) {
