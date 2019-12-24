@@ -11,6 +11,7 @@ import gameengine.graphics.AnimationPlayer;
 import gameengine.hitbox.CircleHitbox;
 import gameengine.hitbox.Hitbox;
 import gameengine.hud.HealthBar;
+import gameengine.hud.PlayerHealthBar;
 import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
 import gamelogic.Direction;
@@ -29,16 +30,22 @@ public class Player extends Mob{
 	public static final float TIME_FOR_MAX_WALKSPEED = 0.1f;
 	public static final int MAX_KNOCKBACK_AMOUNT = 1000;
 	public static final float MAX_KNOCKBACK_TIME = 0.35f;
-	public static final float SHOOT_COOLDOWN = 0.5f;
+	public static final float SHOOT_COOLDOWN = 0.f;
 
 	private Hitbox hitbox;
 	private boolean gotDamaged;
+	private float currentDamagedTime;
+	
 	private Vector2D knockbackVector;
+	private boolean gotKnockbacked;
+	private int CURRENT_MAX_KNOCKBACK_AMMOUNT;
+	private float CURRENT_MAX_KNOCKBACK_TIME;
 	private float currentKnockbackAmount;
 	private float currentKnockbackTime;
 
 	private HealthBar healthBar;
-
+	private PlayerHealthBar playerHealthBar;
+	
 	public LinkedList<Projectile> projectiles;
 	private boolean canShoot = true;
 	private float currentShootCooldown;
@@ -53,6 +60,7 @@ public class Player extends Mob{
 		this.hitbox = new CircleHitbox(centerPosition, 35);
 		this.knockbackVector = new Vector2D();
 		this.healthBar = new HealthBar(this);
+		this.playerHealthBar = new PlayerHealthBar(this);
 		this.projectiles = new LinkedList<Projectile>();
 	}
 
@@ -65,11 +73,17 @@ public class Player extends Mob{
 			healthBar.show();
 		}
 	}
-
-	public void getKnockbacked(Vector2D knockbackVector) {
-		this.knockbackVector.x = knockbackVector.x;
-		this.knockbackVector.y = knockbackVector.y;
-		currentKnockbackAmount = MAX_KNOCKBACK_AMOUNT;
+	
+	public void getKnockbacked(Vector2D knockbackVector, int strength, float time) {
+		if(!gotKnockbacked) {
+			gotKnockbacked = true;
+			this.knockbackVector.x = knockbackVector.x;
+			this.knockbackVector.y = knockbackVector.y;
+			this.knockbackVector.makeUnitVector();
+			this.CURRENT_MAX_KNOCKBACK_AMMOUNT = strength;
+			this.CURRENT_MAX_KNOCKBACK_TIME = time;
+			currentKnockbackTime = 0;
+		}
 	}
 
 	@Override
@@ -79,20 +93,45 @@ public class Player extends Mob{
 		}
 		super.draw(graphics);
 		healthBar.draw(graphics);
+		playerHealthBar.draw(graphics);
 	}
 
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
 		healthBar.update(tslf);
+		playerHealthBar.update(tslf);
 
+		if(gotKnockbacked) {
+			currentKnockbackTime += tslf;
+			
+			if(currentKnockbackTime >= CURRENT_MAX_KNOCKBACK_TIME) {
+				currentKnockbackTime = 0;
+				knockbackVector.x = 0;
+				knockbackVector.y = 0;
+				gotKnockbacked = false;
+			}else {
+				currentKnockbackAmount = MyMaths.linearInterpolation(CURRENT_MAX_KNOCKBACK_AMMOUNT, 0, currentKnockbackTime, CURRENT_MAX_KNOCKBACK_TIME);
+			}
+		}
+		if(gotDamaged) {
+			currentDamagedTime += tslf;
+			if(currentDamagedTime >= MAX_KNOCKBACK_TIME) {
+				animationPlayer.reset();
+				animationPlayer.stop();
+				currentDamagedTime = 0;
+				gotDamaged = false;
+			}
+		}
+		
 		if(canShoot) {
 			if(PlayerInput.isLeftMouseButtonDown()) {
 				Vector2D mousePosition = PlayerInput.getMousePosition();
-				Vector2D velocityVector = new Vector2D(mousePosition.x - Main.SCREEN_WIDTH/2, mousePosition.y - Main.SCREEN_HEIGHT/2);
+				Vector2D velocityVector = new Vector2D(mousePosition.x - centerPosition.x - Main.translateX, mousePosition.y - centerPosition.y - Main.translateY);
 				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
 				projectiles.add(projectile);
 				stopWalking();
+				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), MAX_KNOCKBACK_AMOUNT/2, SHOOT_COOLDOWN/2);
 				canShoot = false;
 			}
 		}else {
@@ -103,24 +142,7 @@ public class Player extends Mob{
 			}
 		}
 
-		for (Projectile projectile : projectiles) {
-			projectile.update(tslf);
-		}
-
-		if(gotDamaged) {
-			currentKnockbackTime += tslf;
-
-			if(currentKnockbackTime >= MAX_KNOCKBACK_TIME) {
-				currentKnockbackTime = 0;
-				knockbackVector.x = 0;
-				knockbackVector.y = 0;
-				animationPlayer.reset();
-				animationPlayer.stop();
-				gotDamaged = false;
-			}else {
-				currentKnockbackAmount = MyMaths.linearInterpolation(MAX_KNOCKBACK_AMOUNT, 0, currentKnockbackTime, MAX_KNOCKBACK_TIME);
-			}
-		}else {
+		if(!gotDamaged) {
 			checkInput();
 
 			if(isWalking) {

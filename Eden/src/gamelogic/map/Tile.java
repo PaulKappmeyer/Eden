@@ -1,5 +1,8 @@
 package gamelogic.map;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -12,11 +15,12 @@ import gameengine.DrawableObject;
  */
 public class Tile extends DrawableObject{
 	
-	private int size;
+	private String id;
+	private static final Font font = new Font("Arial", Font.PLAIN, 8);
 	
-	public Tile(int x, int y, int size, BufferedImage image) {
-		super(x, y, size, size);
-		this.size = size;
+	public Tile(int x, int y, int width, int height, int id, BufferedImage image) {
+		super(x, y, width, height);
+		this.id = "" + id;
 		this.image = image;
 	}
 	
@@ -26,8 +30,23 @@ public class Tile extends DrawableObject{
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		g.drawImage(image, (int)position.x, (int)position.y, size, size, null);
+	public void draw(Graphics graphics) {
+		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
+		
+		graphics.setColor(Color.BLACK);
+		
+		graphics.drawRect((int)position.x, (int)position.y, width, height);
+		
+	    // Get the FontMetrics
+	    FontMetrics metrics = graphics.getFontMetrics(font);
+	    // Determine the X coordinate for the text
+	    int x = (int)(position.x + (width - metrics.stringWidth(id)) / 2);
+	    // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+	    int y = (int)(position.y + ((height - metrics.getHeight()) / 2) + metrics.getAscent());
+	    // Set the font
+	    graphics.setFont(font);
+	    // Draw the String
+	    graphics.drawString(id, x, y);
 	}
 	
 }

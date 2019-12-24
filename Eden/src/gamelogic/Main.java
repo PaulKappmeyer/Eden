@@ -24,7 +24,9 @@ public class Main extends GameBase{
 
 	public static final int SCREEN_WIDTH = 1280;
 	public static final int SCREEN_HEIGHT = 860;
-
+	public static float translateX;
+	public static float translateY;
+	
 	public static final MyRandom RANDOM = new MyRandom();
 
 	public static Player player;
@@ -42,9 +44,9 @@ public class Main extends GameBase{
 		GameResources.load();
 
 		player = new Player(400, 400);
-		tiledMap = new TiledMap(50, 50, 128);
+		tiledMap = GameResources.MAP;
 		zombies = new LinkedList<Zombie>();
-		for (int i = 0; i < 0; i++) {
+		for (int i = 0; i < 1000; i++) {
 			Vector2D position = RANDOM.nextVector2D(750, 200, 3500, 3500);
 			zombies.add(new Zombie(position.x, position.y));
 		}
@@ -55,15 +57,18 @@ public class Main extends GameBase{
 	@Override
 	public void update(float tslf) {
 		player.update(tslf);
+		for (Projectile projectile : player.projectiles) {
+			projectile.update(tslf);
+		}
 		
 		for (Zombie zombie : zombies) {
 			zombie.update(tslf);
 			if(zombie.isAlive) {
 				if(zombie.getHitbox().isOverlapping(player.getHitbox())) {
-					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()).makeUnitVector());
+					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()));
 					zombie.getDamaged(50);
 					player.getDamaged(50);
-					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()).makeUnitVector());
+					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), Player.MAX_KNOCKBACK_AMOUNT, Player.MAX_KNOCKBACK_TIME);
 				}else {
 					//This loop is running from last element to first element because elements get deleted;
 					for(int i = player.projectiles.size()-1; i >= 0; i--) {
@@ -89,15 +94,19 @@ public class Main extends GameBase{
 		//Y-Sort
 		zombies.sort(zombieSort);
 
-
+		translateX = -player.getX() + SCREEN_WIDTH/2 - player.getWidth()/2;
+		translateY = -player.getY() + SCREEN_HEIGHT/2 - player.getHeight()/2;
+		if(translateX > 0) translateX = 0;
+		if(translateY > 0) translateY = 0;
 	}
 
+	
 	@Override
 	public void draw(Graphics graphics) {
 		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-		graphics.translate((int)-player.getX() + SCREEN_WIDTH/2 - player.getWidth()/2, (int)-player.getY()  + SCREEN_HEIGHT/2 - player.getHeight()/2);
+		graphics.translate((int)translateX, (int)translateY);
 
 		tiledMap.draw(graphics);
 		for (Zombie zombie : zombies) {

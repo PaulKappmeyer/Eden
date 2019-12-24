@@ -31,6 +31,7 @@ public class Zombie extends Mob{
 
 	private Hitbox hitbox;
 	private boolean gotDamaged;
+	
 	private Vector2D knockbackVector;
 	private boolean gotKnockbacked;
 	private float currentKnockbackAmount;
@@ -72,6 +73,7 @@ public class Zombie extends Mob{
 			gotKnockbacked = true;
 			this.knockbackVector.x = knockbackVector.x;
 			this.knockbackVector.y = knockbackVector.y;
+			this.knockbackVector.makeUnitVector();
 			currentKnockbackTime = 0;
 		}
 	}

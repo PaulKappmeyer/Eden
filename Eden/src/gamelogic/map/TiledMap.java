@@ -15,7 +15,7 @@ import gamelogic.GameResources;
  */
 public class TiledMap {
 
-	private BufferedImage tileSet;
+	private BufferedImage[] tileSet;
 	private Tile[][] tiles;
 	private int width;	/*The width of the tiled map*/
 	private int height;	/*The height of the tiled map*/
@@ -30,7 +30,7 @@ public class TiledMap {
 	 * @param tileSize The size of each tile in pixels
 	 * @throws Exception
 	 */
-	public TiledMap(int width, int height, int tileSize) {
+	public TiledMap(int width, int height, int tileSize, int[][] ids) {
 		this.tileSet = GameResources.TILESET;
 		this.width = width;
 		this.height = height;
@@ -40,7 +40,11 @@ public class TiledMap {
 		this.tiles = new Tile[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				tiles[i][j] = new Tile(i * tileSize, j * tileSize, tileSize, tileSet);
+				int id = ids[i][j];
+				BufferedImage tileImage = tileSet[2];
+				if(id == 130) tileImage = tileSet[1];
+				else if(id == 115) tileImage = tileSet[2];
+				tiles[i][j] = new Tile(i * tileSize, j * tileSize, tileSize, tileSize, ids[i][j], tileImage);
 			}
 		}
 	}
