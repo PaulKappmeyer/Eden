@@ -18,18 +18,18 @@ import gamelogic.Direction;
 public abstract class Mob extends MovableObject{
 	
 	//Constanst
-	protected int MAX_HEALTH;
-	protected int MAX_WALKSPEED;
-	protected float TIME_FOR_MAX_WALKSPEED;
-	public int MAX_KNOCKBACK_AMOUNT = 1000;
-	public float MAX_KNOCKBACK_TIME = 0.35f;
+	private int MAX_HEALTH;
+	private int MAX_WALKSPEED;
+	private float TIME_FOR_MAX_WALKSPEED;
+	private int MAX_KNOCKBACK_AMOUNT;
+	private float MAX_KNOCKBACK_TIME;
 	
 	//Health
 	protected boolean alive = true;
-	protected float currentHealth;
-	protected HealthBar healthBar;
 	protected boolean gotDamaged = false;
-	protected float currentDamagedTime = 0;
+	private float currentHealth;
+	private HealthBar healthBar;
+	private float currentDamagedTime = 0;
 	
 	//Hitbox
 	protected Hitbox hitbox;
@@ -39,19 +39,19 @@ public abstract class Mob extends MovableObject{
 	protected SoundPlayer soundPlayer = new SoundPlayer();
 	
 	//Walking
+	protected boolean isWalking = false;
 	protected Direction walkDirectionString = Direction.down;
 	protected Vector2D walkDirectionVector = new Vector2D();
-	protected boolean isWalking = false;
-	protected float currentWalkspeed = 0;
-	protected float timeWalked = 0;
+	private float currentWalkspeed = 0;
+	private float timeWalked = 0;
 	
 	//Knockback
-	protected Vector2D knockbackVector = new Vector2D();
 	protected boolean gotKnockbacked = false;
-	protected int CURRENT_MAX_KNOCKBACK_AMMOUNT;
-	protected float CURRENT_MAX_KNOCKBACK_TIME;
-	protected float currentKnockbackAmount = 0;
-	protected float currentKnockbackTime = 0;
+	private Vector2D knockbackVector = new Vector2D();
+	private int CURRENT_MAX_KNOCKBACK_AMMOUNT;
+	private float CURRENT_MAX_KNOCKBACK_TIME;
+	private float currentKnockbackAmount = 0;
+	private float currentKnockbackTime = 0;
 	
 	public Mob(float x, float y, int width, int height, int MAX_HEALTH, int MAX_WALKSPEED, float TIME_FOR_MAX_WALKSPEED, int MAX_KNOCKBACK_AMOUNT, float MAX_KNOCKBACK_TIME) {
 		super(x, y, width, height);
@@ -180,7 +180,7 @@ public abstract class Mob extends MovableObject{
 	}
 	
 	//-------------------------Getters
-	public float getMaxHealth() {
+	public int getMaxHealth() {
 		return MAX_HEALTH;
 	}
 	
@@ -192,8 +192,20 @@ public abstract class Mob extends MovableObject{
 		return alive;
 	}
 	
+	public int getMAX_KNOCKBACK_AMOUNT() {
+		return MAX_KNOCKBACK_AMOUNT;
+	}
+	
+	public float getMAX_KNOCKBACK_TIME() {
+		return MAX_KNOCKBACK_TIME;
+	}
+	
 	public Hitbox getHitbox() {
 		return hitbox;
+	}
+	
+	public float getTimeWalked() {
+		return timeWalked;
 	}
 	
 	public Vector2D getWalkDirectionVector() {

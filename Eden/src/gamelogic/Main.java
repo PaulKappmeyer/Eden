@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 
 import gameengine.GameBase;
+import gameengine.hud.PlayerHUD;
 import gameengine.maths.MyRandom;
 import gameengine.maths.Vector2D;
 import gamelogic.enemies.Zombie;
@@ -30,6 +31,7 @@ public class Main extends GameBase{
 	public static final MyRandom RANDOM = new MyRandom();
 
 	public static Player player;
+	private PlayerHUD playerHUD;
 	private TiledMap tiledMap;
 	private LinkedList<Zombie> zombies;
 	private ZombieSort zombieSort;
@@ -44,6 +46,7 @@ public class Main extends GameBase{
 		GameResources.load();
 
 		player = new Player(400, 400);
+		playerHUD = new PlayerHUD(player);
 		tiledMap = GameResources.MAP;
 		zombies = new LinkedList<Zombie>();
 		for (int i = 0; i < 100; i++) {
@@ -57,6 +60,7 @@ public class Main extends GameBase{
 	@Override
 	public void update(float tslf) {
 		player.update(tslf);
+		playerHUD.update(tslf);
 		for (Projectile projectile : player.projectiles) {
 			projectile.update(tslf);
 		}
@@ -65,10 +69,10 @@ public class Main extends GameBase{
 			zombie.update(tslf);
 			if(zombie.isAlive()) {
 				if(zombie.getHitbox().isOverlapping(player.getHitbox())) {
-					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()), zombie.MAX_KNOCKBACK_AMOUNT, zombie.MAX_KNOCKBACK_TIME);
+					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()), zombie.getMAX_KNOCKBACK_AMOUNT(), zombie.getMAX_KNOCKBACK_TIME());
 					zombie.getDamaged(50);
 					player.getDamaged(50);
-					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), player.MAX_KNOCKBACK_AMOUNT, player.MAX_KNOCKBACK_TIME);
+					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), player.getMAX_KNOCKBACK_AMOUNT(), player.getMAX_KNOCKBACK_TIME());
 				}else {
 					//This loop is running from last element to first element because elements get deleted;
 					for(int i = player.projectiles.size()-1; i >= 0; i--) {
@@ -83,8 +87,9 @@ public class Main extends GameBase{
 						}
 							
 						if(zombie.getHitbox().isOverlapping(projectile.getHitbox())) {
-							zombie.getKnockbacked(projectile.getVelocityVector(), zombie.MAX_KNOCKBACK_AMOUNT, zombie.MAX_KNOCKBACK_TIME);
+							zombie.getKnockbacked(projectile.getVelocityVector(), zombie.getMAX_KNOCKBACK_AMOUNT(), zombie.getMAX_KNOCKBACK_TIME());
 							zombie.getDamaged(50);
+							if(!zombie.isAlive()) player.addExp(50);
 							player.projectiles.remove(i);
 						}
 					}
@@ -105,7 +110,7 @@ public class Main extends GameBase{
 	public void draw(Graphics graphics) {
 		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
+		
 		graphics.translate((int)translateX, (int)translateY);
 
 		tiledMap.draw(graphics);
@@ -114,6 +119,13 @@ public class Main extends GameBase{
 			zombie.getHitbox().draw(graphics);
 		}
 		player.draw(graphics);
+		for (Projectile projectile : player.projectiles) {
+			projectile.draw(graphics);
+		}
 		player.getHitbox().draw(graphics);
+		
+		graphics.translate((int)-translateX, (int)-translateY);
+		
+		playerHUD.draw(graphics);
 	}	
 }

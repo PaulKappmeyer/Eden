@@ -48,7 +48,7 @@ public class Zombie extends Mob{
 	public void getDamaged(float damageAmount) {
 		if(!gotDamaged  && alive) {
 			super.getDamaged(damageAmount);
-			if(currentHealth <= 0) {
+			if(getCurrentHealth() <= 0) {
 				alive = false;
 				animationPlayer.play("zombie_die_" + walkDirectionString);
 			}else {

@@ -8,10 +8,10 @@ import java.awt.Graphics;
 import gameengine.maths.Vector2D;
 import gamelogic.player.Player;
 
-public class PlayerHealthBar {
+public class PlayerLevelBar {
 
-	private Color backgroundColor = new Color(0, 255, 0, 50);
-	private Color color = new Color(0, 255, 0, 255);
+	private Color backgroundColor = new Color(0, 0, 255, 50);
+	private Color color = new Color(255, 0, 255, 255);
 	private Color outlineColor = new Color(0, 0, 0, 255);
 	private Color textColor = new Color(255, 255, 255, 255);
 	
@@ -23,7 +23,7 @@ public class PlayerHealthBar {
 	private String text;
 	private Font font;
 	
-	public PlayerHealthBar(Player player, int x, int y, int FULL_WIDTH, int FULL_HEIGHT, Font font) {
+	 public PlayerLevelBar(Player player, int x, int y, int FULL_WIDTH, int FULL_HEIGHT, Font font) {
 		this.player = player;
 		this.position = new Vector2D(x, y);
 		this.FULL_WIDTH = FULL_WIDTH;
@@ -31,9 +31,9 @@ public class PlayerHealthBar {
 		this.text = new String();
 		this.font = font;
 	}
-	
-	private String getText(float currentHealth, int maxHealth) {
-		return "Health: " + (int)currentHealth + " / " + (int)maxHealth;
+	 
+	private String getText(int level) {
+		 return "Level: " + level;
 	}
 	
 	public void draw(Graphics graphics) {
@@ -60,14 +60,8 @@ public class PlayerHealthBar {
 	}
 	
 	public void update(float tslf) {
-		if(player.getCurrentHealth() > 0) {
-			float currentHealth = player.getCurrentHealth();
-			currentWidth = (int) (currentHealth / player.getMaxHealth() * FULL_WIDTH);
-			text = getText(player.getCurrentHealth(), player.getMaxHealth());
-		}else {
-			currentWidth = 0;
-			text = getText(0, player.getMaxHealth());
-		}
+		text = getText(player.getLevel());
+		currentWidth = (int) (FULL_WIDTH * player.getExp()/player.getMAX_EXP()[player.getLevel()-1]);
 	}
 	
 }

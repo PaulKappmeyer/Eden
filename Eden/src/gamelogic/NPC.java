@@ -31,7 +31,7 @@ public class NPC extends Mob{
 		if(isWalking) {
 			animationPlayer.loop("npc_walk_" + walkDirectionString);
 
-			if(timeWalked >= moveTime) {
+			if(getTimeWalked() >= moveTime) {
 				stopWalking();
 			}
 		}else {

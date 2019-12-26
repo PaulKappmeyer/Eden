@@ -3,13 +3,11 @@
  */
 package gamelogic.player;
 
-import java.awt.Graphics;
 import java.util.LinkedList;
 
 import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
 import gameengine.hitbox.CircleHitbox;
-import gameengine.hud.PlayerHealthBar;
 import gameengine.maths.Vector2D;
 import gamelogic.Direction;
 import gamelogic.GameResources;
@@ -23,36 +21,40 @@ import gamelogic.Projectile;
  */
 public class Player extends Mob{
 
-	public static final float SHOOT_COOLDOWN = 0.5f;
-
-	private PlayerHealthBar playerHealthBar;
+	private float SHOOT_COOLDOWN = 0.5f;
 
 	public LinkedList<Projectile> projectiles;
 	private boolean canShoot = true;
 	private float currentShootCooldown;
 
+	private int level = 1;
+	private int exp = 0;
+	private int MAX_EXP[] = new int[] {100, 110, 130, 160, 200, 250, 300, 500, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000};
+	
 	public Player(float x, float y) {
 		super(x, y, 128, 128, 400, 400, 0.1f, 1000, 0.35f);
 		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET, GameResources.PLAYER_ANIMATION_SET.getAnimation("player_stand_" + walkDirectionString));
 		this.hitbox = new CircleHitbox(centerPosition, 35);
-		this.playerHealthBar = new PlayerHealthBar(this);
 		this.projectiles = new LinkedList<Projectile>();
 	}
 
-	@Override
-	public void draw(Graphics graphics) {
-		for (Projectile projectile : projectiles) {
-			projectile.draw(graphics);
-		}
-		super.draw(graphics);
-		playerHealthBar.draw(graphics);
+	public void addExp(int ammount) {
+		exp += ammount;
 	}
-
+	
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-		playerHealthBar.update(tslf);
 
+		if(exp >= MAX_EXP[level-1]) {
+			exp -= MAX_EXP[level-1];
+			if(level < MAX_EXP.length-1) level++;
+			else {
+				level = MAX_EXP.length;
+				exp = MAX_EXP[level-1];
+			}
+		}
+		
 		//Shooting
 		if(canShoot) {
 			if(PlayerInput.isLeftMouseButtonDown()) {
@@ -61,7 +63,7 @@ public class Player extends Mob{
 				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
 				projectiles.add(projectile);
 				stopWalking();
-				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), MAX_KNOCKBACK_AMOUNT/2, SHOOT_COOLDOWN/2);
+				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMAX_KNOCKBACK_AMOUNT()/2, SHOOT_COOLDOWN/2);
 				canShoot = false;
 			}
 		}else {
@@ -139,5 +141,18 @@ public class Player extends Mob{
 			super.getDamaged(damageAmount);
 			animationPlayer.loop("player_getDamaged_" + walkDirectionString);
 		}
+	}
+	
+	//--------------------------Getters
+	public int getLevel() {
+		return level;
+	}
+	
+	public int getExp() {
+		return exp;
+	}
+	
+	public int[] getMAX_EXP() {
+		return MAX_EXP;
 	}
 }
