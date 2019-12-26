@@ -49,11 +49,11 @@ public class PlayerHealthBar {
 	public void update(float tslf) {
 		if(player.getCurrentHealth() > 0) {
 			float currentHealth = player.getCurrentHealth();
-			currentWidth = (int) (currentHealth / player.MAX_HEALTH * FULL_WIDTH);
-			text = "HEALTH: " + (int)player.getCurrentHealth() + "/" + player.MAX_HEALTH;
+			currentWidth = (int) (currentHealth / player.getMaxHealth() * FULL_WIDTH);
+			text = "HEALTH: " + (int)player.getCurrentHealth() + "/" + player.getMaxHealth();
 		}else {
 			currentWidth = 0;
-			text = "HEALTH: " + (int)0 + "/" + player.MAX_HEALTH;
+			text = "HEALTH: " + (int)0 + "/" + player.getMaxHealth();
 		}
 	}
 	

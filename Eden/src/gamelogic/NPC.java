@@ -5,7 +5,6 @@ package gamelogic;
 
 import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
-import gameengine.maths.MyMaths;
 
 /**
  * 
@@ -14,16 +13,13 @@ import gameengine.maths.MyMaths;
  */
 public class NPC extends Mob{
 	
-	public static final int MAX_WALKSPEED = 200;
-	public static final float TIME_FOR_MAX_WALKSPEED = 0.5f;
-	
 	private float timeIdled;
 
 	private float moveTime;
 	private float standTime;
 
 	public NPC(float x, float y) {
-		super(x, y, 128, 128, 400);
+		super(x, y, 128, 128, 400, 200, 0.5f, 1000, 0.35f);
 		walkDirectionString = Direction.down;
 		animationPlayer = new AnimationPlayer(GameResources.NPC_ANIMATION_SET, GameResources.NPC_ANIMATION_SET.getAnimation("npc_walk_" + walkDirectionString));
 	}
@@ -34,9 +30,6 @@ public class NPC extends Mob{
 		
 		if(isWalking) {
 			animationPlayer.loop("npc_walk_" + walkDirectionString);
-
-			timeWalked += tslf;
-			currentWalkspeed = MyMaths.linearInterpolation(0, MAX_WALKSPEED, timeWalked, TIME_FOR_MAX_WALKSPEED);
 
 			if(timeWalked >= moveTime) {
 				stopWalking();
@@ -59,9 +52,6 @@ public class NPC extends Mob{
 				timeIdled = 0;
 			}
 		}
-
-		this.moveVector.x = walkDirectionVector.x * currentWalkspeed;
-		this.moveVector.y = walkDirectionVector.y * currentWalkspeed;
 	}
 
 	public void move(Direction direction, float moveTime) {

@@ -6,7 +6,6 @@ package gamelogic;
 import java.awt.image.BufferedImage;
 
 import gameengine.graphics.AnimationSet;
-import gameengine.loaders.MapLoader;
 import gameengine.loaders.ResourceLoader;
 import gameengine.sounds.Sound;
 import gamelogic.map.TiledMap;
@@ -37,7 +36,7 @@ public final class GameResources {
 			TILESET[1] = ResourceLoader.load(BufferedImage.class, ".\\res\\Dungeon_2.png");
 			TILESET[2] = ResourceLoader.load(BufferedImage.class, ".\\res\\Dungeon_3.png");
 			ERROR = ResourceLoader.load(BufferedImage.class, ".\\res\\error.png");
-			MAP = MapLoader.loadMap(".\\maps\\Eden Dungeon Karte.txt");
+			MAP = ResourceLoader.load(TiledMap.class, ".\\maps\\Eden Dungeon Karte.txt");
 		} catch (Exception e) {
 			System.err.println("Failed to load");
 			e.printStackTrace();

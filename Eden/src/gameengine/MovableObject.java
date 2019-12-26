@@ -7,7 +7,7 @@ import gameengine.maths.Vector2D;
  * @author Paul
  *
  */
-public class MovableObject extends DrawableObject{
+public abstract class MovableObject extends DrawableObject{
 
 	protected Vector2D centerPosition;
 	protected Vector2D moveVector;
@@ -26,6 +26,7 @@ public class MovableObject extends DrawableObject{
 		centerPosition.y = position.y + height/2;
 	}
 	
+	//------------------------------------Getters
 	public Vector2D getCenterPosition() {
 		return centerPosition;
 	}

@@ -45,7 +45,7 @@ public class HealthBar {
 		if(isShown) {
 			position.x = object.getX();
 			position.y = object.getY() - DISTANCE;
-			if(object.getCurrentHealth() > 0)  currentWidth = (int) (object.getCurrentHealth() / object.MAX_HEALTH * FULL_WIDTH);
+			if(object.getCurrentHealth() > 0)  currentWidth = (int) (object.getCurrentHealth() / object.getMaxHealth() * FULL_WIDTH);
 			else currentWidth = 0;
 			
 			if(slidingUp) {

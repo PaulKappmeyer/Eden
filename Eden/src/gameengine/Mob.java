@@ -1,6 +1,11 @@
 package gameengine;
 
+import java.awt.Graphics;
+
 import gameengine.graphics.AnimationPlayer;
+import gameengine.hitbox.Hitbox;
+import gameengine.hud.HealthBar;
+import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
 import gameengine.sounds.SoundPlayer;
 import gamelogic.Direction;
@@ -10,41 +15,127 @@ import gamelogic.Direction;
  * @author Paul
  *
  */
-public class Mob extends MovableObject{
-
-	public int MAX_HEALTH;
+public abstract class Mob extends MovableObject{
 	
-	protected AnimationPlayer animationPlayer;
-	protected SoundPlayer soundPlayer;
+	//Constanst
+	protected int MAX_HEALTH;
+	protected int MAX_WALKSPEED;
+	protected float TIME_FOR_MAX_WALKSPEED;
+	public int MAX_KNOCKBACK_AMOUNT = 1000;
+	public float MAX_KNOCKBACK_TIME = 0.35f;
 	
-	protected boolean isWalking;
-	protected float currentWalkspeed;
-	protected float timeWalked;
-	protected Vector2D walkDirectionVector;
-	protected Direction walkDirectionString;
-	
+	//Health
+	protected boolean alive = true;
 	protected float currentHealth;
+	protected HealthBar healthBar;
+	protected boolean gotDamaged = false;
+	protected float currentDamagedTime = 0;
 	
-	public Mob(float x, float y, int width, int height, int MAX_HEALTH) {
+	//Hitbox
+	protected Hitbox hitbox;
+	
+	//Animations & Sound
+	protected AnimationPlayer animationPlayer = new AnimationPlayer();
+	protected SoundPlayer soundPlayer = new SoundPlayer();
+	
+	//Walking
+	protected Direction walkDirectionString = Direction.down;
+	protected Vector2D walkDirectionVector = new Vector2D();
+	protected boolean isWalking = false;
+	protected float currentWalkspeed = 0;
+	protected float timeWalked = 0;
+	
+	//Knockback
+	protected Vector2D knockbackVector = new Vector2D();
+	protected boolean gotKnockbacked = false;
+	protected int CURRENT_MAX_KNOCKBACK_AMMOUNT;
+	protected float CURRENT_MAX_KNOCKBACK_TIME;
+	protected float currentKnockbackAmount = 0;
+	protected float currentKnockbackTime = 0;
+	
+	public Mob(float x, float y, int width, int height, int MAX_HEALTH, int MAX_WALKSPEED, float TIME_FOR_MAX_WALKSPEED, int MAX_KNOCKBACK_AMOUNT, float MAX_KNOCKBACK_TIME) {
 		super(x, y, width, height);
-		this.soundPlayer = new SoundPlayer();
-		this.animationPlayer = new AnimationPlayer();
-		this.isWalking = false;
-		this.currentWalkspeed = 0;
-		this.timeWalked = 0;
-		this.walkDirectionVector = new Vector2D();
 		this.MAX_HEALTH = MAX_HEALTH;
+		this.MAX_WALKSPEED = MAX_WALKSPEED;
+		this.TIME_FOR_MAX_WALKSPEED = TIME_FOR_MAX_WALKSPEED;
+		this.MAX_KNOCKBACK_AMOUNT = MAX_KNOCKBACK_AMOUNT;
+		this.MAX_KNOCKBACK_TIME = MAX_KNOCKBACK_TIME;
+		
 		this.currentHealth = MAX_HEALTH;
+		this.healthBar = new HealthBar(this);
 	}
 	
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-		
+		healthBar.update(tslf);
 		animationPlayer.update(tslf);
 		image = animationPlayer.getCurrentFrame();
+		
+		//Damaged
+		if(gotDamaged) {
+			currentDamagedTime += tslf;
+			if(currentDamagedTime >= MAX_KNOCKBACK_TIME) {
+				animationPlayer.stop();
+				currentDamagedTime = 0;
+				gotDamaged = false;
+			}
+		}
+		
+		//Knockback
+		if(gotKnockbacked) {
+			currentKnockbackTime += tslf;
+			if(currentKnockbackTime >= CURRENT_MAX_KNOCKBACK_TIME) {
+				currentKnockbackTime = 0;
+				knockbackVector.x = 0;
+				knockbackVector.y = 0;
+				gotKnockbacked = false;
+			}else {
+				currentKnockbackAmount = MyMaths.linearInterpolation(CURRENT_MAX_KNOCKBACK_AMMOUNT, 0, currentKnockbackTime, CURRENT_MAX_KNOCKBACK_TIME);
+			}
+		}
+		
+		//Walking
+		if(isWalking) {
+			timeWalked += tslf;
+			currentWalkspeed = MyMaths.linearInterpolation(0, MAX_WALKSPEED, timeWalked, TIME_FOR_MAX_WALKSPEED);
+		}
+		
+		this.moveVector.x = walkDirectionVector.x * currentWalkspeed + knockbackVector.x * currentKnockbackAmount;
+		this.moveVector.y = walkDirectionVector.y * currentWalkspeed + knockbackVector.y * currentKnockbackAmount;
+	}
+	
+	//----------------Drawing
+	@Override
+	public void draw(Graphics graphics) {
+		super.draw(graphics);
+		healthBar.draw(graphics);
 	}
 
+	//------------------------Damaged
+	public void getDamaged(float damageAmount) {
+		if(!gotDamaged) {
+			gotDamaged = true;
+			currentHealth -= damageAmount;
+			stopWalking();
+			healthBar.show();
+		}
+	}
+	
+	//----------------Knockback
+	public void getKnockbacked(Vector2D knockbackVector, int strength, float time) {
+		if(!gotKnockbacked && alive) {
+			gotKnockbacked = true;
+			this.knockbackVector.x = knockbackVector.x;
+			this.knockbackVector.y = knockbackVector.y;
+			this.knockbackVector.makeUnitVector();
+			currentKnockbackTime = 0;
+			CURRENT_MAX_KNOCKBACK_AMMOUNT = strength;
+			CURRENT_MAX_KNOCKBACK_TIME = time;
+		}
+	}
+	
+	//-------------------------Walking
 	public void stopWalking() {
 		animationPlayer.reset();
 		animationPlayer.stop();
@@ -88,15 +179,28 @@ public class Mob extends MovableObject{
 		}
 	}
 	
+	//-------------------------Getters
+	public float getMaxHealth() {
+		return MAX_HEALTH;
+	}
+	
+	public float getCurrentHealth() {
+		return currentHealth;
+	}
+	
+	public boolean isAlive() {
+		return alive;
+	}
+	
+	public Hitbox getHitbox() {
+		return hitbox;
+	}
+	
 	public Vector2D getWalkDirectionVector() {
 		return walkDirectionVector;
 	}
 	
 	public Direction getWalkDirectionString() {
 		return walkDirectionString;
-	}
-	
-	public float getCurrentHealth() {
-		return currentHealth;
 	}
 }

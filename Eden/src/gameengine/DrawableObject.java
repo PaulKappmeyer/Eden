@@ -38,6 +38,7 @@ public abstract class DrawableObject {
 		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
 	}
 	
+	//----------------------------Getters
 	public float getX() {
 		return position.x;
 	}

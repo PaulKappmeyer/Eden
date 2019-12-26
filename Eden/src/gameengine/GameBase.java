@@ -38,9 +38,12 @@ public abstract class GameBase {
 		window.addMouseListener(mouseInputManager);
 		window.addMouseMotionListener(mouseInputManager);
 		window.addMouseWheelListener(mouseInputManager);
-
+		
+		long StartOfInit = System.currentTimeMillis();
 		init(); //Calling method init() in the sub-class
-
+		long StartOfGame = System.currentTimeMillis();
+		System.out.println("Time needed for initialization: [" + (StartOfGame - StartOfInit) + "ms]");
+		
 		long lastFrame = System.currentTimeMillis();
 
 		while(true) {

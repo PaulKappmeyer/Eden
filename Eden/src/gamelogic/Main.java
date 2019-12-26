@@ -46,7 +46,7 @@ public class Main extends GameBase{
 		player = new Player(400, 400);
 		tiledMap = GameResources.MAP;
 		zombies = new LinkedList<Zombie>();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 100; i++) {
 			Vector2D position = RANDOM.nextVector2D(750, 200, 3500, 3500);
 			zombies.add(new Zombie(position.x, position.y));
 		}
@@ -63,12 +63,12 @@ public class Main extends GameBase{
 		
 		for (Zombie zombie : zombies) {
 			zombie.update(tslf);
-			if(zombie.isAlive) {
+			if(zombie.isAlive()) {
 				if(zombie.getHitbox().isOverlapping(player.getHitbox())) {
-					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()));
+					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()), zombie.MAX_KNOCKBACK_AMOUNT, zombie.MAX_KNOCKBACK_TIME);
 					zombie.getDamaged(50);
 					player.getDamaged(50);
-					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), Player.MAX_KNOCKBACK_AMOUNT, Player.MAX_KNOCKBACK_TIME);
+					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), player.MAX_KNOCKBACK_AMOUNT, player.MAX_KNOCKBACK_TIME);
 				}else {
 					//This loop is running from last element to first element because elements get deleted;
 					for(int i = player.projectiles.size()-1; i >= 0; i--) {
@@ -83,7 +83,7 @@ public class Main extends GameBase{
 						}
 							
 						if(zombie.getHitbox().isOverlapping(projectile.getHitbox())) {
-							zombie.getKnockbacked(projectile.getVelocityVector());
+							zombie.getKnockbacked(projectile.getVelocityVector(), zombie.MAX_KNOCKBACK_AMOUNT, zombie.MAX_KNOCKBACK_TIME);
 							zombie.getDamaged(50);
 							player.projectiles.remove(i);
 						}

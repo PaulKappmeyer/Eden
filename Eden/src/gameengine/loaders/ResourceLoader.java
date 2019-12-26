@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import gameengine.graphics.AnimationSet;
 import gameengine.sounds.Sound;
+import gamelogic.map.TiledMap;
 
 /**
  * 
@@ -25,6 +26,9 @@ public final class ResourceLoader {
 		}
 		else if(classType == Sound.class) {
 			return (T) SoundLoader.loadSound(filePath);
+		}
+		else if(classType == TiledMap.class) {
+			return (T) MapLoader.loadMap(filePath);
 		}
 		else throw new Exception("Unsupported Type.");
 	}

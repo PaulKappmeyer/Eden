@@ -13,7 +13,7 @@ import gamelogic.map.TiledMap;
  */
 public class MapLoader {
 
-	public static TiledMap loadMap (String filePath) throws Exception{
+	static TiledMap loadMap (String filePath) throws Exception{
 		File mapFile = new File(filePath);
 		
 		if(!mapFile.exists()) throw new Exception("Map " + filePath + " not found.");
