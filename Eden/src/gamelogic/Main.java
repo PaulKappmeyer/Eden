@@ -105,6 +105,10 @@ public class Main extends GameBase{
 		if(translateY > 0) translateY = 0;
 	}
 
+	public static boolean isVisibleOnScreen(float x, float y, int width, int height) {
+		if(x + width > -translateX && x < -translateX + Main.SCREEN_WIDTH && y + height > - translateY && y < -translateY + Main.SCREEN_HEIGHT) return true;
+		return false;
+	}
 	
 	@Override
 	public void draw(Graphics graphics) {
@@ -112,12 +116,15 @@ public class Main extends GameBase{
 		graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		
 		graphics.translate((int)translateX, (int)translateY);
-
+		
 		tiledMap.draw(graphics);
+		
 		for (Zombie zombie : zombies) {
+			if(!isVisibleOnScreen(zombie.getX(), zombie.getY(), zombie.getWidth(), zombie.getHeight())) continue;
 			zombie.draw(graphics);
 			zombie.getHitbox().draw(graphics);
 		}
+		
 		player.draw(graphics);
 		for (Projectile projectile : player.projectiles) {
 			projectile.draw(graphics);

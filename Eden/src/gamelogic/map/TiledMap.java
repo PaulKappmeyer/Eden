@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import gamelogic.GameResources;
+import gamelogic.Main;
 
 /**
  * 
@@ -52,7 +53,9 @@ public class TiledMap {
 	public void draw(Graphics graphics) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				tiles[i][j].draw(graphics);
+				Tile tile = tiles[i][j];
+				if(!Main.isVisibleOnScreen(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight())) continue;
+				tile.draw(graphics);
 			}
 		}
 	}
