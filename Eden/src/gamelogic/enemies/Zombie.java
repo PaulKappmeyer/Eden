@@ -7,7 +7,7 @@ import gamelogic.GameResources;
 import gamelogic.Main;
 
 /**
- * 
+ * Behavior: When the enemy sees the Player or comes in range of the player it starts to chase the Player.
  * @author Paul
  *
  */

@@ -8,9 +8,11 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 
 import gameengine.GameBase;
+import gameengine.Mob;
 import gameengine.hud.PlayerHUD;
 import gameengine.maths.MyRandom;
 import gameengine.maths.Vector2D;
+import gamelogic.enemies.ShootingZombie;
 import gamelogic.enemies.Zombie;
 import gamelogic.enemies.ZombieSort;
 import gamelogic.map.TiledMap;
@@ -27,15 +29,15 @@ public class Main extends GameBase{
 	public static final int SCREEN_HEIGHT = 860;
 	public static float translateX;
 	public static float translateY;
-	
+
 	public static final MyRandom RANDOM = new MyRandom();
 
 	public static Player player;
 	private PlayerHUD playerHUD;
-	private TiledMap tiledMap;
-	private LinkedList<Zombie> zombies;
+	public static TiledMap tiledMap;
+	private LinkedList<Mob> zombies;
 	private ZombieSort zombieSort;
-	
+
 	public static void main(String[] args) {
 		Main main = new Main();
 		main.start("Eden", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -48,12 +50,12 @@ public class Main extends GameBase{
 		player = new Player(400, 400);
 		playerHUD = new PlayerHUD(player);
 		tiledMap = GameResources.MAP;
-		zombies = new LinkedList<Zombie>();
+		zombies = new LinkedList<Mob>();
 		for (int i = 0; i < 100; i++) {
 			Vector2D position = RANDOM.nextVector2D(750, 200, 3500, 3500);
-			zombies.add(new Zombie(position.x, position.y));
+			zombies.add(new ShootingZombie(position.x, position.y));
 		}
-		zombies.add(new Zombie(750, 400));
+		zombies.add(new ShootingZombie(750, 400));
 		zombieSort = new ZombieSort();
 	}
 
@@ -64,8 +66,8 @@ public class Main extends GameBase{
 		for (Projectile projectile : player.projectiles) {
 			projectile.update(tslf);
 		}
-		
-		for (Zombie zombie : zombies) {
+
+		for (Mob zombie : zombies) {
 			zombie.update(tslf);
 			if(zombie.isAlive()) {
 				if(zombie.getHitbox().isOverlapping(player.getHitbox())) {
@@ -85,9 +87,9 @@ public class Main extends GameBase{
 							player.projectiles.remove(i);
 							continue;
 						}
-							
+
 						if(zombie.getHitbox().isOverlapping(projectile.getHitbox())) {
-							zombie.getKnockbacked(projectile.getVelocityVector(), zombie.getMAX_KNOCKBACK_AMOUNT(), zombie.getMAX_KNOCKBACK_TIME());
+							zombie.getKnockbacked(projectile.getVelocityVector(), zombie.getMAX_KNOCKBACK_AMOUNT()/2, zombie.getMAX_KNOCKBACK_TIME()/2);
 							zombie.getDamaged(50);
 							if(!zombie.isAlive()) player.addExp(50);
 							player.projectiles.remove(i);
@@ -109,30 +111,39 @@ public class Main extends GameBase{
 		if(x + width > -translateX && x < -translateX + Main.SCREEN_WIDTH && y + height > - translateY && y < -translateY + Main.SCREEN_HEIGHT) return true;
 		return false;
 	}
-	
+
 	@Override
 	public void draw(Graphics graphics) {
 		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-		
+
 		graphics.translate((int)translateX, (int)translateY);
-		
+
 		tiledMap.draw(graphics);
-		
-		for (Zombie zombie : zombies) {
-			if(!isVisibleOnScreen(zombie.getX(), zombie.getY(), zombie.getWidth(), zombie.getHeight())) continue;
-			zombie.draw(graphics);
-			zombie.getHitbox().draw(graphics);
+
+		for (Mob zombie : zombies) {
+			if(zombie instanceof Zombie) {
+				if(!isVisibleOnScreen(zombie.getX(), zombie.getY(), zombie.getWidth(), zombie.getHeight())) continue;
+				zombie.draw(graphics);
+				zombie.getHitbox().draw(graphics);
+			}else if(zombie instanceof ShootingZombie) {
+				for (Projectile projectile : ((ShootingZombie)zombie).projectiles) {
+					projectile.draw(graphics);
+				}
+				if(!isVisibleOnScreen(zombie.getX(), zombie.getY(), zombie.getWidth(), zombie.getHeight())) continue;
+				zombie.draw(graphics);
+			}
 		}
-		
-		player.draw(graphics);
+
+		//Player
 		for (Projectile projectile : player.projectiles) {
 			projectile.draw(graphics);
 		}
+		player.draw(graphics);
 		player.getHitbox().draw(graphics);
-		
+
 		graphics.translate((int)-translateX, (int)-translateY);
-		
+
 		playerHUD.draw(graphics);
 	}	
 }

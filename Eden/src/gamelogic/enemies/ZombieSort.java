@@ -2,15 +2,17 @@ package gamelogic.enemies;
 
 import java.util.Comparator;
 
+import gameengine.Mob;
+
 /**
  * This class is used for the y-sort of the "zombies".
  * @author Paul
  *
  */
-public class ZombieSort implements Comparator<Zombie>{
+public class ZombieSort implements Comparator<Mob>{
 
 	@Override
-	public int compare(Zombie zombie1, Zombie zombie2) {
+	public int compare(Mob zombie1, Mob zombie2) {
 		if(zombie1.isAlive() && zombie2.isAlive() || !zombie1.isAlive() && !zombie2.isAlive()) {
 			if(zombie1.getCenterPositionY() > zombie2.getCenterPositionY()) {
 				return 1;

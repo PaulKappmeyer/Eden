@@ -63,7 +63,7 @@ public class Player extends Mob{
 				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
 				projectiles.add(projectile);
 				stopWalking();
-				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMAX_KNOCKBACK_AMOUNT()/2, SHOOT_COOLDOWN/2);
+				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMAX_KNOCKBACK_AMOUNT()/2, getMAX_KNOCKBACK_TIME()/2);
 				canShoot = false;
 			}
 		}else {

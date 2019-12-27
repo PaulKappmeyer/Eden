@@ -76,6 +76,7 @@ public abstract class Mob extends MovableObject{
 		if(gotDamaged) {
 			currentDamagedTime += tslf;
 			if(currentDamagedTime >= MAX_KNOCKBACK_TIME) {
+				if(alive) animationPlayer.reset();
 				animationPlayer.stop();
 				currentDamagedTime = 0;
 				gotDamaged = false;
