@@ -44,9 +44,8 @@ public class HealthBar {
 	public void update(float tslf) {
 		if(isShown) {
 			position.x = object.getX();
-			position.y = object.getY() - DISTANCE;
-			if(object.getCurrentHealth() > 0)  currentWidth = (int) (object.getCurrentHealth() / object.getMaxHealth() * FULL_WIDTH);
-			else currentWidth = 0;
+			position.y = object.getY() - DISTANCE; 
+			currentWidth = (int) MyMaths.mapValue(object.getCurrentHealth(), 0, object.getMaxHealth(), 0, FULL_WIDTH);
 			
 			if(slidingUp) {
 				time += tslf;

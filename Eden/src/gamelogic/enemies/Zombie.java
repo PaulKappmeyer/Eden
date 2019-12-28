@@ -32,7 +32,7 @@ public class Zombie extends Mob{
 		super.update(tslf);
 		
 		//Walking
-		if(isWalking && !gotDamaged && !gotKnockbacked && alive) {
+		if(isWalking && !gotDamaged && !gotKnockbacked && isAlive()) {
 			move(zombieBehavior.getVectorToPlayer());
 			walkDirectionString = walkDirectionVector.getDirection();
 
@@ -46,10 +46,9 @@ public class Zombie extends Mob{
 	
 	@Override
 	public void getDamaged(float damageAmount) {
-		if(!gotDamaged  && alive) {
+		if(!gotDamaged  && isAlive()) {
 			super.getDamaged(damageAmount);
 			if(getCurrentHealth() <= 0) {
-				alive = false;
 				animationPlayer.play("zombie_die_" + walkDirectionString);
 			}else {
 				isWalking = true;

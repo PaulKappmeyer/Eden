@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package gameengine.hud;
 
 import java.awt.Color;
@@ -9,10 +12,14 @@ import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
 import gamelogic.player.Player;
 
-public class PlayerHealthBar {
+/**
+ * @author Paul
+ *
+ */
+public class PlayerAmmoBar {
 
-	private Color backgroundColor = new Color(0, 255, 0, 50);
-	private Color color = new Color(0, 255, 0, 255);
+	private Color backgroundColor = new Color(150, 150, 150, 50);
+	private Color color = new Color(150, 150, 150, 255);
 	private Color outlineColor = new Color(0, 0, 0, 255);
 	private Color textColor = new Color(255, 255, 255, 255);
 	
@@ -24,7 +31,7 @@ public class PlayerHealthBar {
 	private String text;
 	private Font font;
 	
-	public PlayerHealthBar(Player player, int x, int y, int FULL_WIDTH, int FULL_HEIGHT, Font font) {
+	public PlayerAmmoBar(Player player, int x, int y, int FULL_WIDTH, int FULL_HEIGHT, Font font) {
 		this.player = player;
 		this.position = new Vector2D(x, y);
 		this.FULL_WIDTH = FULL_WIDTH;
@@ -33,8 +40,8 @@ public class PlayerHealthBar {
 		this.font = font;
 	}
 	
-	private String getText(float currentHealth, int maxHealth) {
-		return "Health: " + (int)currentHealth + " / " + (int)maxHealth;
+	private String getText(int currentAmmo, int maxAmmo) {
+		return "Ammo: " + (int)currentAmmo + " / " + (int)maxAmmo;
 	}
 	
 	public void draw(Graphics graphics) {
@@ -61,10 +68,10 @@ public class PlayerHealthBar {
 	}
 	
 	public void update(float tslf) {
-		float currentHealth = player.getCurrentHealth();
-		int maxHealth = player.getMaxHealth();
-		currentWidth = (int) (MyMaths.mapValue(currentHealth, 0, maxHealth, 0, FULL_WIDTH));
-		text = getText(currentHealth, maxHealth);
+		int currentAmmo = player.getCurrentAmmo();
+		int maxAmmo = player.getMAX_AMMO();
+		currentWidth = (int) (MyMaths.mapValue(currentAmmo, 0, maxAmmo, 0, FULL_WIDTH));
+		text = getText(currentAmmo, maxAmmo);
 	}
 	
 }

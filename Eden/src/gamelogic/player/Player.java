@@ -22,15 +22,19 @@ import gamelogic.Projectile;
 public class Player extends Mob{
 
 	private float SHOOT_COOLDOWN = 0.5f;
+	private int MAX_AMMO = 10;
+	private float RELOAD_TIME = 1f;
 
 	public LinkedList<Projectile> projectiles;
 	private boolean canShoot = true;
-	private float currentShootCooldown;
+	private float currentShootCooldown = 0;
+	private int currentAmmo = MAX_AMMO;
+	private float currentReloadTime = 0;
 
 	private int level = 1;
 	private int exp = 0;
 	private int MAX_EXP[] = new int[] {100, 110, 130, 160, 200, 250, 300, 500, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000};
-	
+
 	public Player(float x, float y) {
 		super(x, y, 128, 128, 400, 400, 0.1f, 1000, 0.35f);
 		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET, GameResources.PLAYER_ANIMATION_SET.getAnimation("player_stand_" + walkDirectionString));
@@ -41,7 +45,7 @@ public class Player extends Mob{
 	public void addExp(int ammount) {
 		exp += ammount;
 	}
-	
+
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
@@ -54,7 +58,7 @@ public class Player extends Mob{
 				exp = MAX_EXP[level-1];
 			}
 		}
-		
+
 		//Shooting
 		if(canShoot) {
 			if(PlayerInput.isLeftMouseButtonDown()) {
@@ -62,15 +66,24 @@ public class Player extends Mob{
 				Vector2D velocityVector = new Vector2D(mousePosition.x - centerPosition.x - Main.translateX, mousePosition.y - centerPosition.y - Main.translateY);
 				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
 				projectiles.add(projectile);
+				currentAmmo--;
 				stopWalking();
 				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMAX_KNOCKBACK_AMOUNT()/2, getMAX_KNOCKBACK_TIME()/2);
 				canShoot = false;
 			}
 		}else {
-			currentShootCooldown += tslf;
-			if(currentShootCooldown >= SHOOT_COOLDOWN) {
-				canShoot = true;
-				currentShootCooldown = 0;
+			if(currentAmmo > 0) {
+				currentShootCooldown += tslf;
+				if(currentShootCooldown >= SHOOT_COOLDOWN) {
+					canShoot = true;
+					currentShootCooldown = 0;
+				}
+			}else {
+				currentReloadTime += tslf;
+				if(currentReloadTime >= RELOAD_TIME) {
+					currentAmmo = MAX_AMMO;
+					currentReloadTime = 0;
+				}
 			}
 		}
 		//Walking
@@ -142,17 +155,25 @@ public class Player extends Mob{
 			animationPlayer.loop("player_getDamaged_" + walkDirectionString);
 		}
 	}
-	
+
 	//--------------------------Getters
 	public int getLevel() {
 		return level;
 	}
-	
+
 	public int getExp() {
 		return exp;
 	}
-	
+
 	public int[] getMAX_EXP() {
 		return MAX_EXP;
+	}
+	
+	public int getCurrentAmmo() {
+		return currentAmmo;
+	}
+	
+	public int getMAX_AMMO() {
+		return MAX_AMMO;
 	}
 }

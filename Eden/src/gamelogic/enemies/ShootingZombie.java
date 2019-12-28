@@ -59,7 +59,7 @@ public class ShootingZombie extends Mob{
 		}
 
 		//Shooting
-		if(canShoot && alive) {
+		if(canShoot && isAlive()) {
 			currentShootCooldown += tslf;
 			if(currentShootCooldown >= SHOOT_COOLDOWN/2) {
 				Vector2D playerPosition = Main.player.getCenterPosition();
@@ -73,7 +73,7 @@ public class ShootingZombie extends Mob{
 			}
 		}
 		//Walking
-		if(isWalking && !gotDamaged && !gotKnockbacked && !canShoot && alive) {
+		if(isWalking && !gotDamaged && !gotKnockbacked && !canShoot && isAlive()) {
 			move(zombieBehavior.getVectorToPlayer());
 			walkDirectionString = walkDirectionVector.getDirection();
 			animationPlayer.loop("zombie_walk_" + walkDirectionString);
@@ -103,10 +103,9 @@ public class ShootingZombie extends Mob{
 
 	@Override
 	public void getDamaged(float damageAmount) {
-		if(!gotDamaged  && alive) {
+		if(!gotDamaged  && isAlive()) {
 			super.getDamaged(damageAmount);
 			if(getCurrentHealth() <= 0) {
-				alive = false;
 				animationPlayer.play("zombie_die_" + walkDirectionString);
 			}else {
 				isWalking = true;

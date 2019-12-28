@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
+import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
 import gamelogic.player.Player;
 
@@ -60,8 +61,9 @@ public class PlayerLevelBar {
 	}
 	
 	public void update(float tslf) {
-		text = getText(player.getLevel());
-		currentWidth = (int) (FULL_WIDTH * player.getExp()/player.getMAX_EXP()[player.getLevel()-1]);
+		int level = player.getLevel();
+		currentWidth = (int) MyMaths.mapValue(player.getExp(), 0, player.getMAX_EXP()[level-1], 0, FULL_WIDTH);
+		text = getText(level);
 	}
 	
 }

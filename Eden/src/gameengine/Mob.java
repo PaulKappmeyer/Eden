@@ -25,8 +25,8 @@ public abstract class Mob extends MovableObject{
 	private float MAX_KNOCKBACK_TIME;
 	
 	//Health
-	protected boolean alive = true;
 	protected boolean gotDamaged = false;
+	private boolean alive = true;
 	private float currentHealth;
 	private HealthBar healthBar;
 	private float currentDamagedTime = 0;
@@ -118,6 +118,10 @@ public abstract class Mob extends MovableObject{
 		if(!gotDamaged) {
 			gotDamaged = true;
 			currentHealth -= damageAmount;
+			if(currentHealth <= 0) {
+				alive = false;
+				currentHealth = 0;
+			}
 			stopWalking();
 			healthBar.show();
 		}
