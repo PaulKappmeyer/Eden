@@ -63,7 +63,7 @@ public class Player extends Mob{
 		if(canShoot) {
 			if(PlayerInput.isLeftMouseButtonDown()) {
 				Vector2D mousePosition = PlayerInput.getMousePosition();
-				Vector2D velocityVector = new Vector2D(mousePosition.x - centerPosition.x - Main.translateX, mousePosition.y - centerPosition.y - Main.translateY);
+				Vector2D velocityVector = new Vector2D(mousePosition.x - centerPosition.x + Main.camera.getX(), mousePosition.y - centerPosition.y + Main.camera.getY());
 				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
 				projectiles.add(projectile);
 				currentAmmo--;
