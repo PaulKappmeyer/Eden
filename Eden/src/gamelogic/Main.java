@@ -119,7 +119,7 @@ public class Main extends GameBase{
 
 		graphics.translate((int)translateX, (int)translateY);
 
-		tiledMap.draw(graphics);
+		tiledMap.drawBottomLayer(graphics);
 
 		for (Mob zombie : zombies) {
 			if(zombie instanceof Zombie) {
@@ -142,6 +142,8 @@ public class Main extends GameBase{
 		player.draw(graphics);
 		player.getHitbox().draw(graphics);
 
+		tiledMap.drawTopLayer(graphics);
+		
 		graphics.translate((int)-translateX, (int)-translateY);
 
 		playerHUD.draw(graphics);

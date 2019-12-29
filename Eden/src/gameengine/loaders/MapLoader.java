@@ -37,18 +37,31 @@ public class MapLoader {
 		bufferedReader.readLine(); //[layer]
 		bufferedReader.readLine(); //type = Ground
 		bufferedReader.readLine(); //data
-		int[][] ids = new int[width][height];
+		int[][] bottomLayer = new int[width][height];
 		for (int y = 0; y < height; y++) {
 			String line = bufferedReader.readLine();
 			String[] data = line.split(",");
 			for (int x = 0; x < width; x++) {
-				ids[x][y] = Integer.parseInt(data[x]);
+				bottomLayer[x][y] = Integer.parseInt(data[x])-1;
+			}
+		}
+		
+		bufferedReader.readLine(); //
+		bufferedReader.readLine(); //[layer]
+		bufferedReader.readLine(); //type = Top
+		bufferedReader.readLine(); //data
+		int[][] topLayer = new int[width][height];
+		for (int y = 0; y < height; y++) {
+			String line = bufferedReader.readLine();
+			String[] data = line.split(",");
+			for (int x = 0; x < width; x++) {
+				topLayer[x][y] = Integer.parseInt(data[x])-1;
 			}
 		}
 		
 		bufferedReader.close();
 		
-		TiledMap map = new TiledMap(width, height, tileWidth, ids);
+		TiledMap map = new TiledMap(width, height, tileWidth, bottomLayer, topLayer);
 		return map;
 	}
 }

@@ -17,13 +17,14 @@ import gamelogic.Main;
 public class TiledMap {
 
 	private BufferedImage[] tileSet;
-	private Tile[][] tiles;
+	private Tile[][] bottomLayer;
+	private Tile[][] topLayer;
 	private int width;	/*The width of the tiled map*/
 	private int height;	/*The height of the tiled map*/
 	private int tileSize;	/*The size of each tile*/
 	private int fullWidth;
 	private int fullHeight;
-	
+
 	/**
 	 * 
 	 * @param width The width of the tiled map; number of tiles in x-direction
@@ -31,43 +32,69 @@ public class TiledMap {
 	 * @param tileSize The size of each tile in pixels
 	 * @throws Exception
 	 */
-	public TiledMap(int width, int height, int tileSize, int[][] ids) {
-		this.tileSet = GameResources.TILESET;
+	public TiledMap(int width, int height, int tileSize, int[][] bottomLayerIds, int[][] topLayerIds) {
+		BufferedImage dungeon_tileset = GameResources.DUNGEON_TILESET;
+		this.tileSet = new BufferedImage[2000];
+		int a = 0;
+		for (int y = 0; y < dungeon_tileset.getHeight()/16; y++) {
+			for (int x = 0; x < dungeon_tileset.getWidth()/16; x++) {
+				tileSet[a] = dungeon_tileset.getSubimage(x * 16, y * 16, 16, 16);
+				a++;
+			}
+		}
+
 		this.width = width;
 		this.height = height;
 		this.tileSize = tileSize;
 		this.fullWidth = width * tileSize;
 		this.fullHeight = height * tileSize;
-		this.tiles = new Tile[width][height];
+		//Bottom Layer
+		this.bottomLayer = new Tile[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				int id = ids[i][j];
-				BufferedImage tileImage = tileSet[2];
-				if(id == 130) tileImage = tileSet[1];
-				else if(id == 115) tileImage = tileSet[2];
-				tiles[i][j] = new Tile(i * tileSize, j * tileSize, tileSize, tileSize, ids[i][j], tileImage);
+				int id = bottomLayerIds[i][j];
+				bottomLayer[i][j] = new Tile(i * tileSize, j * tileSize, tileSize, tileSize, id, tileSet[id]);
+			}
+		}
+		//Top Layer
+		this.topLayer = new Tile[width][height];
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				int id = topLayerIds[i][j];
+				if(id == -1) continue;
+				topLayer[i][j] = new Tile(i * tileSize, j * tileSize, tileSize, tileSize, id, tileSet[id]);
 			}
 		}
 	}
-	
-	public void draw(Graphics graphics) {
+
+	public void drawBottomLayer(Graphics graphics) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				Tile tile = tiles[i][j];
+				Tile tile = bottomLayer[i][j];
 				if(!Main.isVisibleOnScreen(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight())) continue;
 				tile.draw(graphics);
 			}
 		}
 	}
-	
+
+	public void drawTopLayer(Graphics graphics) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				Tile tile = topLayer[i][j];
+				if(tile == null || !Main.isVisibleOnScreen(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight()) || tile.getId() == -1) continue;
+				tile.draw(graphics);
+			}
+		}
+	}
+
 	public int getFullWidth() {
 		return fullWidth;
 	}
-	
+
 	public int getFullHeight() {
 		return fullHeight;
 	}
-	
+
 	public int getTileSize() {
 		return tileSize;
 	}
