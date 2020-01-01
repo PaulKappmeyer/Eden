@@ -16,7 +16,7 @@ public class Zombie extends Mob{
 	private ZombieBehavior zombieBehavior;
 	private ZombieWatchBehavior zombieWatchBehavior;
 	private int triggerDistance = 400;
-	private int viewCone = 25;
+	private int viewCone = 25; //in degrees
 
 	public Zombie(float x, float y) {
 		super(x, y, 128, 128, 100, Main.RANDOM.nextInt(50, 300), 0.1f, 1000, 0.35f);

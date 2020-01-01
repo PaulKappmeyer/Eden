@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import gameengine.GameBase;
 import gameengine.Mob;
+import gameengine.graphics.Camera;
 import gameengine.hud.PlayerHUD;
 import gameengine.maths.MyRandom;
 import gameengine.maths.Vector2D;
@@ -71,10 +72,10 @@ public class Main extends GameBase{
 			zombie.update(tslf);
 			if(zombie.isAlive()) {
 				if(zombie.getHitbox().isOverlapping(player.getHitbox())) {
-					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()), zombie.getMAX_KNOCKBACK_AMOUNT(), zombie.getMAX_KNOCKBACK_TIME());
+					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()), zombie.getMaxKnockbackAmount(), zombie.getMaxKnockbackTime());
 					zombie.getDamaged(50);
 					player.getDamaged(50);
-					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), player.getMAX_KNOCKBACK_AMOUNT(), player.getMAX_KNOCKBACK_TIME());
+					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), player.getMaxKnockbackAmount(), player.getMaxKnockbackTime());
 				}else {
 					//This loop is running from last element to first element because elements get deleted;
 					for(int i = player.projectiles.size()-1; i >= 0; i--) {
@@ -89,7 +90,7 @@ public class Main extends GameBase{
 						}
 
 						if(zombie.getHitbox().isOverlapping(projectile.getHitbox())) {
-							zombie.getKnockbacked(projectile.getVelocityVector(), zombie.getMAX_KNOCKBACK_AMOUNT()/2, zombie.getMAX_KNOCKBACK_TIME()/2);
+							zombie.getKnockbacked(projectile.getVelocityVector(), zombie.getMaxKnockbackAmount()/2, zombie.getMaxKnockbackTime()/2);
 							zombie.getDamaged(50);
 							if(!zombie.isAlive()) player.addExp(50);
 							player.projectiles.remove(i);

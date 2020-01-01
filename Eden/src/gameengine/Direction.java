@@ -1,4 +1,4 @@
-package gamelogic;
+package gameengine;
 
 import gameengine.maths.Vector2D;
 

@@ -18,13 +18,13 @@ import gamelogic.Projectile;
  */
 public class ShootingZombie extends Mob{
 
-	public static final float RANGE = 500;
+	public static final float SHOOT_RANGE = 500;
 	public static final float SHOOT_COOLDOWN = 2.f;
 
 	private ZombieBehavior zombieBehavior;
 	private ZombieWatchBehavior zombieWatchBehavior;
 	private int triggerDistance = 400;
-	private int viewCone = 25;
+	private int viewCone = 25; //in degrees
 
 	public LinkedList<Projectile> projectiles;
 	private float currentShootCooldown = 0;
@@ -48,7 +48,7 @@ public class ShootingZombie extends Mob{
 			Projectile projectile = projectiles.get(i);
 			projectile.update(tslf);
 			if(Main.player.getHitbox().isOverlapping(projectile.getHitbox())) {
-				Main.player.getKnockbacked(projectile.getVelocityVector(), Main.player.getMAX_KNOCKBACK_AMOUNT()/2, Main.player.getMAX_KNOCKBACK_TIME()/2);
+				Main.player.getKnockbacked(projectile.getVelocityVector(), Main.player.getMaxKnockbackAmount()/2, Main.player.getMaxKnockbackTime()/2);
 				Main.player.getDamaged(50);
 				projectiles.remove(i);
 			}
@@ -66,7 +66,7 @@ public class ShootingZombie extends Mob{
 				Vector2D velocityVector = new Vector2D(playerPosition.x - centerPosition.x, playerPosition.y - centerPosition.y);
 				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
 				projectiles.add(projectile);
-				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMAX_KNOCKBACK_AMOUNT()/2, getMAX_KNOCKBACK_TIME());
+				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMaxKnockbackAmount()/2, getMaxKnockbackTime());
 				canShoot = false;
 				currentShootCooldown = 0;
 				isWalking = true;
@@ -79,7 +79,7 @@ public class ShootingZombie extends Mob{
 			animationPlayer.loop("zombie_walk_" + walkDirectionString);
 
 			//Prepare for shoot
-			if(centerPosition.distanceSquared(Main.player.getCenterPosition()) <= RANGE*RANGE) { 
+			if(centerPosition.distanceSquared(Main.player.getCenterPosition()) <= SHOOT_RANGE*SHOOT_RANGE) { 
 				currentShootCooldown += tslf;
 				if(currentShootCooldown >= SHOOT_COOLDOWN) {
 					canShoot = true;

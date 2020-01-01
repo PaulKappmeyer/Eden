@@ -8,7 +8,6 @@ import gameengine.hud.HealthBar;
 import gameengine.maths.MyMaths;
 import gameengine.maths.Vector2D;
 import gameengine.sounds.SoundPlayer;
-import gamelogic.Direction;
 
 /**
  * 
@@ -16,13 +15,13 @@ import gamelogic.Direction;
  *
  */
 public abstract class Mob extends MovableObject{
-	
+
 	//Constanst
-	private int MAX_HEALTH;
-	private int MAX_WALKSPEED;
-	private float TIME_FOR_MAX_WALKSPEED;
-	private int MAX_KNOCKBACK_AMOUNT;
-	private float MAX_KNOCKBACK_TIME;
+	private int maxHealth;
+	private int maxWalkspeed;
+	private float timeForMaxWalkspeed;
+	private int maxKnockbackAmount;
+	private float maxKnockbackTime;
 	
 	//Health
 	protected boolean gotDamaged = false;
@@ -48,20 +47,19 @@ public abstract class Mob extends MovableObject{
 	//Knockback
 	protected boolean gotKnockbacked = false;
 	private Vector2D knockbackVector = new Vector2D();
-	private int CURRENT_MAX_KNOCKBACK_AMMOUNT;
-	private float CURRENT_MAX_KNOCKBACK_TIME;
+	private int currentMaxKnockbackAmount = 0;
+	private float currentMaxKnockbackTime = 0;
 	private float currentKnockbackAmount = 0;
 	private float currentKnockbackTime = 0;
 	
-	public Mob(float x, float y, int width, int height, int MAX_HEALTH, int MAX_WALKSPEED, float TIME_FOR_MAX_WALKSPEED, int MAX_KNOCKBACK_AMOUNT, float MAX_KNOCKBACK_TIME) {
+	public Mob(float x, float y, int width, int height, int maxHealth, int maxWalkspeed, float timeForMaxWalkspeed, int maxKnockbackAmount, float maxKnockbackTime) {
 		super(x, y, width, height);
-		this.MAX_HEALTH = MAX_HEALTH;
-		this.MAX_WALKSPEED = MAX_WALKSPEED;
-		this.TIME_FOR_MAX_WALKSPEED = TIME_FOR_MAX_WALKSPEED;
-		this.MAX_KNOCKBACK_AMOUNT = MAX_KNOCKBACK_AMOUNT;
-		this.MAX_KNOCKBACK_TIME = MAX_KNOCKBACK_TIME;
+		this.maxHealth = maxHealth;
+		this.maxWalkspeed = maxWalkspeed;
+		this.maxKnockbackAmount = maxKnockbackAmount;
+		this.maxKnockbackTime = maxKnockbackTime;
 		
-		this.currentHealth = MAX_HEALTH;
+		this.currentHealth = maxHealth;
 		this.healthBar = new HealthBar(this);
 	}
 	
@@ -75,7 +73,7 @@ public abstract class Mob extends MovableObject{
 		//Damaged
 		if(gotDamaged) {
 			currentDamagedTime += tslf;
-			if(currentDamagedTime >= MAX_KNOCKBACK_TIME) {
+			if(currentDamagedTime >= currentMaxKnockbackTime) {
 				if(alive) {
 					animationPlayer.reset();
 					animationPlayer.stop();
@@ -88,20 +86,20 @@ public abstract class Mob extends MovableObject{
 		//Knockback
 		if(gotKnockbacked) {
 			currentKnockbackTime += tslf;
-			if(currentKnockbackTime >= CURRENT_MAX_KNOCKBACK_TIME) {
+			if(currentKnockbackTime >= currentMaxKnockbackTime) {
 				currentKnockbackTime = 0;
 				knockbackVector.x = 0;
 				knockbackVector.y = 0;
 				gotKnockbacked = false;
 			}else {
-				currentKnockbackAmount = MyMaths.linearInterpolation(CURRENT_MAX_KNOCKBACK_AMMOUNT, 0, currentKnockbackTime, CURRENT_MAX_KNOCKBACK_TIME);
+				currentKnockbackAmount = MyMaths.linearInterpolation(currentMaxKnockbackAmount, 0, currentKnockbackTime, currentMaxKnockbackTime);
 			}
 		}
 		
 		//Walking
 		if(isWalking) {
 			timeWalked += tslf;
-			currentWalkspeed = MyMaths.linearInterpolation(0, MAX_WALKSPEED, timeWalked, TIME_FOR_MAX_WALKSPEED);
+			currentWalkspeed = MyMaths.linearInterpolation(0, maxWalkspeed, timeWalked, timeForMaxWalkspeed);
 		}
 		
 		this.moveVector.x = walkDirectionVector.x * currentWalkspeed + knockbackVector.x * currentKnockbackAmount;
@@ -137,8 +135,8 @@ public abstract class Mob extends MovableObject{
 			this.knockbackVector.y = knockbackVector.y;
 			this.knockbackVector.makeUnitVector();
 			currentKnockbackTime = 0;
-			CURRENT_MAX_KNOCKBACK_AMMOUNT = strength;
-			CURRENT_MAX_KNOCKBACK_TIME = time;
+			currentMaxKnockbackAmount = strength;
+			currentMaxKnockbackTime = time;
 		}
 	}
 	
@@ -188,7 +186,7 @@ public abstract class Mob extends MovableObject{
 	
 	//-------------------------Getters
 	public int getMaxHealth() {
-		return MAX_HEALTH;
+		return maxHealth;
 	}
 	
 	public float getCurrentHealth() {
@@ -199,12 +197,12 @@ public abstract class Mob extends MovableObject{
 		return alive;
 	}
 	
-	public int getMAX_KNOCKBACK_AMOUNT() {
-		return MAX_KNOCKBACK_AMOUNT;
+	public int getMaxKnockbackAmount() {
+		return maxKnockbackAmount;
 	}
 	
-	public float getMAX_KNOCKBACK_TIME() {
-		return MAX_KNOCKBACK_TIME;
+	public float getMaxKnockbackTime() {
+		return maxKnockbackTime;
 	}
 	
 	public Hitbox getHitbox() {

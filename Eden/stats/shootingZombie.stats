@@ -1,0 +1,10 @@
+name:shootingZombie
+max_health:200
+max_walkspeed:100
+time_for_max_walkspeed:0.1
+max_knocback_amount:1000
+max_knockback_time:0.35
+shoot_range:500
+shoot_cooldown:2
+triggerDistance:400
+viewCone:25

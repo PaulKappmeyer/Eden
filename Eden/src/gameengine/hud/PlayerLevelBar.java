@@ -62,7 +62,7 @@ public class PlayerLevelBar {
 	
 	public void update(float tslf) {
 		int level = player.getLevel();
-		currentWidth = (int) MyMaths.mapValue(player.getExp(), 0, player.getMAX_EXP()[level-1], 0, FULL_WIDTH);
+		currentWidth = (int) MyMaths.mapValue(player.getExp(), 0, player.getMaxExp()[level-1], 0, FULL_WIDTH);
 		text = getText(level);
 	}
 	

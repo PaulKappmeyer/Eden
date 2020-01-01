@@ -3,6 +3,7 @@
  */
 package gamelogic;
 
+import gameengine.Direction;
 import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
 

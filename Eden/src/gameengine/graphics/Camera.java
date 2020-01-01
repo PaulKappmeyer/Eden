@@ -1,7 +1,8 @@
-package gamelogic;
+package gameengine.graphics;
 
 import gameengine.DrawableObject;
 import gameengine.maths.Vector2D;
+import gamelogic.Main;
 
 public class Camera {
 

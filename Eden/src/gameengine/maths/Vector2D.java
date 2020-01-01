@@ -3,7 +3,7 @@
  */
 package gameengine.maths;
 
-import gamelogic.Direction;
+import gameengine.Direction;
 
 /**
  * A vector representing a x-and y-location in coordinate space, specified in float precision.

@@ -1,0 +1,9 @@
+name:player
+max_health:400
+max_walkspeed:400
+time_for_max_walkspeed:0.1
+max_knocback_amount:1000
+max_knockback_time:0.35
+shoot_cooldown:0.5
+reloadTime:1
+max_ammo:10

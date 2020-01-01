@@ -2,7 +2,7 @@ package gameengine.maths;
 
 import java.util.Random;
 
-import gamelogic.Direction;
+import gameengine.Direction;
 
 /**
  * A sub-class of {@link java.util.Random}, which implements some special methods needed in the game (e.g. nextVector, nextDirection).
