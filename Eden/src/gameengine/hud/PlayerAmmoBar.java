@@ -68,8 +68,8 @@ public class PlayerAmmoBar {
 	}
 	
 	public void update(float tslf) {
-		int currentAmmo = player.getCurrentAmmo();
-		int maxAmmo = player.getMaxAmmo();
+		int currentAmmo = player.getGun().getCurrentAmmo();
+		int maxAmmo = player.getGun().getMaxAmmo();
 		currentWidth = (int) (MyMaths.mapValue(currentAmmo, 0, maxAmmo, 0, FULL_WIDTH));
 		text = getText(currentAmmo, maxAmmo);
 	}

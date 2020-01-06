@@ -115,15 +115,27 @@ public abstract class Mob extends MovableObject{
 
 	//------------------------Damaged
 	public void getDamaged(float damageAmount) {
+		lossHealth(damageAmount);
 		if(!gotDamaged) {
 			gotDamaged = true;
-			currentHealth -= damageAmount;
-			if(currentHealth <= 0) {
-				alive = false;
-				currentHealth = 0;
-			}
 			stopWalking();
 			healthBar.show();
+		}
+	}
+	
+	//Health
+	public void healHealth(float amount) {
+		currentHealth += amount;
+		if(currentHealth > maxHealth) {
+			currentHealth = maxHealth;
+		}
+	}
+	
+	public void lossHealth(float amount) {
+		currentHealth -= amount;
+		if(currentHealth <= 0) {
+			currentHealth = 0;
+			alive = false;
 		}
 	}
 	

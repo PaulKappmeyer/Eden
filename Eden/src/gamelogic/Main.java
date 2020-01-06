@@ -51,7 +51,7 @@ public class Main extends GameBase{
 		playerHUD = new PlayerHUD(player);
 		tiledMap = GameResources.MAP;
 		zombies = new LinkedList<Mob>();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			Vector2D position = RANDOM.nextVector2D(750, 200, 3500, 3500);
 			zombies.add(new ShootingZombie(position.x, position.y));
 		}
@@ -64,9 +64,6 @@ public class Main extends GameBase{
 	public void update(float tslf) {
 		player.update(tslf);
 		playerHUD.update(tslf);
-		for (Projectile projectile : player.projectiles) {
-			projectile.update(tslf);
-		}
 
 		for (Mob zombie : zombies) {
 			zombie.update(tslf);
@@ -78,14 +75,15 @@ public class Main extends GameBase{
 					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), player.getMaxKnockbackAmount(), player.getMaxKnockbackTime());
 				}else {
 					//This loop is running from last element to first element because elements get deleted;
-					for(int i = player.projectiles.size()-1; i >= 0; i--) {
-						Projectile projectile = player.projectiles.get(i);
+					LinkedList<Projectile> projectiles = player.getGun().getProjectiles();
+					for(int i = projectiles.size()-1; i >= 0; i--) {
+						Projectile projectile = player.getGun().getProjectiles().get(i);
 						if(projectile.getX() < 0 || projectile.getY() < 0) {
-							player.projectiles.remove(i);
+							projectiles.remove(i);
 							continue;
 						}
 						else if(projectile.getX() > tiledMap.getFullWidth() || projectile.getY() > tiledMap.getFullHeight()) {
-							player.projectiles.remove(i);
+							projectiles.remove(i);
 							continue;
 						}
 
@@ -93,7 +91,7 @@ public class Main extends GameBase{
 							zombie.getKnockbacked(projectile.getVelocityVector(), zombie.getMaxKnockbackAmount()/2, zombie.getMaxKnockbackTime()/2);
 							zombie.getDamaged(50);
 							if(!zombie.isAlive()) player.addExp(50);
-							player.projectiles.remove(i);
+							projectiles.remove(i);
 						}
 					}
 				}
@@ -129,9 +127,6 @@ public class Main extends GameBase{
 		}
 
 		//Player
-		for (Projectile projectile : player.projectiles) {
-			projectile.draw(graphics);
-		}
 		player.draw(graphics);
 		player.getHitbox().draw(graphics);
 

@@ -3,7 +3,7 @@
  */
 package gamelogic.player;
 
-import java.util.LinkedList;
+import java.awt.Graphics;
 
 import gameengine.Direction;
 import gameengine.Mob;
@@ -11,8 +11,8 @@ import gameengine.graphics.AnimationPlayer;
 import gameengine.hitbox.CircleHitbox;
 import gameengine.maths.Vector2D;
 import gamelogic.GameResources;
+import gamelogic.Gun;
 import gamelogic.Main;
-import gamelogic.Projectile;
 
 /**
  * 
@@ -21,35 +21,24 @@ import gamelogic.Projectile;
  */
 public class Player extends Mob{
 
-	private float shootCooldown = 0.5f;
-	private float reloadTime = 1f;
-	private int maxAmmo = 10;
-
-	public LinkedList<Projectile> projectiles;
-	private boolean canShoot = true;
-	private float currentShootCooldown = 0;
-	private int currentAmmo = maxAmmo;
-	private float currentReloadTime = 0;
+	private Gun gun;
 
 	private int level = 1;
 	private int exp = 0;
 	private int maxExp[] = new int[] {100, 110, 130, 160, 200, 250, 300, 500, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000};
 
 	public Player(float x, float y) {
-		super(x, y, 128, 128, 400, 400, 0.1f, 1000, 0.35f);
+		super(x, y, 128, 128, 400, 400, 0.1f, 700, 0.2f);
 		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET, GameResources.PLAYER_ANIMATION_SET.getAnimation("player_stand_" + walkDirectionString));
 		this.hitbox = new CircleHitbox(centerPosition, 35);
-		this.projectiles = new LinkedList<Projectile>();
-	}
-
-	public void addExp(int ammount) {
-		exp += ammount;
+		this.gun = new Gun(100, 0.1f, 1);
 	}
 
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-
+		gun.update(tslf);
+		
 		if(exp >= maxExp[level-1]) {
 			exp -= maxExp[level-1];
 			if(level < maxExp.length-1) level++;
@@ -60,32 +49,17 @@ public class Player extends Mob{
 		}
 
 		//Shooting
-		if(canShoot) {
-			if(PlayerInput.isLeftMouseButtonDown()) {
+		if(PlayerInput.isLeftMouseButtonDown()) {
+			if(gun.canShoot()) {
 				Vector2D mousePosition = PlayerInput.getMousePosition();
 				Vector2D velocityVector = new Vector2D(mousePosition.x - centerPosition.x + Main.camera.getX(), mousePosition.y - centerPosition.y + Main.camera.getY());
-				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
-				projectiles.add(projectile);
-				currentAmmo--;
+				gun.shoot(getCenterPosition(), velocityVector);
 				stopWalking();
 				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMaxKnockbackAmount()/2, getMaxKnockbackTime()/2);
-				canShoot = false;
-			}
-		}else {
-			if(currentAmmo > 0) {
-				currentShootCooldown += tslf;
-				if(currentShootCooldown >= shootCooldown) {
-					canShoot = true;
-					currentShootCooldown = 0;
-				}
-			}else {
-				currentReloadTime += tslf;
-				if(currentReloadTime >= reloadTime) {
-					currentAmmo = maxAmmo;
-					currentReloadTime = 0;
-				}
+
 			}
 		}
+		
 		//Walking
 		if(!gotDamaged) {
 			checkInput();
@@ -95,7 +69,17 @@ public class Player extends Mob{
 			}
 		}
 	}
-
+	
+	@Override
+	public void draw(Graphics graphics) {
+		gun.draw(graphics);
+		super.draw(graphics);
+	}
+	
+	public void addExp(int ammount) {
+		exp += ammount;
+	}
+	
 	public void checkInput() {
 		boolean isPressing = false;
 		walkDirectionVector.x = 0;
@@ -169,11 +153,7 @@ public class Player extends Mob{
 		return maxExp;
 	}
 	
-	public int getCurrentAmmo() {
-		return currentAmmo;
-	}
-	
-	public int getMaxAmmo() {
-		return maxAmmo;
+	public Gun getGun() {
+		return gun;
 	}
 }
