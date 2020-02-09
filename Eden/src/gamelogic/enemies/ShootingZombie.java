@@ -1,8 +1,5 @@
 package gamelogic.enemies;
 
-import java.awt.Graphics;
-import java.util.LinkedList;
-
 import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
 import gameengine.hitbox.CircleHitbox;
@@ -26,7 +23,6 @@ public class ShootingZombie extends Mob{
 	private int triggerDistance = 400;
 	private int viewCone = 25; //in degrees
 
-	public LinkedList<Projectile> projectiles;
 	private float currentShootCooldown = 0;
 	private boolean canShoot = false;
 
@@ -37,26 +33,11 @@ public class ShootingZombie extends Mob{
 		this.animationPlayer = new AnimationPlayer(GameResources.ZOMBIE_ANIMATION_SET, GameResources.ZOMBIE_ANIMATION_SET.getAnimation("zombie_walk_" + walkDirectionString));
 		this.zombieBehavior = new ZombieBehavior(this, width);
 		this.zombieWatchBehavior = new ZombieWatchBehavior(this, triggerDistance, viewCone);
-		this.projectiles = new LinkedList<Projectile>();
 	}
 
 	@Override
 	public void update(float tslf) {
 		super.update(tslf);
-		//This loop is running from last element to first element because elements get deleted;
-		for(int i = projectiles.size()-1; i >= 0; i--) {
-			Projectile projectile = projectiles.get(i);
-			projectile.update(tslf);
-			if(Main.player.getHitbox().isOverlapping(projectile.getHitbox())) {
-				Main.player.getKnockbacked(projectile.getVelocityVector(), Main.player.getMaxKnockbackAmount()/2, Main.player.getMaxKnockbackTime()/2);
-				Main.player.getDamaged(50);
-				projectiles.remove(i);
-			}
-			else if(projectile.getX() < 0 || projectile.getY() < 0 || projectile.getX() > Main.tiledMap.getFullWidth() || projectile.getY() > Main.tiledMap.getFullHeight()) {
-				projectiles.remove(i);
-				continue;
-			}
-		}
 
 		//Shooting
 		if(canShoot && isAlive()) {
@@ -64,8 +45,8 @@ public class ShootingZombie extends Mob{
 			if(currentShootCooldown >= SHOOT_COOLDOWN/2) {
 				Vector2D playerPosition = Main.player.getCenterPosition();
 				Vector2D velocityVector = new Vector2D(playerPosition.x - centerPosition.x, playerPosition.y - centerPosition.y);
-				Projectile projectile = new Projectile(getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
-				projectiles.add(projectile);
+				Projectile projectile = new Projectile(this, getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
+				Main.projectiles.add(projectile);
 				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMaxKnockbackAmount()/2, getMaxKnockbackTime());
 				canShoot = false;
 				currentShootCooldown = 0;
@@ -94,11 +75,6 @@ public class ShootingZombie extends Mob{
 				isWalking = true;
 			}
 		}
-	}
-
-	@Override
-	public void draw(Graphics graphics) {
-		super.draw(graphics);
 	}
 
 	@Override

@@ -111,6 +111,7 @@ public abstract class Mob extends MovableObject{
 	public void draw(Graphics graphics) {
 		super.draw(graphics);
 		healthBar.draw(graphics);
+		hitbox.draw(graphics);
 	}
 
 	//------------------------Damaged

@@ -3,8 +3,6 @@
  */
 package gamelogic.player;
 
-import java.awt.Graphics;
-
 import gameengine.Direction;
 import gameengine.Mob;
 import gameengine.graphics.AnimationPlayer;
@@ -31,7 +29,7 @@ public class Player extends Mob{
 		super(x, y, 128, 128, 400, 400, 0.1f, 700, 0.2f);
 		this.animationPlayer = new AnimationPlayer(GameResources.PLAYER_ANIMATION_SET, GameResources.PLAYER_ANIMATION_SET.getAnimation("player_stand_" + walkDirectionString));
 		this.hitbox = new CircleHitbox(centerPosition, 35);
-		this.gun = new Gun(100, 0.1f, 1);
+		this.gun = new Gun(this, 100, 0.1f, 1);
 	}
 
 	@Override
@@ -56,7 +54,6 @@ public class Player extends Mob{
 				gun.shoot(getCenterPosition(), velocityVector);
 				stopWalking();
 				getKnockbacked(new Vector2D(-velocityVector.x, -velocityVector.y), getMaxKnockbackAmount()/2, getMaxKnockbackTime()/2);
-
 			}
 		}
 		
@@ -68,12 +65,6 @@ public class Player extends Mob{
 				animationPlayer.loop("player_walk_" + walkDirectionString);
 			}
 		}
-	}
-	
-	@Override
-	public void draw(Graphics graphics) {
-		gun.draw(graphics);
-		super.draw(graphics);
 	}
 	
 	public void addExp(int ammount) {
