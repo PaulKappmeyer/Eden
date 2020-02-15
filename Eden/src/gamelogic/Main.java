@@ -62,11 +62,29 @@ public class Main extends GameBase{
 		camera.setFocusedObject(player);
 	}
 
+	public void onPlayerDeath() {
+		player = new Player(400, 400);
+		playerHUD = new PlayerHUD(player);
+		tiledMap = GameResources.MAP;
+		zombies = new LinkedList<>();
+		for (int i = 0; i < 10; i++) {
+			Vector2D position = RANDOM.nextVector2D(750, 200, 3500, 3500);
+			zombies.add(new ShootingZombie(position.x, position.y));
+		}
+		zombieSort = new ZombieSort();
+		projectiles = new LinkedList<>();
+		camera = new Camera();
+		camera.setFocusedObject(player);
+	}
+	
 	@Override
 	public void update(float tslf) {
 		//Update the player
 		player.update(tslf);
 		playerHUD.update(tslf);
+		if(!player.isAlive()) {
+			onPlayerDeath();
+		}
 		
 		//Update the projectiles
 		//This loop is running from last element to first element because elements might get deleted;
