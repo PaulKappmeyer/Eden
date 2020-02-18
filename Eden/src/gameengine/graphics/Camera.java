@@ -1,28 +1,40 @@
 package gameengine.graphics;
 
-import gameengine.DrawableObject;
 import gameengine.maths.Vector2D;
 import gamelogic.Main;
+import gamelogic.player.Player;
 
 public class Camera {
 
 	private Vector2D position;
-	private DrawableObject focusedObject;
+	private Player player;
 
 	private float velocity = 10; 
 	private float strength = 0.5f; //in percent 
 	private float setValue = 0.01f;
+	
+	private float offsetX = 200;
+	private float offsetY = 200;
 	
 	public Camera() {
 		this.position = new Vector2D();
 	}
 
 	public void update(float tslf) {
-		if(focusedObject != null) {
+		if(player != null) {
+			Player player = (Player)this.player;
+			
+			Vector2D movementVector = player.getWalkDirectionVector();
+			float offsetX = Math.copySign(this.offsetX, movementVector.x);
+			if(movementVector.x == 0) offsetX = 0;
+			
+			float offsetY = Math.copySign(this.offsetY, movementVector.y);
+			if(movementVector.y == 0) offsetY = 0;
+			
 			float goalX;
 			float goalY;
-			goalX = (focusedObject.getX() + focusedObject.getWidth()/2 - Main.SCREEN_WIDTH/2);
-			goalY = (focusedObject.getY() + focusedObject.getHeight()/2 - Main.SCREEN_HEIGHT/2);
+			goalX = (player.getX() + player.getWidth()/2 - Main.SCREEN_WIDTH/2 + offsetX);
+			goalY = (player.getY() + player.getHeight()/2 - Main.SCREEN_HEIGHT/2 + offsetY);
 			if(goalX < 0)  goalX = 0;
 			if(goalY < 0) goalY = 0;
 
@@ -40,8 +52,8 @@ public class Camera {
 		}
 	}
 
-	public void setFocusedObject(DrawableObject object) {
-		this.focusedObject = object;
+	public void setFocusedObject(Player player) {
+		this.player = player;
 	}
 
 	public boolean isVisibleOnCamera(float x, float y, int width, int height) {
