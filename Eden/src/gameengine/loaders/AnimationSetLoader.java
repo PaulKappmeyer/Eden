@@ -23,7 +23,7 @@ final class AnimationSetLoader {
 		String filePathWithoutExtension = filePath.substring(0, filePath.lastIndexOf('.'));
 		String filePathAnimationTextFile = filePathWithoutExtension + ".txt";
 		File fileAnimationTextFile = new File(filePathAnimationTextFile);
-		
+
 		if(!fileAnimationTextFile.exists()) throw new Exception("AnimationSetLoader: DescriptionFile was not found for " + filePath);
 
 		FileReader fileReader = new FileReader(fileAnimationTextFile);
@@ -31,17 +31,16 @@ final class AnimationSetLoader {
 
 		int width = Integer.parseInt(bufferedReader.readLine());
 		int height = Integer.parseInt(bufferedReader.readLine());
-		int numberOfAnimations = Integer.parseInt(bufferedReader.readLine());
-		
+
 		BufferedImage animationSetSprite = ResourceLoader.load(BufferedImage.class, filePath);
-		
 		AnimationSet animationSet = new AnimationSet();
-		
-		for (int n = 0; n < numberOfAnimations; n++) {
-			String name = bufferedReader.readLine();
+
+		String line = bufferedReader.readLine();
+		while (line != null) {
+			String name = line;
 			String[]array = bufferedReader.readLine().split("]");
 			BufferedImage[] sprites = new BufferedImage[array.length];
-			
+
 			for (int i = 0; i < array.length; i++) {
 				String[] positions = array[i].split(",");
 				int x = Integer.parseInt(positions[0].substring(1));
@@ -49,10 +48,13 @@ final class AnimationSetLoader {
 				sprites[i] = animationSetSprite.getSubimage(x*width, y*height, width, height);
 			}
 			float timePerSprite = Float.parseFloat(bufferedReader.readLine());
+			
 			Animation animation = new Animation(sprites, timePerSprite);
 			animationSet.addAnimation(name, animation);
+			
+			line = bufferedReader.readLine();
 		}
-		
+
 		bufferedReader.close();
 
 		return animationSet;

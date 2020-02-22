@@ -1,6 +1,5 @@
 64
 64
-12
 player_stand_down
 [0,0]
 0.1
