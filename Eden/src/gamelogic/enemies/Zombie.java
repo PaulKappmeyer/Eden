@@ -32,13 +32,13 @@ public class Zombie extends Mob{
 		super.update(tslf);
 		
 		//Walking
-		if(isWalking && !gotDamaged && !gotKnockbacked && isAlive()) {
+		if (isWalking && !gotDamaged && !gotKnockbacked && isAlive()) {
 			move(zombieBehavior.getVectorToPlayer());
 			walkDirectionString = walkDirectionVector.getDirection();
 
 			animationPlayer.loop("zombie_walk_" + walkDirectionString);
-		}else {
-			if(zombieBehavior.isTriggered() || zombieWatchBehavior.isTriggered()) {
+		} else {
+			if (zombieBehavior.isTriggered() || zombieWatchBehavior.isTriggered()) {
 				isWalking = true;
 			}
 		}
@@ -46,11 +46,11 @@ public class Zombie extends Mob{
 	
 	@Override
 	public void getDamaged(float damageAmount) {
-		if(!gotDamaged  && isAlive()) {
+		if (!gotDamaged  && isAlive()) {
 			super.getDamaged(damageAmount);
-			if(getCurrentHealth() <= 0) {
+			if (getCurrentHealth() <= 0) {
 				animationPlayer.play("zombie_die_" + walkDirectionString);
-			}else {
+			} else {
 				isWalking = true;
 				animationPlayer.loop("zombie_getDamaged_" + walkDirectionString);
 			}

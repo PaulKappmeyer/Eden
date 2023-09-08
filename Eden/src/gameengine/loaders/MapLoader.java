@@ -16,7 +16,9 @@ public class MapLoader {
 	static TiledMap loadMap (String filePath) throws Exception{
 		File mapFile = new File(filePath);
 		
-		if(!mapFile.exists()) throw new Exception("Map " + filePath + " not found.");
+		if (!mapFile.exists()) {
+			throw new Exception("Map " + filePath + " not found: " + mapFile.getAbsolutePath());
+		}
 		
 		FileReader fileReader = new FileReader(mapFile);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);

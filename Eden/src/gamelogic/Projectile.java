@@ -28,9 +28,9 @@ public class Projectile extends DrawableObject{
 	@Override
 	public void draw(Graphics graphics) {
 		graphics.setColor(Color.YELLOW);
-		graphics.fillOval((int)position.x, (int)position.y, width, height);
+		graphics.fillOval((int) position.x, (int) position.y, width, height);
 		graphics.setColor(Color.BLACK);
-		graphics.drawOval((int)position.x, (int)position.y, width, height);
+		graphics.drawOval((int) position.x, (int) position.y, width, height);
 	}
 	
 	@Override

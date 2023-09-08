@@ -61,7 +61,9 @@ public class TiledMap {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				int id = topLayerIds[i][j];
-				if(id == -1) continue;
+				if (id == -1) {
+					continue;
+				}
 				topLayer[i][j] = new Tile(i * tileSize, j * tileSize, tileSize, tileSize, id, tileSet[id]);
 			}
 		}
@@ -71,7 +73,9 @@ public class TiledMap {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Tile tile = bottomLayer[i][j];
-				if(!Main.camera.isVisibleOnCamera(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight())) continue;
+				if (!Main.camera.isVisibleOnCamera(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight())) {
+					continue;
+				}
 				tile.draw(graphics);
 			}
 		}
@@ -81,7 +85,9 @@ public class TiledMap {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Tile tile = topLayer[i][j];
-				if(tile == null || !Main.camera.isVisibleOnCamera(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight()) || tile.getId() == -1) continue;
+				if (tile == null || !Main.camera.isVisibleOnCamera(tile.getX(), tile.getY(), tile.getWidth(), tile.getHeight()) || tile.getId() == -1) {
+					continue;
+				}
 				tile.draw(graphics);
 			}
 		}

@@ -40,9 +40,9 @@ public class ShootingZombie extends Mob{
 		super.update(tslf);
 
 		//Shooting
-		if(canShoot && isAlive()) {
+		if (canShoot && isAlive()) {
 			currentShootCooldown += tslf;
-			if(currentShootCooldown >= SHOOT_COOLDOWN/2) {
+			if (currentShootCooldown >= SHOOT_COOLDOWN/2) {
 				Vector2D playerPosition = Main.player.getCenterPosition();
 				Vector2D velocityVector = new Vector2D(playerPosition.x - centerPosition.x, playerPosition.y - centerPosition.y);
 				Projectile projectile = new Projectile(this, getCenterPositionX(), getCenterPositionY(), velocityVector.x, velocityVector.y);
@@ -54,24 +54,24 @@ public class ShootingZombie extends Mob{
 			}
 		}
 		//Walking
-		if(isWalking && !gotDamaged && !gotKnockbacked && !canShoot && isAlive()) {
+		if (isWalking && !gotDamaged && !gotKnockbacked && !canShoot && isAlive()) {
 			move(zombieBehavior.getVectorToPlayer());
 			walkDirectionString = walkDirectionVector.getDirection();
 			animationPlayer.loop("zombie_walk_" + walkDirectionString);
 
 			//Prepare for shoot
-			if(centerPosition.distanceSquared(Main.player.getCenterPosition()) <= SHOOT_RANGE*SHOOT_RANGE) { 
+			if (centerPosition.distanceSquared(Main.player.getCenterPosition()) <= SHOOT_RANGE*SHOOT_RANGE) { 
 				currentShootCooldown += tslf;
-				if(currentShootCooldown >= SHOOT_COOLDOWN) {
+				if (currentShootCooldown >= SHOOT_COOLDOWN) {
 					canShoot = true;
 					currentShootCooldown = 0;
 					stopWalking();
 				}
-			}else {
+			} else {
 				currentShootCooldown = 0;
 			}
-		}else {
-			if(zombieBehavior.isTriggered() || zombieWatchBehavior.isTriggered()) {
+		} else {
+			if (zombieBehavior.isTriggered() || zombieWatchBehavior.isTriggered()) {
 				isWalking = true;
 			}
 		}
@@ -79,11 +79,11 @@ public class ShootingZombie extends Mob{
 
 	@Override
 	public void getDamaged(float damageAmount) {
-		if(!gotDamaged  && isAlive()) {
+		if (!gotDamaged  && isAlive()) {
 			super.getDamaged(damageAmount);
-			if(getCurrentHealth() <= 0) {
+			if (getCurrentHealth() <= 0) {
 				animationPlayer.play("zombie_die_" + walkDirectionString);
-			}else {
+			} else {
 				isWalking = true;
 				animationPlayer.loop("zombie_getDamaged_" + walkDirectionString);
 			}

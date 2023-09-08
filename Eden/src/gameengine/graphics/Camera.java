@@ -10,7 +10,7 @@ public class Camera {
 	private Player player;
 
 	private float velocity = 10; 
-	private float strength = 0.5f; //in percent 
+	private float strength = 0.2f; //in percent 
 	private float setValue = 0.01f;
 	
 	private float offsetX = 200;
@@ -21,22 +21,30 @@ public class Camera {
 	}
 
 	public void update(float tslf) {
-		if(player != null) {
+		if (player != null) {
 			Player player = (Player)this.player;
 			
 			Vector2D movementVector = player.getWalkDirectionVector();
 			float offsetX = Math.copySign(this.offsetX, movementVector.x);
-			if(movementVector.x == 0) offsetX = 0;
+			if (movementVector.x == 0) {
+				offsetX = 0;
+			}
 			
 			float offsetY = Math.copySign(this.offsetY, movementVector.y);
-			if(movementVector.y == 0) offsetY = 0;
+			if (movementVector.y == 0) {
+				offsetY = 0;
+			}
 			
 			float goalX;
 			float goalY;
 			goalX = (player.getX() + player.getWidth()/2 - Main.SCREEN_WIDTH/2 + offsetX);
 			goalY = (player.getY() + player.getHeight()/2 - Main.SCREEN_HEIGHT/2 + offsetY);
-			if(goalX < 0)  goalX = 0;
-			if(goalY < 0) goalY = 0;
+			if (goalX < 0) {
+				goalX = 0;
+			}
+			if (goalY < 0) {
+				goalY = 0;
+			}
 
 			float diffX = goalX - position.x;
 			float amountX = velocity * (diffX * strength) * tslf;
@@ -47,8 +55,12 @@ public class Camera {
 			position.y += amountY;
 			
 			//At this point the difference is too small so the value gets set to avoid shaking of the camera
-			if(-setValue < diffX && diffX < setValue) position.x = goalX;
-			if(-setValue < diffY && diffY < setValue) position.y = goalY;
+			if (-setValue < diffX && diffX < setValue) {
+				position.x = goalX;
+			}
+			if (-setValue < diffY && diffY < setValue) {
+				position.y = goalY;
+			}
 		}
 	}
 
@@ -57,8 +69,11 @@ public class Camera {
 	}
 
 	public boolean isVisibleOnCamera(float x, float y, int width, int height) {
-		if(x + width > position.x && x < position.x + Main.SCREEN_WIDTH && y + height > position.y && y < position.y + Main.SCREEN_HEIGHT) return true;
-		return false;
+		if (x + width > position.x && x < position.x + Main.SCREEN_WIDTH && y + height > position.y && y < position.y + Main.SCREEN_HEIGHT) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	//--------------------------------Getters

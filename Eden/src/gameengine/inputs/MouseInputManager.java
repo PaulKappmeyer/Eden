@@ -30,12 +30,17 @@ public final class MouseInputManager implements MouseInputListener, MouseWheelLi
 	}
 	
 	public static boolean isButtonDown(int mouseButton) {
-		if(mouseButton >= 0 && mouseButton < mousebutton.length && mousebutton[mouseButton]) return true;
-		else return false;
+		if (mouseButton >= 0 && mouseButton < mousebutton.length && mousebutton[mouseButton]) {
+			return true;
+		} else {
+			return false;
+		}
 	}
+	
 	public static float getMouseX () {
 		return mouseX;
 	}
+	
 	public static float getMouseY () {
 		return mouseY;
 	}
@@ -43,7 +48,9 @@ public final class MouseInputManager implements MouseInputListener, MouseWheelLi
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent) {
 		int button = mouseEvent.getButton();
-		if(button >= 0 && button < mousebutton.length) mousebutton[button] = false;
+		if (button >= 0 && button < mousebutton.length) {
+			mousebutton[button] = false;
+		}
 	}
 
 	@Override
@@ -59,19 +66,25 @@ public final class MouseInputManager implements MouseInputListener, MouseWheelLi
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
 		int button = mouseEvent.getButton();
-		if(button >= 0 && button < mousebutton.length) mousebutton[button] = true;
+		if (button >= 0 && button < mousebutton.length) {
+			mousebutton[button] = true;
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
 		int button = mouseEvent.getButton();
-		if(button >= 0 && button < mousebutton.length) mousebutton[button] = false;
+		if (button >= 0 && button < mousebutton.length) {
+			mousebutton[button] = false;
+		}
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent mouseEvent) {
 		int button = mouseEvent.getButton();
-		if(button >= 0 && button < mousebutton.length) mousebutton[button] = true;
+		if (button >= 0 && button < mousebutton.length) {
+			mousebutton[button] = true;
+		}
 		
 		mouseX = mouseEvent.getX() - window.getInsetX();
 		mouseY = mouseEvent.getY() - window.getInsetY();

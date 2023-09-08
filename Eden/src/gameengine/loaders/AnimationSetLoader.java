@@ -24,7 +24,9 @@ final class AnimationSetLoader {
 		String filePathAnimationTextFile = filePathWithoutExtension + ".txt";
 		File fileAnimationTextFile = new File(filePathAnimationTextFile);
 
-		if(!fileAnimationTextFile.exists()) throw new Exception("AnimationSetLoader: DescriptionFile was not found for " + filePath);
+		if (!fileAnimationTextFile.exists()) {
+			throw new Exception("AnimationSetLoader: DescriptionFile was not found for " + fileAnimationTextFile.getAbsolutePath());
+		}
 
 		FileReader fileReader = new FileReader(fileAnimationTextFile);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);

@@ -23,9 +23,11 @@ public abstract class DrawableObject {
 	public DrawableObject() {
 		this.position = new Vector2D();
 	}
+	
 	public DrawableObject(float x, float y) {
 		this.position = new Vector2D(x, y);
 	}
+	
 	public DrawableObject(float x, float y, int width, int height) {
 		this.position = new Vector2D(x, y);
 		this.width = width;
@@ -35,7 +37,7 @@ public abstract class DrawableObject {
 	public abstract void update(float tslf);
 	
 	public void draw(Graphics graphics) {
-		graphics.drawImage(image, (int)position.x, (int)position.y, width, height, null);
+		graphics.drawImage(image, (int) position.x, (int) position.y, width, height, null);
 	}
 	
 	//----------------------------Getters

@@ -46,7 +46,7 @@ public abstract class GameBase {
 		
 		long lastFrame = System.currentTimeMillis();
 
-		while(true) {
+		while (true) {
 			lastFrame = System.currentTimeMillis();
 			while(window.isActive()) {
 				//Calculating time since last frame

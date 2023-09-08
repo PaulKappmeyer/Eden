@@ -44,11 +44,14 @@ public class Gun {
 	}
 	
 	public void update(float tslf) {
-		if(canShoot) return;
+		if (canShoot) {
+			return;
+		}
+		
 		//Manage shoot-cooldown
-		if(currentAmmo > 0) {
+		if (currentAmmo > 0) {
 			currentTime += tslf;
-			if(currentTime >= shootCooldown) {
+			if (currentTime >= shootCooldown) {
 				canShoot = true;
 				currentTime = 0;
 			}
@@ -56,7 +59,7 @@ public class Gun {
 		//Manage reload
 		else {
 			currentTime += tslf;
-			if(currentTime >= reloadTime) {
+			if (currentTime >= reloadTime) {
 				currentAmmo = maxAmmo;
 				currentTime = 0;
 			}
@@ -64,7 +67,7 @@ public class Gun {
 	}
 	
 	public void shoot(Vector2D position, Vector2D velocityVector) {
-		if(canShoot) {
+		if (canShoot) {
 			Projectile projectile = new Projectile(owner, position.x, position.y, velocityVector.x, velocityVector.y);
 			Main.projectiles.add(projectile);
 			currentAmmo--;

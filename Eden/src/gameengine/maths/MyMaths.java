@@ -8,14 +8,18 @@ package gameengine.maths;
 public class MyMaths {
 
 	public static float linearInterpolation(float startValue, float endValue, float currentTime, float maxTime) {
-		if(startValue < endValue) {
-			if(currentTime >= maxTime) {
+		if (startValue < endValue) {
+			if (currentTime >= maxTime) {
 				return endValue;
-			} else return (startValue + endValue * (currentTime / maxTime));
+			} else {
+				return (startValue + endValue * (currentTime / maxTime));
+			}
 		} else {
-			if(currentTime >= maxTime) {
+			if (currentTime >= maxTime) {
 				return startValue;
-			} else return (startValue - startValue * (currentTime / maxTime));
+			} else {
+				return (startValue - startValue * (currentTime / maxTime));
+			}
 		}
 	}
 

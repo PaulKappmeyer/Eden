@@ -45,7 +45,7 @@ public class HealthBar {
 	}
 
 	public void draw(Graphics graphics) {
-		if(isShown) {
+		if (isShown) {
 			graphics.setColor(backgroundColor);
 			graphics.fillRect((int)position.x, (int)position.y, FULL_WIDTH, FULL_HEIGHT);
 
@@ -55,7 +55,7 @@ public class HealthBar {
 			graphics.setColor(outlineColor);
 			graphics.drawRect((int)position.x, (int)position.y, FULL_WIDTH, FULL_HEIGHT);
 
-			if(SHOW_TEXT) {
+			if (SHOW_TEXT) {
 				graphics.setColor(textColor);
 				// Get the FontMetrics
 				FontMetrics metrics = graphics.getFontMetrics(font);
@@ -76,32 +76,30 @@ public class HealthBar {
 	}
 	
 	public void update(float tslf) {
-		if(isShown) {
+		if (isShown) {
 			position.x = object.getX();
 			position.y = object.getY() - DISTANCE; 
 			currentWidth = (int) MyMaths.mapValue(object.getCurrentHealth(), 0, object.getMaxHealth(), 0, FULL_WIDTH);
 			text = getText(object.getCurrentHealth(), object.getMaxHealth());
 			
-			if(slidingUp) {
+			if (slidingUp) {
 				time += tslf;
 				position.y = MyMaths.linearInterpolation(object.getY(), object.getY() - DISTANCE, time, TIME_FOR_SHOW_UP);
-				if(position.y <= object.getY() - DISTANCE) {
+				if (position.y <= object.getY() - DISTANCE) {
 					time = 0;
 					slidingUp = false;
 				}
-			}
-			else if(slidingDown) {
+			} else if (slidingDown) {
 				time += tslf;
 				position.y = MyMaths.linearInterpolation(object.getY() - DISTANCE, object.getY(), time, TIME_FOR_SHOW_UP);
-				if(position.y >= object.getY()) {
+				if (position.y >= object.getY()) {
 					time = 0;
 					slidingDown = false;
 					isShown = false;
 				}
-			}
-			else {
+			} else {
 				time += tslf;
-				if(time >= TIME_SHOWING_UP) {
+				if (time >= TIME_SHOWING_UP) {
 					time = 0;
 					hide();
 				}

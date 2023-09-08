@@ -14,7 +14,7 @@ public class SoundPlayer {
 	}
 
 	public void play(String name) {
-		if(!isPlaying) {
+		if (!isPlaying) {
 			currentSound = soundSet.getSound(name);
 			currentSound.play();
 			isPlaying = true;
@@ -22,23 +22,27 @@ public class SoundPlayer {
 	}
 
 	public void loop(String name) {
-		if(!isPlaying) {
+		if (!isPlaying) {
 			currentSound = soundSet.getSound(name);
-			if(currentSound == null) return;
+			if (currentSound == null) {
+				return;
+			}
 			currentSound.loop();
 			isPlaying = true;
 		}
 	}
 
 	public void stop() {
-		if(isPlaying) {
+		if (isPlaying) {
 			currentSound.stop();
 			isPlaying = false;
 		}
 	}
 
 	public void setVolume(float volume) {
-		if(currentSound == null) return;
+		if (currentSound == null) {
+			return;
+		}
 		currentSound.setVolume(volume);
 	}
 	

@@ -71,10 +71,10 @@ public abstract class Mob extends MovableObject{
 		image = animationPlayer.getCurrentFrame();
 		
 		//Damaged
-		if(gotDamaged) {
+		if (gotDamaged) {
 			currentDamagedTime += tslf;
-			if(currentDamagedTime >= currentMaxKnockbackTime) {
-				if(alive) {
+			if (currentDamagedTime >= currentMaxKnockbackTime) {
+				if (alive) {
 					animationPlayer.reset();
 					animationPlayer.stop();
 				}
@@ -84,9 +84,9 @@ public abstract class Mob extends MovableObject{
 		}
 		
 		//Knockback
-		if(gotKnockbacked) {
+		if (gotKnockbacked) {
 			currentKnockbackTime += tslf;
-			if(currentKnockbackTime >= currentMaxKnockbackTime) {
+			if (currentKnockbackTime >= currentMaxKnockbackTime) {
 				currentKnockbackTime = 0;
 				knockbackVector.x = 0;
 				knockbackVector.y = 0;
@@ -97,7 +97,7 @@ public abstract class Mob extends MovableObject{
 		}
 		
 		//Walking
-		if(isWalking) {
+		if (isWalking) {
 			timeWalked += tslf;
 			currentWalkspeed = MyMaths.linearInterpolation(0, maxWalkspeed, timeWalked, timeForMaxWalkspeed);
 		}
@@ -117,7 +117,7 @@ public abstract class Mob extends MovableObject{
 	//------------------------Damaged
 	public void getDamaged(float damageAmount) {
 		lossHealth(damageAmount);
-		if(!gotDamaged) {
+		if (!gotDamaged) {
 			gotDamaged = true;
 			stopWalking();
 			healthBar.show();
@@ -127,14 +127,14 @@ public abstract class Mob extends MovableObject{
 	//Health
 	public void healHealth(float amount) {
 		currentHealth += amount;
-		if(currentHealth > maxHealth) {
+		if (currentHealth > maxHealth) {
 			currentHealth = maxHealth;
 		}
 	}
 	
 	public void lossHealth(float amount) {
 		currentHealth -= amount;
-		if(currentHealth <= 0) {
+		if (currentHealth <= 0) {
 			currentHealth = 0;
 			alive = false;
 		}
@@ -142,7 +142,7 @@ public abstract class Mob extends MovableObject{
 	
 	//----------------Knockback
 	public void getKnockbacked(Vector2D knockbackVector, int strength, float time) {
-		if(!gotKnockbacked && alive) {
+		if (!gotKnockbacked && alive) {
 			gotKnockbacked = true;
 			this.knockbackVector.x = knockbackVector.x;
 			this.knockbackVector.y = knockbackVector.y;
@@ -172,7 +172,7 @@ public abstract class Mob extends MovableObject{
 	}
 	
 	public void move(Direction walkDirection) {
-		if(walkDirection == null) return;
+		if (walkDirection == null) return;
 		walkDirectionString = walkDirection;
 		switch (walkDirection) {
 		case up:

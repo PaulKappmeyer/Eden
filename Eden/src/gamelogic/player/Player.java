@@ -37,9 +37,11 @@ public class Player extends Mob{
 		super.update(tslf);
 		gun.update(tslf);
 		
-		if(exp >= maxExp[level-1]) {
+		if (exp >= maxExp[level-1]) {
 			exp -= maxExp[level-1];
-			if(level < maxExp.length-1) level++;
+			if (level < maxExp.length-1) {
+				level++;
+			}
 			else {
 				level = maxExp.length;
 				exp = maxExp[level-1];
@@ -47,8 +49,8 @@ public class Player extends Mob{
 		}
 
 		//Shooting
-		if(PlayerInput.isLeftMouseButtonDown()) {
-			if(gun.canShoot()) {
+		if (PlayerInput.isLeftMouseButtonDown()) {
+			if (gun.canShoot()) {
 				Vector2D mousePosition = PlayerInput.getMousePosition();
 				Vector2D velocityVector = new Vector2D(mousePosition.x - centerPosition.x + Main.camera.getX(), mousePosition.y - centerPosition.y + Main.camera.getY());
 				gun.shoot(getCenterPosition(), velocityVector);
@@ -58,10 +60,10 @@ public class Player extends Mob{
 		}
 		
 		//Walking
-		if(!gotDamaged) {
+		if (!gotDamaged) {
 			checkInput();
 
-			if(isWalking) {
+			if (isWalking) {
 				animationPlayer.loop("player_walk_" + walkDirectionString);
 			}
 		}
@@ -75,49 +77,49 @@ public class Player extends Mob{
 		boolean isPressing = false;
 		walkDirectionVector.x = 0;
 		walkDirectionVector.y = 0;
-		if(PlayerInput.isUpKeyDown() && !(PlayerInput.isLeftKeyDown() || PlayerInput.isRightKeyDown())) {
+		if (PlayerInput.isUpKeyDown() && !(PlayerInput.isLeftKeyDown() || PlayerInput.isRightKeyDown())) {
 			isPressing = true;
 			walkDirectionVector.y = -1;
 			walkDirectionString = Direction.up;
 		}
-		if(PlayerInput.isUpKeyDown() && PlayerInput.isRightKeyDown()) {
+		if (PlayerInput.isUpKeyDown() && PlayerInput.isRightKeyDown()) {
 			isPressing = true;
 			walkDirectionVector.y = -0.7f;
 			walkDirectionVector.x = 0.7f;
 		}
-		if(PlayerInput.isUpKeyDown() && PlayerInput.isLeftKeyDown()) {
+		if (PlayerInput.isUpKeyDown() && PlayerInput.isLeftKeyDown()) {
 			isPressing = true;
 			walkDirectionVector.y = -0.7f;
 			walkDirectionVector.x = -0.7f;
 		}
-		if(PlayerInput.isDownKeyDown() && !(PlayerInput.isLeftKeyDown() || PlayerInput.isRightKeyDown())) {
+		if (PlayerInput.isDownKeyDown() && !(PlayerInput.isLeftKeyDown() || PlayerInput.isRightKeyDown())) {
 			isPressing = true;
 			walkDirectionVector.y = 1;
 			walkDirectionString = Direction.down;
 		}
-		if(PlayerInput.isDownKeyDown() && PlayerInput.isRightKeyDown()) {
+		if (PlayerInput.isDownKeyDown() && PlayerInput.isRightKeyDown()) {
 			isPressing = true;
 			walkDirectionVector.y = 0.7f;
 			walkDirectionVector.x = 0.7f;
 		}
-		if(PlayerInput.isDownKeyDown() && PlayerInput.isLeftKeyDown()) {
+		if (PlayerInput.isDownKeyDown() && PlayerInput.isLeftKeyDown()) {
 			isPressing = true;
 			walkDirectionVector.y = 0.7f;
 			walkDirectionVector.x = -0.7f;
 		}
-		if(PlayerInput.isLeftKeyDown() && !(PlayerInput.isUpKeyDown() || PlayerInput.isDownKeyDown())) {
+		if (PlayerInput.isLeftKeyDown() && !(PlayerInput.isUpKeyDown() || PlayerInput.isDownKeyDown())) {
 			isPressing = true;
 			walkDirectionVector.x = -1;
 			walkDirectionString = Direction.left;
 		}
-		if(PlayerInput.isRightKeyDown() && !(PlayerInput.isUpKeyDown() || PlayerInput.isDownKeyDown())) {
+		if (PlayerInput.isRightKeyDown() && !(PlayerInput.isUpKeyDown() || PlayerInput.isDownKeyDown())) {
 			isPressing = true;
 			walkDirectionVector.x = 1;
 			walkDirectionString = Direction.right;
 		}
-		if(isPressing) {
+		if (isPressing) {
 			isWalking = true;
-		} else 	if(walkDirectionVector.x == 0 && walkDirectionVector.y == 0) {
+		} else 	if (walkDirectionVector.x == 0 && walkDirectionVector.y == 0) {
 			stopWalking();
 		}
 	}
@@ -125,7 +127,7 @@ public class Player extends Mob{
 	//------------------------Damaged
 	@Override
 	public void getDamaged(float damageAmount) {
-		if(!gotDamaged) {
+		if (!gotDamaged) {
 			super.getDamaged(damageAmount);
 			animationPlayer.loop("player_getDamaged_" + walkDirectionString);
 		}

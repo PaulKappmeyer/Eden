@@ -29,20 +29,28 @@ public class NPC extends Mob{
 	public void update(float tslf) {
 		super.update(tslf);
 		
-		if(isWalking) {
+		if (isWalking) {
 			animationPlayer.loop("npc_walk_" + walkDirectionString);
 
-			if(getTimeWalked() >= moveTime) {
+			if (getTimeWalked() >= moveTime) {
 				stopWalking();
 			}
 		}else {
 			timeIdled += tslf;
 
-			if(timeIdled >= standTime) {
-				if(position.x < 100) move(Direction.right, 2);
-				else if(position.x > 700) move(Direction.left, 2);
-				else if(position.y < 100) move(Direction.down, 2);
-				else if(position.y > 700) move(Direction.up, 2);
+			if (timeIdled >= standTime) {
+				if (position.x < 100) {
+					move(Direction.right, 2);
+				}
+				else if (position.x > 700) {
+					move(Direction.left, 2);
+				}
+				else if (position.y < 100) {
+					move(Direction.down, 2);
+				}
+				else if (position.y > 700) {
+					move(Direction.up, 2);
+				}
 				else {
 					walkDirectionString = Main.RANDOM.nextDirection();
 					moveTime = Main.RANDOM .nextFloat() * 3;

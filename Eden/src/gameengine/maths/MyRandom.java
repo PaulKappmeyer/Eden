@@ -13,9 +13,9 @@ import gameengine.Direction;
 public class MyRandom extends Random{
 
 	public int nextInt(int lowerBound, int upperBound) {
-		if(lowerBound < upperBound) {
+		if (lowerBound < upperBound) {
 			return lowerBound + nextInt(upperBound-lowerBound);
-		} else if(lowerBound == upperBound) {
+		} else if (lowerBound == upperBound) {
 			return lowerBound;
 		} else {
 			System.err.println("Upper Bound must be greater than lower Bound");

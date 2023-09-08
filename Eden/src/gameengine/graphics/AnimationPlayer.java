@@ -38,14 +38,15 @@ public class AnimationPlayer {
 	}
 	
 	public void update(float tslf) {
-		if(isPlaying) {
+		if (isPlaying) {
 			currentPlayedTime += tslf;
-			if(currentPlayedTime >= currentAnimation.getTimePerSprite()) {
+			if (currentPlayedTime >= currentAnimation.getTimePerSprite()) {
 				currentPlayedTime -= currentAnimation.getTimePerSprite();
 				currentSpriteIndex ++;
-				if(currentSpriteIndex == currentAnimation.getSprites().length) {
-					if(isLooping) currentSpriteIndex = 0;
-					else {
+				if (currentSpriteIndex == currentAnimation.getSprites().length) {
+					if (isLooping) {
+						currentSpriteIndex = 0;
+					} else {
 						currentSpriteIndex = currentAnimation.getSprites().length - 1;
 						stop();
 					}
@@ -56,41 +57,41 @@ public class AnimationPlayer {
 	
 	public boolean isAnimationFinished(String name) {
 		Animation newAnimation = animationSet.getAnimation(name);
-		if(newAnimation == null) {
+		if (newAnimation == null) {
 			System.err.println("Animation " + name + " not found.");
 			return false;
-		}else if(newAnimation == currentAnimation && isLooping == false && isPlaying == false) {
+		} else if (newAnimation == currentAnimation && isLooping == false && isPlaying == false) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
 	
 	public void play(String name) {
 		Animation newAnimation = animationSet.getAnimation(name);
-		if(newAnimation == null) {
+		if (newAnimation == null) {
 			System.err.println("Animation " + name + " not found.");
 			return;
-		}else if(newAnimation != currentAnimation) {
+		} else if (newAnimation != currentAnimation) {
 			reset();
 			currentAnimation = newAnimation;
 			isPlaying = true;
-		}else {
+		} else {
 			isPlaying = true;
 		}
 	}
 
 	public void loop(String name) {
 		Animation newAnimation = animationSet.getAnimation(name);
-		if(newAnimation == null) {
+		if (newAnimation == null) {
 			System.err.println("Animation " + name + " not found.");
 			return;
-		}else if(newAnimation != currentAnimation) {
+		} else if (newAnimation != currentAnimation) {
 			reset();
 			currentAnimation = newAnimation;
 			isPlaying = true;
 			isLooping = true;
-		}else {
+		} else {
 			isPlaying = true;
 			isLooping = true;
 		}

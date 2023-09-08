@@ -18,18 +18,20 @@ public final class ResourceLoader {
 	
 	@SuppressWarnings("unchecked")
 	public static <T> T load(Class<T> classType, String filePath) throws Exception {
-		if(classType == BufferedImage.class) {
+		if (classType == BufferedImage.class) {
 			return (T) ImageLoader.loadImage(filePath);
-		}
-		else if(classType == AnimationSet.class) {
+		} 
+		else if (classType == AnimationSet.class) {
 			return (T) AnimationSetLoader.loadAnimationSet(filePath);
-		}
-		else if(classType == Sound.class) {
+		} 
+		else if (classType == Sound.class) {
 			return (T) SoundLoader.loadSound(filePath);
-		}
-		else if(classType == TiledMap.class) {
+		} 
+		else if (classType == TiledMap.class) {
 			return (T) MapLoader.loadMap(filePath);
+		} 
+		else {
+			throw new Exception("Unsupported Type.");
 		}
-		else throw new Exception("Unsupported Type.");
 	}
 }

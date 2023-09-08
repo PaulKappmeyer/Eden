@@ -136,11 +136,21 @@ public class Vector2D {
 	}
 
 	public Direction getDirection() {
-		if(x <= 1 && x >= 0.7) return Direction.right;
-		else if(x <= -0.7 && x >= -1) return Direction.left;
-		else if(y <= 1 && y >= 0.7) return Direction.down;
-		else if(y <= -0.7 && y >= -1) return Direction.up;
-		else return null;
+		if (x <= 1 && x >= 0.7) {
+			return Direction.right;
+		}
+		else if (x <= -0.7 && x >= -1) {
+			return Direction.left;
+		}
+		else if (y <= 1 && y >= 0.7) {
+			return Direction.down;
+		}
+		else if (y <= -0.7 && y >= -1) {
+			return Direction.up;
+		}
+		else {
+			return null;
+		}
 	}
 	
 	@Override

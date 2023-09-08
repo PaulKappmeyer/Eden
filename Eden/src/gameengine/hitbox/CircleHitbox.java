@@ -23,16 +23,20 @@ public class CircleHitbox extends Hitbox{
 	
 	@Override
 	public void draw(Graphics graphics) {
-		if(!SHOW_HITBOXES) return;
+		if (!SHOW_HITBOXES) {
+			return;
+		}
 		graphics.setColor(Color.GREEN);
 		graphics.drawOval((int)(centerPosition.x-radius), (int)(centerPosition.y-radius), (int)(radius*2), (int)(radius*2));
 	}
 
 	@Override
 	public boolean isOverlapping(Hitbox hitboxB) {
-		if(hitboxB instanceof CircleHitbox) {
+		if (hitboxB instanceof CircleHitbox) {
 			CircleHitbox circleHitboxB = (CircleHitbox)hitboxB;
 			return MyCollision.circleToCircle(this.centerPosition, this.radius, circleHitboxB.centerPosition, circleHitboxB.radius);
-		} else return false;
+		} else {
+			return false;
+		}
 	}
 }

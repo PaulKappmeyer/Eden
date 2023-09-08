@@ -21,20 +21,20 @@ public class Sound {
 	}
 
 	public void play() {
-		if(!clip.isRunning()) {
+		if (!clip.isRunning()) {
 			clip.setMicrosecondPosition(0);
 			clip.start();
 		}
 	}
 
 	public void stop() {
-		if(clip.isRunning()) {
+		if (clip.isRunning()) {
 			clip.stop();
 		}
 	}
 
 	public void loop() {
-		if(!clip.isRunning()) {
+		if (!clip.isRunning()) {
 			clip.loop(Clip.LOOP_CONTINUOUSLY);
 		}
 	}

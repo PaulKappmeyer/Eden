@@ -17,8 +17,10 @@ public class Tile extends DrawableObject{
 
 	public static final boolean DRAW_ID = false;
 	public static final boolean DRAW_OUTLINE = false;
-	private int id;
+	
 	private static final Font font = new Font("Arial", Font.PLAIN, 20);
+	
+	private int id;
 
 	public Tile(int x, int y, int width, int height, int id, BufferedImage image) {
 		super(x, y, width, height);
@@ -37,9 +39,11 @@ public class Tile extends DrawableObject{
 
 		graphics.setColor(Color.BLACK);
 
-		if(DRAW_OUTLINE)graphics.drawRect((int)position.x, (int)position.y, width, height);
+		if (DRAW_OUTLINE) {
+			graphics.drawRect((int)position.x, (int)position.y, width, height);
+		}
 
-		if(DRAW_ID) {
+		if (DRAW_ID) {
 			// Get the FontMetrics
 			FontMetrics metrics = graphics.getFontMetrics(font);
 			// Determine the X coordinate for the text

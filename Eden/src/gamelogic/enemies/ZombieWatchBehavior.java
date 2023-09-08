@@ -31,13 +31,13 @@ public class ZombieWatchBehavior {
 		graphics.setColor(new Color(255, 255, 255, 150));
 		switch (object.getWalkDirectionString()) {
 		case right:
-			graphics.fillArc((int)(object.getCenterPositionX() - t), (int)(object.getCenterPositionY() - t), t*2, t*2, (int)(0-v), (int)(v*2));	
+			graphics.fillArc((int) (object.getCenterPositionX() - t), (int) (object.getCenterPositionY() - t), t*2, t*2, (int) (0-v), (int) (v*2));	
 			break;
 		case left:
-			graphics.fillArc((int)(object.getCenterPositionX() - t), (int)(object.getCenterPositionY() - t), t*2, t*2, (int)(180-v), (int)(v*2));	
+			graphics.fillArc((int) (object.getCenterPositionX() - t), (int) (object.getCenterPositionY() - t), t*2, t*2, (int) (180-v), (int) (v*2));	
 			break;
 		case up:
-			graphics.fillArc((int)(object.getCenterPositionX() - t), (int)(object.getCenterPositionY() - t), t*2, t*2, (int)(90-v), (int)(v*2));	
+			graphics.fillArc((int) (object.getCenterPositionX() - t), (int) (object.getCenterPositionY() - t), t*2, t*2, (int) (90-v), (int) (v*2));	
 			break;
 		case down:
 			graphics.fillArc((int)(object.getCenterPositionX() - t), (int)(object.getCenterPositionY() - t), t*2, t*2, (int)(-90-v), (int)(v*2));	
@@ -52,7 +52,7 @@ public class ZombieWatchBehavior {
 		Vector2D playerCenterPosition = Main.player.getCenterPosition();
 		Vector2D zombieCenterPosition = object.getCenterPosition();
 		
-		if(triggerDistance*triggerDistance >= zombieCenterPosition.distanceSquared(playerCenterPosition)) {
+		if (triggerDistance*triggerDistance >= zombieCenterPosition.distanceSquared(playerCenterPosition)) {
 			Vector2D zombieWatchVector = Direction.directionToVector(object.getWalkDirectionString());
 			Vector2D newCenterPosition = Vector2D.subtract(playerCenterPosition, zombieCenterPosition);
 			
@@ -62,7 +62,9 @@ public class ZombieWatchBehavior {
 			float degrees = (float) Math.toDegrees(Math.acos(value));
 			
 			return degrees <= viewCone/2 ? true : false;
-		} else return false;
+		} else {
+			return false;
+		}
 	}
 
 	public Vector2D getVectorToPlayer() {

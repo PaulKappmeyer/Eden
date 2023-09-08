@@ -82,7 +82,7 @@ public class Main extends GameBase{
 		//Update the player
 		player.update(tslf);
 		playerHUD.update(tslf);
-		if(!player.isAlive()) {
+		if (!player.isAlive()) {
 			onPlayerDeath();
 		}
 		
@@ -92,13 +92,13 @@ public class Main extends GameBase{
 			Projectile projectile = projectiles.get(i);
 			projectile.update(tslf);
 			//Checking collision to the map border
-			if(projectile.getX() < 0 || projectile.getY() < 0 || projectile.getX() > tiledMap.getFullWidth() || projectile.getY() > tiledMap.getFullHeight()) {
+			if (projectile.getX() < 0 || projectile.getY() < 0 || projectile.getX() > tiledMap.getFullWidth() || projectile.getY() > tiledMap.getFullHeight()) {
 				projectiles.remove(projectile);
 				continue;
 			}
 			//Checking if the projectile is shoot by an enemy
-			if(projectile.getOwner() == player) continue;
-			if(player.getHitbox().isOverlapping(projectile.getHitbox())) {
+			if (projectile.getOwner() == player) continue;
+			if (player.getHitbox().isOverlapping(projectile.getHitbox())) {
 				player.getKnockbacked(projectile.getVelocityVector(), Main.player.getMaxKnockbackAmount()/2, Main.player.getMaxKnockbackTime()/2);
 				player.getDamaged(50);
 				projectiles.remove(i);
@@ -109,9 +109,9 @@ public class Main extends GameBase{
 		for (Mob zombie : zombies) {
 			zombie.update(tslf);
 
-			if(zombie.isAlive()) {
+			if (zombie.isAlive()) {
 				//Checking collision to the player
-				if(zombie.getHitbox().isOverlapping(player.getHitbox())) {
+				if (zombie.getHitbox().isOverlapping(player.getHitbox())) {
 					zombie.getKnockbacked(Vector2D.subtract(zombie.getCenterPosition(), player.getCenterPosition()), zombie.getMaxKnockbackAmount(), zombie.getMaxKnockbackTime());
 					zombie.getDamaged(50);
 					player.getKnockbacked(Vector2D.subtract(player.getCenterPosition(), zombie.getCenterPosition()), player.getMaxKnockbackAmount(), player.getMaxKnockbackTime());
@@ -122,11 +122,11 @@ public class Main extends GameBase{
 				for(int i = projectiles.size()-1; i >= 0; i--) {
 					Projectile projectile = projectiles.get(i);
 					//Check if projectile is shoot by the player
-					if(projectile.getOwner() != player) continue;
-					if(zombie.getHitbox().isOverlapping(projectile.getHitbox())) {
+					if (projectile.getOwner() != player) continue;
+					if (zombie.getHitbox().isOverlapping(projectile.getHitbox())) {
 						zombie.getKnockbacked(projectile.getVelocityVector(), zombie.getMaxKnockbackAmount()/2, zombie.getMaxKnockbackTime()/2);
 						zombie.getDamaged(50);
-						if(!zombie.isAlive()) player.addExp(50);
+						if (!zombie.isAlive()) player.addExp(50);
 						projectiles.remove(i);
 
 					}
@@ -144,20 +144,24 @@ public class Main extends GameBase{
 		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-		graphics.translate((int)-camera.getX(), (int)-camera.getY());
+		graphics.translate((int) -camera.getX(), (int) -camera.getY());
 
 		//Drawing the map
 		tiledMap.drawBottomLayer(graphics);
 
 		//Drawing the projectiles
 		for (Projectile projectile : projectiles) {
-			if(!camera.isVisibleOnCamera(projectile.getX(), projectile.getY(), projectile.getWidth(), projectile.getHeight())) continue;
+			if (!camera.isVisibleOnCamera(projectile.getX(), projectile.getY(), projectile.getWidth(), projectile.getHeight())) {
+				continue;
+			}
 			projectile.draw(graphics);
 		}
 
 		//Drawing the enemies
 		for (Mob zombie : zombies) {
-			if(!camera.isVisibleOnCamera(zombie.getX(), zombie.getY(), zombie.getWidth(), zombie.getHeight())) continue;
+			if (!camera.isVisibleOnCamera(zombie.getX(), zombie.getY(), zombie.getWidth(), zombie.getHeight())) {
+				continue;
+			}
 			zombie.draw(graphics);
 		}
 
@@ -167,7 +171,7 @@ public class Main extends GameBase{
 		//Drawing the Map
 		tiledMap.drawTopLayer(graphics);
 
-		graphics.translate((int)camera.getX(), (int)camera.getY());
+		graphics.translate((int) camera.getX(), (int) camera.getY());
 
 		//Drawing the player-hud
 		playerHUD.draw(graphics);

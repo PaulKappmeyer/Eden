@@ -21,8 +21,12 @@ import gameengine.sounds.Sound;
 final class SoundLoader {
 	static Sound loadSound(String filePath) throws Exception {
 		File soundFile = new File(filePath);
-		if(!soundFile.exists()) throw new FileNotFoundException("This file could not be found");
-		if(!soundFile.isFile()) throw new Exception("The given path is not a file");
+		if (!soundFile.exists()) {
+			throw new FileNotFoundException("This file could not be found: " + soundFile.getAbsolutePath());
+		}
+		if (!soundFile.isFile()) {
+			throw new Exception("The given path is not a file: " + soundFile.getAbsolutePath());
+		}
 		
 		Clip clip = AudioSystem.getClip();
 		AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
