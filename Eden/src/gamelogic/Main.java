@@ -88,7 +88,7 @@ public class Main extends GameBase{
 		
 		//Update the projectiles
 		//This loop is running from last element to first element because elements might get deleted;
-		for(int i = projectiles.size()-1; i >= 0; i--) {
+		for (int i = projectiles.size()-1; i >= 0; i--) {
 			Projectile projectile = projectiles.get(i);
 			projectile.update(tslf);
 			//Checking collision to the map border
@@ -97,7 +97,9 @@ public class Main extends GameBase{
 				continue;
 			}
 			//Checking if the projectile is shoot by an enemy
-			if (projectile.getOwner() == player) continue;
+			if (projectile.getOwner() == player) {
+				continue;
+			}
 			if (player.getHitbox().isOverlapping(projectile.getHitbox())) {
 				player.getKnockbacked(projectile.getVelocityVector(), Main.player.getMaxKnockbackAmount()/2, Main.player.getMaxKnockbackTime()/2);
 				player.getDamaged(50);
@@ -119,10 +121,12 @@ public class Main extends GameBase{
 				}
 				//Checking collision the projectiles
 				//This loop is running from last element to first element because elements might get deleted;
-				for(int i = projectiles.size()-1; i >= 0; i--) {
+				for (int i = projectiles.size()-1; i >= 0; i--) {
 					Projectile projectile = projectiles.get(i);
 					//Check if projectile is shoot by the player
-					if (projectile.getOwner() != player) continue;
+					if (projectile.getOwner() != player) {
+						continue;
+					}
 					if (zombie.getHitbox().isOverlapping(projectile.getHitbox())) {
 						zombie.getKnockbacked(projectile.getVelocityVector(), zombie.getMaxKnockbackAmount()/2, zombie.getMaxKnockbackTime()/2);
 						zombie.getDamaged(50);
