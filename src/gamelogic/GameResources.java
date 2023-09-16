@@ -27,13 +27,13 @@ public final class GameResources {
 	
 	public static void load() {
 		try {	
-			PLAYER_ANIMATION_SET = ResourceLoader.load(AnimationSet.class, "./Eden/res/eden_64.png");
-			NPC_ANIMATION_SET = ResourceLoader.load(AnimationSet.class, "./Eden/res/npc_64.png");
-			ZOMBIE_ANIMATION_SET = ResourceLoader.load(AnimationSet.class, "./Eden/res/zombie_64.png");
-			PLAYER_WALK_SOUND = ResourceLoader.load(Sound.class, "./Eden/sfx/walking_female.wav");
-			DUNGEON_TILESET  = ResourceLoader.load(BufferedImage.class, "./Eden/res/Dungeon_tileset.png");
-			ERROR = ResourceLoader.load(BufferedImage.class, "./Eden/res/error.png");
-			MAP = ResourceLoader.load(TiledMap.class, "./Eden/maps/Eden Dungeon Karte.txt");
+			PLAYER_ANIMATION_SET = ResourceLoader.load(AnimationSet.class, "./res/eden_64.png");
+			NPC_ANIMATION_SET = ResourceLoader.load(AnimationSet.class, "./res/npc_64.png");
+			ZOMBIE_ANIMATION_SET = ResourceLoader.load(AnimationSet.class, "./res/zombie_64.png");
+			PLAYER_WALK_SOUND = ResourceLoader.load(Sound.class, "./sfx/walking_female.wav");
+			DUNGEON_TILESET  = ResourceLoader.load(BufferedImage.class, "./res/Dungeon_tileset.png");
+			ERROR = ResourceLoader.load(BufferedImage.class, "./res/error.png");
+			MAP = ResourceLoader.load(TiledMap.class, "./maps/Eden Dungeon Karte.txt");
 		} catch (Exception e) {
 			System.err.println("Failed to load");
 			e.printStackTrace();
